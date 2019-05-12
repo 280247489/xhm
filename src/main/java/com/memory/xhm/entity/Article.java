@@ -4,17 +4,17 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * @Auther: cui.Memory
- * @Date: 2019/5/8 0008 10:20
+ * @Date: 2019/5/12 0012 16:13
  * @Description:
  */
 @Entity
 public class Article {
-    private int id;
+    private String id;
     private String typeId;
     private String articleTitle;
     private String articleLogo;
@@ -26,20 +26,20 @@ public class Article {
     private int articleTotalView;
     private int articleTotalShare;
     private int articleTotalLike;
-    private Timestamp articleCreateTime;
+    private Date articleCreateTime;
     private String articleCreateUserId;
     private int articleCheckYn;
-    private Timestamp articleCheckTime;
+    private Date articleCheckTime;
     private String articleCheckAdminId;
     private int articleDelYn;
 
     @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
+    @Column(name = "id", nullable = false, length = 255)
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -155,11 +155,11 @@ public class Article {
 
     @Basic
     @Column(name = "article_create_time", nullable = false)
-    public Timestamp getArticleCreateTime() {
+    public Date getArticleCreateTime() {
         return articleCreateTime;
     }
 
-    public void setArticleCreateTime(Timestamp articleCreateTime) {
+    public void setArticleCreateTime(Date articleCreateTime) {
         this.articleCreateTime = articleCreateTime;
     }
 
@@ -185,11 +185,11 @@ public class Article {
 
     @Basic
     @Column(name = "article_check_time", nullable = false)
-    public Timestamp getArticleCheckTime() {
+    public Date getArticleCheckTime() {
         return articleCheckTime;
     }
 
-    public void setArticleCheckTime(Timestamp articleCheckTime) {
+    public void setArticleCheckTime(Date articleCheckTime) {
         this.articleCheckTime = articleCheckTime;
     }
 
@@ -218,13 +218,13 @@ public class Article {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Article article = (Article) o;
-        return id == article.id &&
-                articleOnline == article.articleOnline &&
+        return articleOnline == article.articleOnline &&
                 articleTotalView == article.articleTotalView &&
                 articleTotalShare == article.articleTotalShare &&
                 articleTotalLike == article.articleTotalLike &&
                 articleCheckYn == article.articleCheckYn &&
                 articleDelYn == article.articleDelYn &&
+                Objects.equals(id, article.id) &&
                 Objects.equals(typeId, article.typeId) &&
                 Objects.equals(articleTitle, article.articleTitle) &&
                 Objects.equals(articleLogo, article.articleLogo) &&

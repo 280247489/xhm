@@ -18,6 +18,7 @@ public class Message {
     public static Message success(){
         Message message = new Message();
         message.state = "success";
+        message.msg = "success";
         message.recode = SUCCESS;
         return message;
     }
@@ -25,6 +26,7 @@ public class Message {
     public static Message error(){
         Message message = new Message();
         message.state = "error";
+        message.msg = "error";
         message.recode = ERROR;
         return message;
     }

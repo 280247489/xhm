@@ -141,15 +141,19 @@ public class DaoUtils {
         return query;
     }
 
-    public Page getPage(int pageIndex, int limit){
+    public Page getPage(Integer pageIndex, Integer limit){
         if(page == null){
             page = new Page();
         }
+        if(pageIndex == null || pageIndex == 0)
+            pageIndex = 1;
+        if(limit == null || limit == 0)
+            limit = 10;
         page.setPageIndex(pageIndex);
         page.setLimit(limit);
         return page;
     }
-    class Page{
+    public class Page{
         private int start = 0;
         private int limit = 10;
         private int pageIndex = 1;

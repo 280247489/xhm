@@ -25,6 +25,7 @@ public class DemoExceptionHandle extends BaseController {
     public Message exceptionHandle(Exception e) {
         msg = Message.error();
         logger.error("***异常***\t"+e);
+        e.printStackTrace();
         msg.setRecode(100);
         msg.setMsg(e.toString());
         return msg;

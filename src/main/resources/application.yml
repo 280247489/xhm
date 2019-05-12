@@ -1,4 +1,5 @@
-label: dev-application
+filePath: /E:\Tomcat 8.0\webapps\
+fileUrl: http://localhost:8080/
 server:
   port: 8081
   servlet:

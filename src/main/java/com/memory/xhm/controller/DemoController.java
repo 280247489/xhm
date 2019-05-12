@@ -11,7 +11,10 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Auther: cui.Memory
@@ -23,22 +26,22 @@ public class DemoController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(DemoController.class);
 
-    @Autowired
-    private RedisUtil redisUtil;
-
     @RequestMapping("test")
-    public Message test() {
+    public Message test(HttpServletRequest req) {
         msg = Message.success();
+        Map<String, String> map = new HashMap<String, String>();
         try {
+            map.put("req.getContextPath()", req.getContextPath());
+            map.put("req.getServletPath()", req.getServletPath());
+            map.put("req.getServletContext().getRealPath('')", req.getServletContext().getRealPath(""));
+            map.put("ResourceUtils.getURL('classpath:').getPath()", ResourceUtils.getURL("classpath:").getPath());
+            map.put("ClassUtils.getDefaultClassLoader().getResource('').getPath()", ClassUtils.getDefaultClassLoader().getResource("").getPath());
+            map.put("DemoController.class.getResource('').getPath()", DemoController.class.getResource("").getPath());
             logger.error("这是ERROR");
-            System.out.println("=====================");
-            System.out.println(ResourceUtils.getURL("classpath:").getPath());
-            System.out.println(ClassUtils.getDefaultClassLoader().getResource("").getPath());
-            System.out.println(DemoController.class.getResource("").getPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        msg.setData(redisUtil.get("name"));
+        msg.setData(map);
         return msg;
     }
 }
