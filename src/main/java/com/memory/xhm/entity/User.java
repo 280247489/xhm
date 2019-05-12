@@ -1,5 +1,7 @@
 package com.memory.xhm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import java.util.Objects;
 @Entity
 public class User {
     private String id;
+    @JsonIgnore
     private String password;
     private String userUnionId;
     private String userOpenId;
@@ -69,7 +72,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }

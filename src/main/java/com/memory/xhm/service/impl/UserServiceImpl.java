@@ -6,8 +6,8 @@ import com.memory.xhm.repository.UserRepository;
 import com.memory.xhm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     //微信注册，授权登录
-    @Transient
+    @Transactional
     @Override
     public User login(String userUnionId, String userOpenId, String userName, String userLogo) {
         User user = userRepository.findByUserOpenId(userOpenId);
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //手机号注册
-    @Transient
+    @Transactional
     @Override
     public User register(String userTel, String password) {
         User user = userRepository.findByUserTel(userTel);

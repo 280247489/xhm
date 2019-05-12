@@ -6,10 +6,9 @@ import com.memory.xhm.repository.ArticleRepository;
 import com.memory.xhm.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Transient;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,10 +54,11 @@ public class ArticleServiceImpl implements ArticleService {
         return reutnrMap;
     }
 
-    @Transient
+    @Transactional
     @Override
     public Article add(Article article) {
-        articleRepository.save(article);
+        daoUtils.save(article);
+        //articleRepository.save(article);
         return article;
     }
 }

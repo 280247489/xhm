@@ -21,6 +21,15 @@ public class DaoUtils {
     private EntityManager em;
     private Page page;
 
+    public Object save(Object obj){
+        em.merge(obj);
+        return obj;
+    }
+    public Object del(Object obj){
+        em.detach(obj);
+        return obj;
+    }
+
     /**
      * HQL语句查询结果集
      * @param hql HQL查询语句
