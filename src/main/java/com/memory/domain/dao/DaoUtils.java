@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,14 @@ public class DaoUtils {
     }
     public Object del(Object obj){
         em.detach(obj);
+        return obj;
+    }
+
+    public Object getById(String className, String id){
+        StringBuffer sb=new StringBuffer(" from "+className+" where id=:id");
+        Map<String, Object> getByIdMap=new HashMap<>();
+        getByIdMap.put("id", id);
+        Object obj=this.findObjectHQL(sb.toString(), getByIdMap);
         return obj;
     }
 
@@ -121,7 +131,11 @@ public class DaoUtils {
      */
     public Object findObjectHQL(String hql, Map map) {
         Query query = getHQLQuery(hql, map);
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     //获取HQLQuery

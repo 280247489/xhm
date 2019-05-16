@@ -1,6 +1,6 @@
 package com.memory.xhm_cms.repository;
 
-import com.memory.xhm.entity.SysAdmin;
+import com.memory.entity.SysAdmin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

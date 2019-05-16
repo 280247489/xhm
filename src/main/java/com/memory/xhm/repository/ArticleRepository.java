@@ -1,6 +1,6 @@
 package com.memory.xhm.repository;
 
-import com.memory.xhm.entity.Article;
+import com.memory.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

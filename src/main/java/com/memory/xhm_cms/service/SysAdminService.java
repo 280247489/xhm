@@ -1,6 +1,6 @@
 package com.memory.xhm_cms.service;
 
-import com.memory.xhm.entity.SysAdmin;
+import com.memory.entity.SysAdmin;
 
 /**
  * @Auther: cui.Memory

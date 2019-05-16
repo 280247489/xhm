@@ -1,4 +1,4 @@
-package com.memory.xhm.entity;
+package com.memory.entity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

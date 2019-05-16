@@ -1,7 +1,7 @@
 package com.memory.xhm.service.impl;
 
 import com.memory.common.utils.Utils;
-import com.memory.xhm.entity.User;
+import com.memory.entity.User;
 import com.memory.xhm.repository.UserRepository;
 import com.memory.xhm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

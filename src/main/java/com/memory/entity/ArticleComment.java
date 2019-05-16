@@ -1,7 +1,7 @@
-package com.memory.xhm.entity;
+package com.memory.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -20,7 +20,7 @@ public class ArticleComment {
     private int commentType;
     private String commentParentId;
     private String commentContent;
-    private Timestamp commentCreateTime;
+    private Date commentCreateTime;
     private int commentTotalLike;
 
     @Id
@@ -105,11 +105,11 @@ public class ArticleComment {
 
     @Basic
     @Column(name = "comment_create_time", nullable = false)
-    public Timestamp getCommentCreateTime() {
+    public Date getCommentCreateTime() {
         return commentCreateTime;
     }
 
-    public void setCommentCreateTime(Timestamp commentCreateTime) {
+    public void setCommentCreateTime(Date commentCreateTime) {
         this.commentCreateTime = commentCreateTime;
     }
 

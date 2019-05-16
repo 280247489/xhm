@@ -2,7 +2,7 @@ package com.memory.xhm_cms.controller;
 
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
-import com.memory.xhm.entity.SysAdmin;
+import com.memory.entity.SysAdmin;
 import com.memory.xhm_cms.service.SysAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

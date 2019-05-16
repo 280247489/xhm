@@ -1,7 +1,7 @@
 package com.memory.xhm_cms.service.impl;
 
 import com.memory.common.utils.Utils;
-import com.memory.xhm.entity.SysAdmin;
+import com.memory.entity.SysAdmin;
 import com.memory.xhm_cms.repository.SysAdminRepository;
 import com.memory.xhm_cms.service.SysAdminService;
 import org.springframework.beans.factory.annotation.Autowired;

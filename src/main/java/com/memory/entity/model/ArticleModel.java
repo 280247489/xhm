@@ -1,6 +1,6 @@
-package com.memory.xhm.entity.model;
+package com.memory.entity.model;
 
-import com.memory.xhm.entity.Article;
+import com.memory.entity.Article;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

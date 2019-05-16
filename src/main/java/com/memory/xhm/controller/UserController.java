@@ -2,7 +2,7 @@ package com.memory.xhm.controller;
 
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
-import com.memory.xhm.entity.User;
+import com.memory.entity.User;
 import com.memory.xhm.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

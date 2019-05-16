@@ -1,12 +1,12 @@
-package com.memory.xhm.entity;
+package com.memory.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * @Auther: cui.Memory
- * @Date: 2019/5/8 0008 10:20
+ * @Date: 2019/5/16 0016 15:28
  * @Description:
  */
 @Entity
@@ -15,7 +15,8 @@ public class ArticleLike {
     private String id;
     private String userId;
     private String articleId;
-    private Timestamp createTime;
+    private int likeStatus;
+    private Date createTime;
 
     @Id
     @Column(name = "id", nullable = false, length = 255)
@@ -48,12 +49,22 @@ public class ArticleLike {
     }
 
     @Basic
+    @Column(name = "like_status", nullable = false)
+    public int getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(int likeStatus) {
+        this.likeStatus = likeStatus;
+    }
+
+    @Basic
     @Column(name = "create_time", nullable = false)
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -62,7 +73,8 @@ public class ArticleLike {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArticleLike that = (ArticleLike) o;
-        return Objects.equals(id, that.id) &&
+        return likeStatus == that.likeStatus &&
+                Objects.equals(id, that.id) &&
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(articleId, that.articleId) &&
                 Objects.equals(createTime, that.createTime);
@@ -70,6 +82,6 @@ public class ArticleLike {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, articleId, createTime);
+        return Objects.hash(id, userId, articleId, likeStatus, createTime);
     }
 }

@@ -1,7 +1,6 @@
 package com.memory.xhm.service;
 
-import com.memory.xhm.entity.User;
-import org.springframework.stereotype.Service;
+import com.memory.entity.User;
 
 /**
  * @Auther: cui.Memory
