@@ -145,6 +145,12 @@ public class ArticleController extends BaseController {
         return msg;
     }
 
+    /**
+     * 文章点赞
+     * @param aid
+     * @param uid
+     * @return
+     */
     @RequestMapping("like")
     public Message like(@RequestParam(name="aid") String aid, @RequestParam(name="uid") String uid) {
         msg = Message.success();
