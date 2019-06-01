@@ -1,9 +1,9 @@
-package com.memory.xhm.service.impl;
+package com.memory.app.service.impl;
 
 import com.memory.common.utils.Utils;
 import com.memory.entity.User;
-import com.memory.xhm.repository.UserRepository;
-import com.memory.xhm.service.UserService;
+import com.memory.app.repository.UserRepository;
+import com.memory.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

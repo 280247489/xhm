@@ -1,12 +1,12 @@
-package com.memory.xhm.service.impl;
+package com.memory.app.service.impl;
 
 import com.memory.common.utils.Utils;
 import com.memory.domain.dao.DaoUtils;
 import com.memory.entity.Article;
 import com.memory.entity.ArticleLike;
 import com.memory.entity.User;
-import com.memory.xhm.repository.ArticleRepository;
-import com.memory.xhm.service.ArticleService;
+import com.memory.app.repository.ArticleRepository;
+import com.memory.app.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

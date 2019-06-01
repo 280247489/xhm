@@ -50,7 +50,7 @@ public class DemoAspect {
         logger.info(stringBuffer.toString());
         logger.info("response = {}", data);*/
     }
-    @Pointcut("execution(public * com.memory.xhm.controller.*.*(..))")
+    @Pointcut("execution(public * com.memory.app.controller.*.*(..))")
     public void request_log(){
     }
 }

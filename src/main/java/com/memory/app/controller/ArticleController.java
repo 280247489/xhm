@@ -1,4 +1,4 @@
-package com.memory.xhm.controller;
+package com.memory.app.controller;
 
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
@@ -6,7 +6,7 @@ import com.memory.common.utils.Utils;
 import com.memory.entity.Article;
 import com.memory.entity.ArticleLike;
 import com.memory.entity.model.ArticleModel;
-import com.memory.xhm.service.ArticleService;
+import com.memory.app.service.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

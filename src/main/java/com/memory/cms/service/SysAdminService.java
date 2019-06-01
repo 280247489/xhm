@@ -1,4 +1,4 @@
-package com.memory.xhm_cms.service;
+package com.memory.cms.service;
 
 import com.memory.entity.SysAdmin;
 

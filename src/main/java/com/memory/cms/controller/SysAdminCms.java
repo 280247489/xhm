@@ -1,9 +1,9 @@
-package com.memory.xhm_cms.controller;
+package com.memory.cms.controller;
 
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
 import com.memory.entity.SysAdmin;
-import com.memory.xhm_cms.service.SysAdminService;
+import com.memory.cms.service.SysAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("sysAdmin")
 @RestController
-public class SysAdminController extends BaseController {
-    private final static Logger logger = LoggerFactory.getLogger(SysAdminController.class);
+public class SysAdminCms extends BaseController {
+    private final static Logger logger = LoggerFactory.getLogger(SysAdminCms.class);
     @Autowired
     private SysAdminService sysAdminService;
 

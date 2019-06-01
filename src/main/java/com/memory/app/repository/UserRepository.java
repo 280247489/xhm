@@ -1,4 +1,4 @@
-package com.memory.xhm.repository;
+package com.memory.app.repository;
 
 import com.memory.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,22 +1,16 @@
-package com.memory.xhm.controller;
+package com.memory.app.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
-import com.memory.common.utils.Utils;
 import com.memory.redis.config.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +21,7 @@ import java.util.Map;
  */
 @RestController
 public class DemoController extends BaseController {
+    public static Map<String, Object> memory_map = null;
 
     private final static Logger logger = LoggerFactory.getLogger(DemoController.class);
     @Autowired
@@ -55,14 +50,35 @@ public class DemoController extends BaseController {
             redisUtil.set("article:content:id-1", JSON.toJSONString(article_map));
             redisUtil.set("article:content:id-2", JSON.toJSONString(article_map));
             redisUtil.set("article:content:id-3", JSON.toJSONString(article_map));*/
+            String id = "article:content:id-2";
+            if(memory_map == null){
+                memory_map = (Map<String, Object>) JSON.parse(redisUtil.get(id).toString());
+                System.out.println("initMap");
+            }
 
-            map.put("content", JSON.parse(redisUtil.get("article:content:id-1").toString()));
-            map.put("view", redisUtil.incr("article:view:id-1", 1));
-
+            map.put("content", memory_map);
+            map.put("view", redisUtil.incr("article:view:id-2", 1));
         } catch (Exception e) {
             e.printStackTrace();
         }
         msg.setData(map);
         return msg;
     }
+
+    @RequestMapping("test1")
+    public Message test1(HttpServletRequest req) {
+        msg = Message.success();
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            redisUtil.set("article:content:top", redisUtil.get("article:content:id-2").toString());
+            memory_map = null;
+            msg.setMsg("上传最新一期成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        msg.setData(map);
+        return msg;
+    }
+
+
 }

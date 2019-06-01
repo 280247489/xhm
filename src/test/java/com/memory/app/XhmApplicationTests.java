@@ -1,4 +1,4 @@
-package com.memory.xhm;
+package com.memory.app;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
