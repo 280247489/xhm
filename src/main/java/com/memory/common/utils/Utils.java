@@ -34,6 +34,7 @@ public class Utils {
     }
 
     public static SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat sf_yMd = new SimpleDateFormat("yyyy-MM-dd");
 
     public static SimpleDateFormat idTimer = new SimpleDateFormat("yyyyMMddHHmmss");
 }

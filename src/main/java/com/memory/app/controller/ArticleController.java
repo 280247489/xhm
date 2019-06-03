@@ -113,6 +113,10 @@ public class ArticleController extends BaseController {
             }
             model.getArticle().setArticlePicture(stringBuffer.substring(0, stringBuffer.length()-1));
         }
+        //设置文章默认属性
+        model.getArticle().setArticleOnline(0);
+        model.getArticle().setArticleCheckYn(0);
+        model.getArticle().setArticleDelYn(0);
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", articleService.add(model.getArticle()));

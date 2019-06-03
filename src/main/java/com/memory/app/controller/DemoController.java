@@ -7,6 +7,8 @@ import com.memory.redis.config.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,13 +34,13 @@ public class DemoController extends BaseController {
         msg = Message.success();
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            /*map.put("req.getContextPath()", req.getContextPath());
+            map.put("req.getContextPath()", req.getContextPath());
             map.put("req.getServletPath()", req.getServletPath());
             map.put("req.getServletContext().getRealPath('')", req.getServletContext().getRealPath(""));
             map.put("ResourceUtils.getURL('classpath:').getPath()", ResourceUtils.getURL("classpath:").getPath());
             map.put("ClassUtils.getDefaultClassLoader().getResource('').getPath()", ClassUtils.getDefaultClassLoader().getResource("").getPath());
             map.put("DemoController.class.getResource('').getPath()", DemoController.class.getResource("").getPath());
-            logger.error("这是ERROR");*/
+            logger.error("这是ERROR");
 
             /*
             //添加测试信息
@@ -49,7 +51,7 @@ public class DemoController extends BaseController {
 
             redisUtil.set("article:content:id-1", JSON.toJSONString(article_map));
             redisUtil.set("article:content:id-2", JSON.toJSONString(article_map));
-            redisUtil.set("article:content:id-3", JSON.toJSONString(article_map));*/
+            redisUtil.set("article:content:id-3", JSON.toJSONString(article_map));
             String id = "article:content:id-2";
             if(memory_map == null){
                 memory_map = (Map<String, Object>) JSON.parse(redisUtil.get(id).toString());
@@ -57,7 +59,8 @@ public class DemoController extends BaseController {
             }
 
             map.put("content", memory_map);
-            map.put("view", redisUtil.incr("article:view:id-2", 1));
+            map.put("view", redisUtil.incr("article:view:id-2", 1));*/
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -25,6 +25,9 @@ public class SysAdmin {
     private Date createTime;
     private int nologin;
 
+    public SysAdmin() {
+    }
+
     public SysAdmin(String id, String loginname, String password, String logo, String name, String sex, Date birthday, String tel, String email, String address, Date createTime, int nologin) {
         this.id = id;
         this.loginname = loginname;

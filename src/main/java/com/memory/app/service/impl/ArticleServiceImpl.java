@@ -33,8 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Map<String, Object> sel(String typeId, Integer start, Integer limit) {
         Map<String, Object> reutnrMap = new HashMap<>();
-        StringBuffer sb =new StringBuffer(" from Article where articleCheckYn = 1 and articleDelYn = 0");
-        StringBuffer sb_count =new StringBuffer("select count(*) from Article where articleCheckYn = 1 and articleDelYn = 0");
+        StringBuffer sb =new StringBuffer(" from Article where articleCheckYn = 1 and articleDelYn = 0 and articleOnline = 1");
+        StringBuffer sb_count =new StringBuffer("select count(*) from Article where articleCheckYn = 1 and articleDelYn = 0 and articleOnline = 1");
         Map<String, Object> map = null;
         if(!"".equals(typeId)){
             map = new HashMap<>();
@@ -42,12 +42,12 @@ public class ArticleServiceImpl implements ArticleService {
             sb.append(" and typeId=:typeId");
             sb_count.append(" and typeId=:typeId");
         }
-        sb.append(" order by articleCheckTime desc");
+        sb.append(" order by articleCreateTime desc");
         DaoUtils.Page page = daoUtils.getPage(start, limit);
         reutnrMap.put("list", daoUtils.findByHQL(sb.toString(), map, page));
         reutnrMap.put("count", daoUtils.getTotalByHQL(sb_count.toString(), map));
-        reutnrMap.put("start", start);
-        reutnrMap.put("limit", limit);
+        reutnrMap.put("start", page.getPageIndex());
+        reutnrMap.put("limit", page.getLimit());
         return reutnrMap;
     }
 
@@ -71,8 +71,8 @@ public class ArticleServiceImpl implements ArticleService {
         map.put("userId", userId);
         reutnrMap.put("list", daoUtils.findByHQL(sb.toString(), map, page));
         reutnrMap.put("count", daoUtils.getTotalByHQL(sb_count.toString(), map));
-        reutnrMap.put("start", start);
-        reutnrMap.put("limit", limit);
+        reutnrMap.put("start", page.getPageIndex());
+        reutnrMap.put("limit", page.getLimit());
 
         return reutnrMap;
     }

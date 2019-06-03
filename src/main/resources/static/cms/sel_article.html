@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>家乐说后台管理系统</title>
+<link rel="shortcut icon" type="text/css" href="images/icon/favicon.ico" />
+<meta name="author" content="CuiDi" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/> 
+<!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<![endif]-->
+<script src="js/jquery.js"></script>
+<script src="js/utils.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<header>
+ <h1><img src="images/logo.png"/></h1>
+ <ul class="rt_nav">
+  <li><a href="javascript:;" class="admin_icon" id="loginUserName"></a></li>
+  <li><a href="change_password.html" class="set_icon">修改密码</a></li>
+  <li><a href="javascript:;" id="esc" class="quit_icon">安全退出</a></li>
+ </ul>
+</header>
+<aside class="lt_aside_nav content mCustomScrollbar">
+ <h2><a href="index.html">主菜单</a></h2>
+ <ul class="dh_close" id="sys">
+  <!--  -->
+ </ul>
+</aside>
+<section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+     <section class="loading_area">
+      <div class="loading_cont">
+       <div class="loading_icon"><i></i><i></i><i></i><i></i><i></i></div>
+       <div class="loading_txt"><mark>数据正在加载，请稍后！</mark></div>
+      </div>
+     </section>
+     <div class="page_title">
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;文章管理 / 文章查询</strong></h2>
+		 <span class="fr">
+            <input type="text" id="userName" style="width:150px;" placeholder="用户名称.." class="textbox"/>
+            文章栏目：
+            <select class="select" id="tid" style="width:100px">
+                <option value="">全 部</option>
+                <option value="1">1</option>
+            </select>
+            上下架状态：
+            <select class="select" id="online" style="width:100px">
+                <option value="">全 部</option>
+                <option value="1">上 架</option>
+                <option value="0">下 架</option>
+            </select>
+            审核状态：
+            <select class="select" id="check" style="width:100px">
+                <option value="">全 部</option>
+                <option value="0">审核中</option>
+                <option value="1">通 过</option>
+                <option value="2">未通过</option>
+            </select>
+            是否删除：
+            <select class="select" id="del" style="width:100px">
+                <option value="0">未删除</option>
+                <option value="1">删 除</option>
+            </select>
+            <input type="text" id="startTime" style="width:200px;" placeholder="开始时间.." class="textbox"/>
+             -
+            <span id="endTime_span">
+                <input type="text" id="endTime" style="width:200px;" placeholder="结束时间.." class="textbox"/>
+            </span>
+		   </span>
+     </div>
+     
+     <div style="padding-left:10px;font-size:14px;font-weight:bold;" id="content"></div>
+ </div>
+</section>
+</body>
+<script src="laydate/laydate.js"></script>
+<script src="pagejs/sel_article.js"></script>
+</html>
