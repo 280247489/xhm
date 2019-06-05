@@ -64,7 +64,7 @@ public class DemoController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 
@@ -79,7 +79,7 @@ public class DemoController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 

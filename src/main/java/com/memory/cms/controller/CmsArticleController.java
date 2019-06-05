@@ -48,10 +48,9 @@ public class CmsArticleController extends BaseController {
                        @RequestParam(name="startTime") String startTime, @RequestParam(name="endTime") String endTime,
                        @RequestParam(name="start") Integer start, @RequestParam(name="limit") Integer limit) {
         msg = Message.success();
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = cmsArticleService.sel(userName, tid, online, check, del, startTime, endTime, start, limit);
         map.put("fileUrl", this.getFileUrl());
-        map.put("data", cmsArticleService.sel(userName, tid, online, check, del, startTime, endTime, start, limit));
-        msg.setData(map);
+        msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("sel{ start: {} - limit: {} }", start, limit);
         return msg;
@@ -65,12 +64,13 @@ public class CmsArticleController extends BaseController {
      * @return
      */
     @RequestMapping("selcheck")
-    public Message sel(@RequestParam(name="tid") String tid, @RequestParam(name="start") Integer start, @RequestParam(name="limit") Integer limit) {
+    public Message sel(@RequestParam(name="userName") String userName, @RequestParam(name="tid") String tid,
+                       @RequestParam(name="startTime") String startTime, @RequestParam(name="endTime") String endTime,
+                       @RequestParam(name="start") Integer start, @RequestParam(name="limit") Integer limit) {
         msg = Message.success();
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = cmsArticleService.selCheck(userName, tid, startTime, endTime, start, limit);
         map.put("fileUrl", this.getFileUrl());
-        map.put("data", cmsArticleService.selCheck(tid, start, limit));
-        msg.setData(map);
+        msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("sel{ start: {} - limit: {} }", start, limit);
         return msg;
@@ -93,7 +93,7 @@ public class CmsArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         logger.info("selById{ aid: {} }", aid);
         return msg;
     }
@@ -115,7 +115,7 @@ public class CmsArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 
@@ -136,7 +136,7 @@ public class CmsArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 
@@ -157,7 +157,7 @@ public class CmsArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 

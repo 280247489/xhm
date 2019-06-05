@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>家乐说后台管理系统</title>
+<link rel="shortcut icon" type="text/css" href="images/icon/favicon.ico" />
+<meta name="author" content="CuiDi" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/> 
+<!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<![endif]-->
+<script src="js/jquery.js"></script>
+<script src="js/utils.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+</head>
+<body>
+<header>
+ <h1><img src="images/logo.png"/></h1>
+ <ul class="rt_nav">
+  <li><a href="javascript:;" class="admin_icon" id="loginUserName"></a></li>
+  <li><a href="change_password.html" class="set_icon">修改密码</a></li>
+  <li><a href="javascript:;" id="esc" class="quit_icon">安全退出</a></li>
+ </ul>
+</header>
+<aside class="lt_aside_nav content mCustomScrollbar">
+ <h2><a href="index.html">主菜单</a></h2>
+ <ul class="dh_close" id="sys">
+  <!--  -->
+ </ul>
+</aside>
+<section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+     <section class="loading_area">
+      <div class="loading_cont">
+       <div class="loading_icon"><i></i><i></i><i></i><i></i><i></i></div>
+       <div class="loading_txt"><mark>数据正在加载，请稍后！</mark></div>
+      </div>
+     </section>
+     <div class="page_title">
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;文章管理 / 文章详情</strong></h2>
+         <a class="fr top_rt_btn">返 回</a>
+     </div>
+     
+     <div style="padding-left:10px;font-size:14px;font-weight:bold;" id="content">
+         <table border="1" class="table">
+             <tr><td width="200px" align=right>类型：</td>
+                 <td id="typeId"></td></tr>
+             <tr><td width="200px" align=right>文章标题图：</td>
+                 <td id="logo"></td></tr>
+             <tr><td width="200px" align=right>文章标题：</td>
+                 <td id="title"></td></tr>
+             <tr><td width="200px" align=right>文章内容图：</td>
+                 <td id="picture"></td></tr>
+             <tr><td width="200px" align="right">文章内容：</td>
+                 <td id="article_content"></td></tr>
+             <tr><td width="200px" align=right>发布作者：</td>
+                 <td id="userId"></td></tr>
+             <tr><td width="200px" align=right>发布时间：</td>
+                 <td id="createTime"></td></tr>
+             <tr><td width="200px" align=right>统计数：</td>
+                 <td id="tjs">阅读数：1 ， 点赞数：1 ， 分享数： 1 </td></tr>
+             <tr><td width="200px" align=right>是否上线：</td>
+                 <td id="online"></td></tr>
+             <tr><td width="200px" align=right>是否审核：</td>
+                 <td id="check"></td></tr>
+         </table>
+     </div>
+ </div>
+</section>
+</body>
+<script src="laydate/laydate.js"></script>
+<script src="pagejs/article_info.js"></script>
+</html>

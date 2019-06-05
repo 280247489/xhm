@@ -38,19 +38,15 @@ function login(loginname, password){
 	ajax("cmsSysAdmin/login", {loginname: loginname, password: password}, login_callback);
 }
 function login_callback(data){
-	if(data.state=="success"){
-		if(data.recode==0){
-            if($('#remeberLoginname').is(":checked")){
-                window.localStorage.setItem("remeberLoginname", $('#loginname').val());
-            }else{
-                window.localStorage.removeItem("remeberLoginname");
-            }
-            window.sessionStorage.setItem("login_id", data.data.id);
-            window.sessionStorage.setItem("login_name", data.data.name);
-            window.location.href='index.html';
-		}else{
-            $.jBox.tip(data.msg);
-		}
+	if(data.state=="success" && data.recode==0){
+        if($('#remeberLoginname').is(":checked")){
+            window.localStorage.setItem("remeberLoginname", $('#loginname').val());
+        }else{
+            window.localStorage.removeItem("remeberLoginname");
+        }
+        window.sessionStorage.setItem("login_id", data.result.id);
+        window.sessionStorage.setItem("login_name", data.result.name);
+        window.location.href='index.html';
 	}else{
 		$.jBox.tip(data.msg);
 	}

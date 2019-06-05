@@ -1,7 +1,7 @@
 $(function(){
     $(".loading_area").fadeIn();
 	$("#article").addClass("dh_dl_open");
-	$("#sel_article").addClass("active");
+	$("#wsh_article").addClass("active");
 	$('#userName').bind('input propertychange', function(){
 		clearTimeout(sel_flag);
 		sel_flag = setTimeout(function(){
@@ -58,24 +58,17 @@ $(function(){
 	}, 500);
 });
 var sel_flag, time_flag;
-var start=1, limit=15, startTime='', endTime='', userName='', tid='', online='', check='', del=0;
+var start=1, limit=15, startTime='', endTime='', userName='', tid='';
 var list, fileUrl;
 function init(){
 	$(".loading_area").fadeIn();
 	userName = $('#userName').val();
     tid = $('#tid').val();
-    online = $('#online').val();
-    check = $('#check').val();
-    //del = $('#del').val();
 	startTime = $('#startTime').val();
 	endTime = $('#endTime').val();
-	//adminId:window.sessionStorage.getItem("login_id")
-	ajax("cmsArticle/sel",
+	ajax("cmsArticle/selcheck",
 			{userName: userName,
 				tid: tid,
-                online: online,
-                check: check,
-    			del: del,
                 startTime: startTime,
                 endTime: endTime,
                 start: start,
@@ -93,8 +86,6 @@ function sel_callback(data){
             +'<td width="18%" align=center>标 题</td>'
             +'<td width="8%" align=center>作 者</td>'
             +'<td width="8%" align=center>发布时间</td>'
-            +'<td width="15%" align=center>统计数</td>'
-            +'<td width="8%" align=center>上下架状态</td>'
             +'<td width="8%" align=center>审核状态</td>'
             +'<td align=center>详情</td></tr>';
         if(data.result.count==0){
@@ -106,19 +97,17 @@ function sel_callback(data){
             fileUrl = data.result.fileUrl;
             for (var i = 0; i < list.length; i++) {
                 var obj = list[i];
-                content += '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
+                content += '<tr id="tr_'+obj.id+'"><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
                     + '<td align=center>' + obj.typeId + '</td>'
                     + '<td align=center><img style="width: 80px; height: 80px;" src="' + data.result.fileUrl + obj.articleLogo + '"></td>'
                     + '<td align=center>' + obj.articleTitle + '</td>'
-                    //+ '<td align=center>' + obj.articleCreateUserId + '</td>'
                     + '<td align=center>' + obj.articleCreateUserId + '</td>'
                     + '<td align=center>' + obj.articleCreateTime + '</td>'
-                    + '<td align=center>阅读数：' + obj.articleTotalView + '<br><br>  <font color="#ffc0cb">点赞数：' + obj.articleTotalLike + '</font><br><br>  <font color="#00ced1">分享数：' + obj.articleTotalShare + '</font></td>'
-                    + '<td align=center id="td_'+obj.id+'">' + (obj.articleOnline == 1 ? "<font color='green'>已上架</font>" : "<font color='red'>未上架</font>") + '</td>'
                     + '<td align=center>' + (obj.articleCheckYn == 0 ? "<font color='orange'>审核中</font>" : obj.articleCheckYn == 1 ? "<font color='green'>通过</font>" : "<font color='red'>驳回</font>") + '</td>'
                     + '<td align=center>'
                     + '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
-                    + '<button class="online_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">' + (obj.articleOnline == 1 ? "下架" : "上架") + '</button>'
+                    + '<button class="check1_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">审核通过</button>'
+                    + '<button class="check2_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">审核驳回</button>'
                     + '</td>'
                     + '</tr>';
             }
@@ -137,24 +126,31 @@ function sel_callback(data){
                 window.sessionStorage.setItem("fileUrl", fileUrl);
                 window.location.href="article_info.html";
             });
-            $('.online_fun').click(function(){
-                var aid = $(this).attr('aid');
-                info(aid);
+            $('.check1_fun').click(function(){
+                if(confirm("确认通过？")){
+                    var aid = $(this).attr('aid');
+                    info(aid, 1);
+                }
+            });
+            $('.check2_fun').click(function(){
+                if(confirm("确认驳回？")){
+                    var aid = $(this).attr('aid');
+                    info(aid, 2);
+                }
             });
         }
 	}else{
 		$.jBox.tip(data.msg);
 	}
 }
-function info(aid){
+function info(aid, check){
     $(".loading_area").fadeIn();
-    ajax("cmsArticle/online",
-        { aid: aid },
+    ajax("cmsArticle/check",
+        { aid: aid, check: check },
         function(data){
             $(".loading_area").fadeOut(300);
 			if(data.state == "success" && data.recode == 0){
-				$('#td_'+aid).html(data.result.obj.articleOnline == 1 ? "<font color='green'>已上架</font>" : "<font color='red'>未上架</font>");
-				$('#btn_'+aid).html(data.result.obj.articleOnline == 1 ? "下架" : "上架");
+				$('#tr_'+aid).remove();
 			}else{
                 $.jBox.tip(data.msg);
 			}

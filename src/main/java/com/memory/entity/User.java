@@ -1,7 +1,5 @@
 package com.memory.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,33 +9,15 @@ import java.util.Objects;
 
 /**
  * @Auther: cui.Memory
- * @Date: 2019/5/8 0008 10:20
+ * @Date: 2019/6/5 0005 21:12
  * @Description:
  */
 @Entity
 public class User {
-    private String id;
-    @JsonIgnore
-    private String password;
-    private String userUnionId;
-    private String userOpenId;
-    private String userTel;
-    private String userName;
-    private String userLogo;
-    private String userSex;
-    private String userBirthday;
-    private String userProvince;
-    private String userCity;
-    private String userArea;
-    private String userAddress;
-    private Date userCreateTime;
-    private int userForbidden;
-    private int userNologin;
-    private int userCancel;
+    public User() {
+    }
 
-    public User() { }
-
-    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel) {
+    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel, String parentId) {
         this.id = id;
         this.password = password;
         this.userUnionId = userUnionId;
@@ -55,7 +35,27 @@ public class User {
         this.userForbidden = userForbidden;
         this.userNologin = userNologin;
         this.userCancel = userCancel;
+        this.parentId = parentId;
     }
+
+    private String id;
+    private String password;
+    private String userUnionId;
+    private String userOpenId;
+    private String userTel;
+    private String userName;
+    private String userLogo;
+    private String userSex;
+    private String userBirthday;
+    private String userProvince;
+    private String userCity;
+    private String userArea;
+    private String userAddress;
+    private Date userCreateTime;
+    private int userForbidden;
+    private int userNologin;
+    private int userCancel;
+    private String parentId;
 
     @Id
     @Column(name = "id", nullable = false, length = 255)
@@ -72,6 +72,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -226,6 +227,16 @@ public class User {
         this.userCancel = userCancel;
     }
 
+    @Basic
+    @Column(name = "parent_id", nullable = false, length = 255)
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -247,11 +258,12 @@ public class User {
                 Objects.equals(userCity, user.userCity) &&
                 Objects.equals(userArea, user.userArea) &&
                 Objects.equals(userAddress, user.userAddress) &&
-                Objects.equals(userCreateTime, user.userCreateTime);
+                Objects.equals(userCreateTime, user.userCreateTime) &&
+                Objects.equals(parentId, user.parentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, password, userUnionId, userOpenId, userTel, userName, userLogo, userSex, userBirthday, userProvince, userCity, userArea, userAddress, userCreateTime, userForbidden, userNologin, userCancel);
+        return Objects.hash(id, password, userUnionId, userOpenId, userTel, userName, userLogo, userSex, userBirthday, userProvince, userCity, userArea, userAddress, userCreateTime, userForbidden, userNologin, userCancel, parentId);
     }
 }

@@ -13,7 +13,7 @@ public class Message {
     private String state;
     private Integer recode;
     private String msg;
-    private Object data;
+    private Object result;
 
     public static Message success(){
         Message message = new Message();
@@ -55,12 +55,11 @@ public class Message {
         this.msg = msg;
     }
 
-    public Object getData() {
-        return data;
+    public Object getResult() {
+        return result;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setResult(Object result) {
+        this.result = result;
     }
-
 }

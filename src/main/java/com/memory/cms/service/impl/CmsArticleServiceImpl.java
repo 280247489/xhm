@@ -28,11 +28,20 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     @Override
     public Map<String, Object> sel(String userName, String typeId, Integer online, Integer check, Integer del, String startTime, String endTime, Integer start, Integer limit) {
         Map<String, Object> reutnrMap = new HashMap<>();
-        StringBuffer sb =new StringBuffer("select a from Article a, User u where a.articleCreateUserId = u.id ");
+        StringBuffer sb =new StringBuffer("select new Article(a.id, a.typeId, " +
+                "a.articleTitle, a.articleLogo, " +
+                "a.articlePicture, a.articleContent, " +
+                "a.articleLabel, a.articleKeyWords, " +
+                "a.articleOnline, a.articleTotalView, " +
+                "a.articleTotalShare, a.articleTotalLike, " +
+                "a.articleCreateTime, u.userName, " +
+                "a.articleCheckYn, a.articleCheckTime, " +
+                "a.articleCheckAdminId, a.articleDelYn) " +
+                "from Article a, User u where a.articleCreateUserId = u.id ");
         StringBuffer sb_count =new StringBuffer("select count(*) from Article a, User u where a.articleCreateUserId = u.id ");
         Map<String, Object> map = new HashMap<>();
         if(!"".equals(userName)){
-            map.put("userName", userName);
+            map.put("userName", "%"+userName+"%");
             sb.append(" and u.userName like :userName");
             sb_count.append(" and u.userName like :userName");
         }
@@ -90,17 +99,55 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     }
 
     @Override
-    public Map<String, Object> selCheck(String typeId, Integer start, Integer limit) {
+    public Map<String, Object> selCheck(String userName, String typeId, String startTime, String endTime, Integer start, Integer limit) {
         Map<String, Object> reutnrMap = new HashMap<>();
-        StringBuffer sb =new StringBuffer(" from Article where articleDelYn = 0 and articleCheckYn = 0 ");
-        StringBuffer sb_count =new StringBuffer("select count(*) from Article where articleDelYn = 0 and articleCheckYn = 0 ");
+        StringBuffer sb =new StringBuffer("select new Article(a.id, a.typeId, " +
+                "a.articleTitle, a.articleLogo, " +
+                "a.articlePicture, a.articleContent, " +
+                "a.articleLabel, a.articleKeyWords, " +
+                "a.articleOnline, a.articleTotalView, " +
+                "a.articleTotalShare, a.articleTotalLike, " +
+                "a.articleCreateTime, u.userName, " +
+                "a.articleCheckYn, a.articleCheckTime, " +
+                "a.articleCheckAdminId, a.articleDelYn) " +
+                "from Article a, User u where a.articleCreateUserId = u.id and a.articleCheckYn=0 and a.articleDelYn=0 ");
+        StringBuffer sb_count =new StringBuffer("select count(*) from Article a, User u where a.articleCreateUserId = u.id and a.articleCheckYn=0 and a.articleDelYn=0 ");
         Map<String, Object> map = new HashMap<>();
+        if(!"".equals(userName)){
+            map.put("userName", "%"+userName+"%");
+            sb.append(" and u.userName like :userName");
+            sb_count.append(" and u.userName like :userName");
+        }
         if(!"".equals(typeId)){
             map.put("typeId", typeId);
-            sb.append(" and typeId=:typeId");
-            sb_count.append(" and typeId=:typeId");
+            sb.append(" and a.typeId=:typeId");
+            sb_count.append(" and a.typeId=:typeId");
         }
-        sb.append(" order by articleCheckTime ");
+        if(!"".equals(startTime)){
+            try {
+                Date sTime = Utils.sf_yMd.parse(startTime);
+                map.put("sTime", sTime);
+                sb.append(" and a.articleCreateTime >= :sTime");
+                sb_count.append(" and a.articleCreateTime >= :sTime");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(!"".equals(endTime)){
+            try {
+
+                Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
+                c.setTime(Utils.sf_yMd.parse(endTime));
+                c.add(Calendar.DATE, 1);
+                map.put("eTime", c.getTime());
+                sb.append(" and a.articleCreateTime <= :eTime");
+                sb_count.append(" and a.articleCreateTime <= :eTime");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        sb.append(" order by a.articleCreateTime");
         DaoUtils.Page page = daoUtils.getPage(start, limit);
         reutnrMap.put("list", daoUtils.findByHQL(sb.toString(), map.size()>0?map:null, page));
         reutnrMap.put("count", daoUtils.getTotalByHQL(sb_count.toString(), map));
@@ -122,7 +169,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         Article article = (Article) daoUtils.getById("Article", aid);
         if(article != null){
             if(article.getArticleCheckYn() == 0){
-                article.setArticleCheckYn(checkYn==1?1:0);
+                article.setArticleCheckYn(checkYn==1?1:2);
                 if(checkYn==1){
                     article.setArticleOnline(1);
                     article.setArticleCheckTime(new Date());

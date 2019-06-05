@@ -44,7 +44,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("data", articleService.sel(tid, start, limit));
-        msg.setData(map);
+        msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("sel{ start: {} - limit: {} }", start, limit);
         return msg;
@@ -67,7 +67,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         logger.info("selById{ aid: {} }", aid);
         return msg;
     }
@@ -85,7 +85,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("data", articleService.selByUserId(uid, start, limit));
-        msg.setData(map);
+        msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("selByUserId{ start: {} - limit: {} }", start, limit);
         return msg;
@@ -109,9 +109,15 @@ public class ArticleController extends BaseController {
         if(model.getPictures() != null){
             StringBuffer stringBuffer = new StringBuffer("");
             for (int i = 0; i < model.getPictures().size(); i++) {
-                stringBuffer.append(this.upload2PNG(i+"_"+Utils.idTimer.format(date), model.getArticle().getId(), model.getPictures().get(i))+",");
+                String path = this.upload2PNG(i+"_"+Utils.idTimer.format(date), model.getArticle().getId(), model.getPictures().get(i));
+                stringBuffer.append(path+",");
+                if(i==0){
+                    model.getArticle().setArticleLogo(path);
+                }
             }
             model.getArticle().setArticlePicture(stringBuffer.substring(0, stringBuffer.length()-1));
+        }else{
+            model.getArticle().setArticlePicture("");
         }
         //设置文章默认属性
         model.getArticle().setArticleOnline(0);
@@ -120,7 +126,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", articleService.add(model.getArticle()));
-        msg.setData(map);
+        msg.setResult(map);
         msg.setMsg("添加成功");
         logger.info("add{ article: {} }", model.getArticle().toString());
         return msg;
@@ -144,7 +150,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
-        msg.setData(map);
+        msg.setResult(map);
         logger.info("del{ aid: {}, uid: {} }", aid, uid);
         return msg;
     }
@@ -168,7 +174,7 @@ public class ArticleController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", articleLike);
-        msg.setData(map);
+        msg.setResult(map);
         return msg;
     }
 }

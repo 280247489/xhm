@@ -27,7 +27,7 @@ public class CmsSysAdminController extends BaseController {
     public Message login(@RequestParam(name="loginname") String loginname, @RequestParam(name="password") String password) {
         msg = Message.success();
         SysAdmin sysAdmin = cmsSysAdminService.login(loginname, password);
-        msg.setData(sysAdmin);
+        msg.setResult(sysAdmin);
         msg.setMsg("登录成功");
         return msg;
     }

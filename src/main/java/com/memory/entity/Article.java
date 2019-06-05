@@ -242,4 +242,28 @@ public class Article {
     public int hashCode() {
         return Objects.hash(id, typeId, articleTitle, articleLogo, articlePicture, articleContent, articleLabel, articleKeyWords, articleOnline, articleTotalView, articleTotalShare, articleTotalLike, articleCreateTime, articleCreateUserId, articleCheckYn, articleCheckTime, articleCheckAdminId, articleDelYn);
     }
+
+    public Article() {
+    }
+
+    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn) {
+        this.id = id;
+        this.typeId = typeId;
+        this.articleTitle = articleTitle;
+        this.articleLogo = articleLogo;
+        this.articlePicture = articlePicture;
+        this.articleContent = articleContent;
+        this.articleLabel = articleLabel;
+        this.articleKeyWords = articleKeyWords;
+        this.articleOnline = articleOnline;
+        this.articleTotalView = articleTotalView;
+        this.articleTotalShare = articleTotalShare;
+        this.articleTotalLike = articleTotalLike;
+        this.articleCreateTime = articleCreateTime;
+        this.articleCreateUserId = articleCreateUserId;
+        this.articleCheckYn = articleCheckYn;
+        this.articleCheckTime = articleCheckTime;
+        this.articleCheckAdminId = articleCheckAdminId;
+        this.articleDelYn = articleDelYn;
+    }
 }

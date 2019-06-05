@@ -2,8 +2,8 @@ package com.memory.app.controller;
 
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
-import com.memory.entity.User;
 import com.memory.app.service.UserService;
+import com.memory.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserController extends BaseController {
                        @RequestParam(name="name") String userName, @RequestParam(name="logo") String userLog) {
         msg = Message.success();
         User user = userService.login(userUnionId, userOpenId, userName, userLog);
-        msg.setData(user);
+        msg.setResult(user);
         msg.setMsg("授权登录成功");
         logger.info("wxLogin{ id: {} - openid: {} }", user.getId(), user.getUserOpenId());
         return msg;
@@ -96,7 +96,7 @@ public class UserController extends BaseController {
             User user = userService.login(userTel, password);
             if(user != null){
                 msg.setMsg("登录成功");
-                msg.setData(user);
+                msg.setResult(user);
             }else{
                 msg.setRecode(1);
                 msg.setMsg("账号或密码错误");

@@ -1,9 +1,9 @@
 package com.memory.app.service.impl;
 
 import com.memory.common.utils.Utils;
-import com.memory.entity.User;
 import com.memory.app.repository.UserRepository;
 import com.memory.app.service.UserService;
+import com.memory.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             user = new User(Utils.generateUUID(), "", userUnionId, userOpenId, "", userName, userLogo,
                     "", "", "", "", "", "",
-                    new Date(), 0, 0, 0);
+                    new Date(), 0, 0, 0, "");
 
         }else{
             user.setUserLogo(userLogo);
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             user = new User(Utils.generateUUID(), password, "", "", userTel, "", "",
                     "", "", "", "", "", "",
-                    new Date(), 0, 0, 0);
+                    new Date(), 0, 0, 0, "");
             userRepository.save(user);
         }else{
             user = null;

@@ -15,7 +15,7 @@ public interface CmsArticleService {
     Map<String, Object> sel(String userName, String typeId, Integer online, Integer check, Integer del, String startTime, String endTime, Integer start, Integer limit);
 
     //查询未审核文章全部文章
-    Map<String, Object> selCheck(String typeId, Integer start, Integer limit);
+    Map<String, Object> selCheck(String userName, String typeId, String startTime, String endTime, Integer start, Integer limit);
 
     //查询文章详情
     Article selById(String aid);

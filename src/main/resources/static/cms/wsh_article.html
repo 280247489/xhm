@@ -40,7 +40,7 @@
       </div>
      </section>
      <div class="page_title">
-		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;文章管理 / 文章查询</strong></h2>
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;文章管理 / 未审核文章</strong></h2>
 		 <span class="fr">
             <input type="text" id="userName" style="width:150px;" placeholder="用户名称.." class="textbox"/>
             文章栏目：
@@ -48,24 +48,6 @@
                 <option value="">全 部</option>
                 <option value="1">1</option>
             </select>
-            上下架状态：
-            <select class="select" id="online" style="width:100px">
-                <option value="">全 部</option>
-                <option value="1">上 架</option>
-                <option value="0">下 架</option>
-            </select>
-            审核状态：
-            <select class="select" id="check" style="width:100px">
-                <option value="">全 部</option>
-                <option value="0">审核中</option>
-                <option value="1" selected = "selected">通 过</option>
-                <option value="2">未通过</option>
-            </select>
-            <!--是否删除：
-            <select class="select" id="del" style="width:100px">
-                <option value="0">未删除</option>
-                <option value="1">删 除</option>
-            </select>-->
             <input type="text" id="startTime" style="width:200px;" placeholder="开始时间.." class="textbox"/>
              -
             <span id="endTime_span">
@@ -79,5 +61,5 @@
 </section>
 </body>
 <script src="laydate/laydate.js"></script>
-<script src="pagejs/sel_article.js"></script>
+<script src="pagejs/wsh_article.js"></script>
 </html>
