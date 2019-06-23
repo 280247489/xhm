@@ -36,7 +36,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
                 "a.articleTotalShare, a.articleTotalLike, " +
                 "a.articleCreateTime, u.userName, " +
                 "a.articleCheckYn, a.articleCheckTime, " +
-                "a.articleCheckAdminId, a.articleDelYn) " +
+                "a.articleCheckAdminId, a.articleDelYn , a.articleTopYn) " +
                 "from Article a, User u where a.articleCreateUserId = u.id ");
         StringBuffer sb_count =new StringBuffer("select count(*) from Article a, User u where a.articleCreateUserId = u.id ");
         Map<String, Object> map = new HashMap<>();
@@ -109,7 +109,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
                 "a.articleTotalShare, a.articleTotalLike, " +
                 "a.articleCreateTime, u.userName, " +
                 "a.articleCheckYn, a.articleCheckTime, " +
-                "a.articleCheckAdminId, a.articleDelYn) " +
+                "a.articleCheckAdminId, a.articleDelYn,a.articleTopYn) " +
                 "from Article a, User u where a.articleCreateUserId = u.id and a.articleCheckYn=0 and a.articleDelYn=0 ");
         StringBuffer sb_count =new StringBuffer("select count(*) from Article a, User u where a.articleCreateUserId = u.id and a.articleCheckYn=0 and a.articleDelYn=0 ");
         Map<String, Object> map = new HashMap<>();
@@ -206,4 +206,17 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         return article;
     }
 
+    @Transactional
+    @Override
+    public Article top(String aid) {
+        Article article = (Article) daoUtils.getById("Article", aid);
+        if(article != null){
+            if(article.getArticleTopYn()==0){
+                article.setArticleTopYn(1);
+            }else{
+                article.setArticleTopYn(0);
+            }
+        }
+        return article;
+    }
 }

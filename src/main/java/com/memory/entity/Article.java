@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @Auther: cui.Memory
- * @Date: 2019/5/12 0012 16:13
- * @Description:
+ * @author Liuty
+ * @date 2019-06-23 15:11
  */
+
 @Entity
 public class Article {
     private String id;
@@ -32,9 +32,10 @@ public class Article {
     private Date articleCheckTime;
     private String articleCheckAdminId;
     private int articleDelYn;
+    private int articleTopYn;
 
     @Id
-    @Column(name = "id", nullable = false, length = 255)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -44,7 +45,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "type_id", nullable = false, length = 255)
+    @Column(name = "type_id")
     public String getTypeId() {
         return typeId;
     }
@@ -54,7 +55,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_title", nullable = false, length = 255)
+    @Column(name = "article_title")
     public String getArticleTitle() {
         return articleTitle;
     }
@@ -64,7 +65,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_logo", nullable = false, length = 255)
+    @Column(name = "article_logo")
     public String getArticleLogo() {
         return articleLogo;
     }
@@ -74,7 +75,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_picture", nullable = false, length = -1)
+    @Column(name = "article_picture")
     public String getArticlePicture() {
         return articlePicture;
     }
@@ -84,7 +85,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_content", nullable = false, length = -1)
+    @Column(name = "article_content")
     public String getArticleContent() {
         return articleContent;
     }
@@ -94,7 +95,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_label", nullable = false, length = 255)
+    @Column(name = "article_label")
     public String getArticleLabel() {
         return articleLabel;
     }
@@ -104,7 +105,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_key_words", nullable = false, length = -1)
+    @Column(name = "article_key_words")
     public String getArticleKeyWords() {
         return articleKeyWords;
     }
@@ -114,7 +115,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_online", nullable = false)
+    @Column(name = "article_online")
     public int getArticleOnline() {
         return articleOnline;
     }
@@ -124,7 +125,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_total_view", nullable = false)
+    @Column(name = "article_total_view")
     public int getArticleTotalView() {
         return articleTotalView;
     }
@@ -134,7 +135,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_total_share", nullable = false)
+    @Column(name = "article_total_share")
     public int getArticleTotalShare() {
         return articleTotalShare;
     }
@@ -144,7 +145,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_total_like", nullable = false)
+    @Column(name = "article_total_like")
     public int getArticleTotalLike() {
         return articleTotalLike;
     }
@@ -154,7 +155,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_create_time", nullable = false)
+    @Column(name = "article_create_time")
     public Date getArticleCreateTime() {
         return articleCreateTime;
     }
@@ -164,7 +165,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_create_user_id", nullable = false, length = 255)
+    @Column(name = "article_create_user_id")
     public String getArticleCreateUserId() {
         return articleCreateUserId;
     }
@@ -174,7 +175,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_check_yn", nullable = false)
+    @Column(name = "article_check_yn")
     public int getArticleCheckYn() {
         return articleCheckYn;
     }
@@ -184,7 +185,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_check_time", nullable = false)
+    @Column(name = "article_check_time")
     public Date getArticleCheckTime() {
         return articleCheckTime;
     }
@@ -194,7 +195,7 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_check_admin_id", nullable = false, length = 255)
+    @Column(name = "article_check_admin_id")
     public String getArticleCheckAdminId() {
         return articleCheckAdminId;
     }
@@ -204,13 +205,23 @@ public class Article {
     }
 
     @Basic
-    @Column(name = "article_del_yn", nullable = false)
+    @Column(name = "article_del_yn")
     public int getArticleDelYn() {
         return articleDelYn;
     }
 
     public void setArticleDelYn(int articleDelYn) {
         this.articleDelYn = articleDelYn;
+    }
+
+    @Basic
+    @Column(name = "article_top_yn")
+    public int getArticleTopYn() {
+        return articleTopYn;
+    }
+
+    public void setArticleTopYn(int articleTopYn) {
+        this.articleTopYn = articleTopYn;
     }
 
     @Override
@@ -224,6 +235,7 @@ public class Article {
                 articleTotalLike == article.articleTotalLike &&
                 articleCheckYn == article.articleCheckYn &&
                 articleDelYn == article.articleDelYn &&
+                articleTopYn == article.articleTopYn &&
                 Objects.equals(id, article.id) &&
                 Objects.equals(typeId, article.typeId) &&
                 Objects.equals(articleTitle, article.articleTitle) &&
@@ -240,13 +252,14 @@ public class Article {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, typeId, articleTitle, articleLogo, articlePicture, articleContent, articleLabel, articleKeyWords, articleOnline, articleTotalView, articleTotalShare, articleTotalLike, articleCreateTime, articleCreateUserId, articleCheckYn, articleCheckTime, articleCheckAdminId, articleDelYn);
+        return Objects.hash(id, typeId, articleTitle, articleLogo, articlePicture, articleContent, articleLabel, articleKeyWords, articleOnline, articleTotalView, articleTotalShare, articleTotalLike, articleCreateTime, articleCreateUserId, articleCheckYn, articleCheckTime, articleCheckAdminId, articleDelYn, articleTopYn);
     }
 
     public Article() {
     }
 
-    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn) {
+
+    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn, int articleTopYn) {
         this.id = id;
         this.typeId = typeId;
         this.articleTitle = articleTitle;
@@ -265,5 +278,6 @@ public class Article {
         this.articleCheckTime = articleCheckTime;
         this.articleCheckAdminId = articleCheckAdminId;
         this.articleDelYn = articleDelYn;
+        this.articleTopYn = articleTopYn;
     }
 }

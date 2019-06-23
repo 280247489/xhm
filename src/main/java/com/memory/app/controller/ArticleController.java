@@ -123,6 +123,7 @@ public class ArticleController extends BaseController {
         model.getArticle().setArticleOnline(0);
         model.getArticle().setArticleCheckYn(0);
         model.getArticle().setArticleDelYn(0);
+        model.getArticle().setArticleTopYn(0);
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", articleService.add(model.getArticle()));

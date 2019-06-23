@@ -3,19 +3,14 @@ package com.memory.cms.controller;
 import com.memory.cms.service.CmsArticleService;
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
-import com.memory.common.utils.Utils;
 import com.memory.entity.Article;
-import com.memory.entity.ArticleLike;
-import com.memory.entity.model.ArticleModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,6 +123,23 @@ public class CmsArticleController extends BaseController {
     public Message online(@RequestParam(name="aid") String aid) {
         msg = Message.success();
         Article article = cmsArticleService.online(aid);
+        if(article != null){
+            msg.setMsg("操作成功");
+        }else{
+            msg.setMsg("ID不存在");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("fileUrl", this.getFileUrl());
+        map.put("obj", article);
+        msg.setResult(map);
+        return msg;
+    }
+
+
+
+    public Message top(@RequestParam(name = "aid") String aid){
+        msg = Message.success();
+        Article article = cmsArticleService.top(aid);
         if(article != null){
             msg.setMsg("操作成功");
         }else{

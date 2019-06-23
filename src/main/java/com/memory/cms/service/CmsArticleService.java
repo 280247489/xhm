@@ -2,7 +2,6 @@ package com.memory.cms.service;
 
 import com.memory.entity.Article;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -25,4 +24,6 @@ public interface CmsArticleService {
     Article online(String aid);
     //删除文章
     Article del(String aid);
+    //置顶文章
+    Article top(String aid);
 }
