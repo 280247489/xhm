@@ -1,5 +1,7 @@
 package com.memory.common.utils;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
@@ -50,6 +52,27 @@ public class Utils {
         }else {
             return false;
         }
+    }
+
+
+    public static Boolean isNotNull(String str){
+        return  str!=null && str.length()>0;
+    }
+
+    public static Boolean isNotNull(Integer str){
+        return  str!=null ;
+    }
+
+    public static Boolean isNotNull(Boolean str){
+        return  str!=null ;
+    }
+
+    public static Boolean isNotNull(MultipartFile file){
+        return file!=null && !file.isEmpty();
+    }
+
+    public static Boolean isNotNull(Object file){
+        return file!=null;
     }
 
 
