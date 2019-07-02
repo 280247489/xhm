@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * @author INS6+
- * @date 2019/7/1 19:33
+ * @date 2019/7/2 17:12
  */
 
 @Entity
@@ -21,6 +21,7 @@ public class Topics {
     private String topicCreateUserId;
     private String topicCreateUser;
     private int topicSort;
+    private int topicStatus;
     private Date topicCreateTime;
 
     @Id
@@ -94,6 +95,16 @@ public class Topics {
     }
 
     @Basic
+    @Column(name = "topic_status")
+    public int getTopicStatus() {
+        return topicStatus;
+    }
+
+    public void setTopicStatus(int topicStatus) {
+        this.topicStatus = topicStatus;
+    }
+
+    @Basic
     @Column(name = "topic_create_time")
     public Date getTopicCreateTime() {
         return topicCreateTime;
@@ -110,6 +121,7 @@ public class Topics {
         Topics topics = (Topics) o;
         return topicSum == topics.topicSum &&
                 topicSort == topics.topicSort &&
+                topicStatus == topics.topicStatus &&
                 Objects.equals(id, topics.id) &&
                 Objects.equals(topicName, topics.topicName) &&
                 Objects.equals(articleTypeId, topics.articleTypeId) &&
@@ -120,6 +132,6 @@ public class Topics {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, topicName, articleTypeId, topicSum, topicCreateUserId, topicCreateUser, topicSort, topicCreateTime);
+        return Objects.hash(id, topicName, articleTypeId, topicSum, topicCreateUserId, topicCreateUser, topicSort, topicStatus, topicCreateTime);
     }
 }

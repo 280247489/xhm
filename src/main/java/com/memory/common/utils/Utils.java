@@ -3,6 +3,7 @@ package com.memory.common.utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -55,6 +56,7 @@ public class Utils {
     }
 
 
+
     public static Boolean isNotNull(String str){
         return  str!=null && str.length()>0;
     }
@@ -74,6 +76,9 @@ public class Utils {
     public static Boolean isNotNull(Object file){
         return file!=null;
     }
+
+    public static Boolean isNotNull(List<?> list){ return list!=null && list.size()>0; }
+
 
 
 
