@@ -47,21 +47,26 @@
             <select class="select" id="articleTypeId" style="width:100px">
                 <option value="">全 部</option>
                 <option value="宝妈团">宝妈团</option>
-                  <option value="出游">出游</option>
-               <!--   <option value="宝妈团">宝妈团</option>-->
+                <option value="出游">出游</option>
+                <option value="吃喝">吃喝</option>
+                 <option value="专栏">专栏</option>
             </select>
-            上下架状态：
-            <select class="select" id="online" style="width:100px">
+            话题启用状态：
+            <select class="select" id="topicStatus" style="width:100px">
                 <option value="">全 部</option>
-                <option value="1">上 架</option>
-                <option value="0">下 架</option>
+                <option value=0>未启用</option>
+                <option value=1>启用</option>
             </select>
-            审核状态：
-            <select class="select" id="check" style="width:100px">
-                <option value="">全 部</option>
-                <option value="0">审核中</option>
-                <option value="1" selected = "selected">通 过</option>
-                <option value="2">未通过</option>
+            话题排序方式：
+             <!--  1. sumDesc   sumAsc 阅读数 2. sortDesc sortAsc  排序 3.timeDesc timeAsc 创建时间-->
+            <select class="select" id="sortType" style="width:100px">
+                <option value="">默认时间倒叙</option>
+                <option value="sumDesc">阅读数倒叙</option>
+                <option value="sumAsc">阅读数正叙</option>
+                <option value="sortDesc">排序倒叙</option>
+                 <option value="sortAsc">排序正叙</option>
+                 <option value="timeDesc">时间倒叙</option>
+                 <option value="timeAsc">时间正叙</option>
             </select>
             <!--是否删除：
             <select class="select" id="del" style="width:100px">

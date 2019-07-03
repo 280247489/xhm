@@ -62,13 +62,14 @@ public class CmsTopicsController {
 
     @RequestMapping("list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
-                       @RequestParam String articleType,@RequestParam String sortType,@RequestParam Integer topicStatus,@RequestParam String topicName){
+                       @RequestParam String articleType,@RequestParam String sortType,@RequestParam Integer topicStatus,@RequestParam String topicName,
+                       @RequestParam String beginTime,@RequestParam String endTime){
         Result result = new Result();
         try {
             int pageIndex = page+1;
             int limit = size;
-            List<Topics> list =cmsTopicsService.queryTopicsByQue(pageIndex,limit,articleType,sortType,topicStatus,topicName);
-            int totalElements =cmsTopicsService.queryTopicsCountByQue(articleType,sortType,topicStatus,topicName);
+            List<Topics> list =cmsTopicsService.queryTopicsByQue(pageIndex,limit,articleType,sortType,topicStatus,topicName,beginTime,endTime);
+            int totalElements =cmsTopicsService.queryTopicsCountByQue(articleType,sortType,topicStatus,topicName,beginTime,endTime);
             PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
             result = ResultUtil.success(pageResult);
         }catch (Exception e){

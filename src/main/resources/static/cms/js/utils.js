@@ -38,6 +38,11 @@ $(function(){
             sys_html+='<dd><a id="" href="system.html">系统查询</a></dd>';
             sys_html+='</dl></li>';
 
+            //话题管理
+			sys_html+='<li><dl id="topics">';
+			sys_html+='<dt><a href="javascript:;">话题管理</a></dt>';
+			sys_html+='<dd><a id="sel_topics" href="sel_topics.html">话题查询</a></dd>';
+			sys_html+='</dl></li>';
 			/*var permissionList = JSON.parse(window.sessionStorage.getItem("login_permission"));
 			for ( var i = 0; i < permissionList.length; i++) {
 				var obj = permissionList[i];

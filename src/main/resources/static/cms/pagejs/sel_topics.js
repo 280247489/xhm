@@ -1,7 +1,7 @@
 $(function(){
     $(".loading_area").fadeIn();
-	$("#article").addClass("dh_dl_open");
-	$("#wsh_article").addClass("active");
+	$("#topics").addClass("dh_dl_open");
+	$("#sel_topics").addClass("active");
 	$('#userName').bind('input propertychange', function(){
 		clearTimeout(sel_flag);
 		sel_flag = setTimeout(function(){
@@ -58,21 +58,29 @@ $(function(){
 	}, 500);
 });
 var sel_flag, time_flag;
-var start=1, limit=15, startTime='', endTime='', userName='', tid='';
+var start=1, limit=10;
 var list, fileUrl;
-function init(){
+var beginTime,endTime,articleType,sortType,topicStatus,topicName;
+function init(beginTime,endTime,articleType,sortType,topicStatus,topicName){
 	$(".loading_area").fadeIn();
-	userName = $('#userName').val();
-    tid = $('#tid').val();
-	startTime = $('#startTime').val();
-	endTime = $('#endTime').val();
-	ajax("cmsArticle/selcheck",
-			{userName: userName,
-				tid: tid,
-                startTime: startTime,
-                endTime: endTime,
-                start: start,
-                limit: limit
+
+	 beginTime = $('#startTime').val();
+	 endTime = $('#endTime').val();
+	 articleType =$('#articleTypeId').val();
+	 sortType =$('#sortType').val();
+	 topicStatus =$('#topicStatus').val();
+	 topicName = $('#topicName').val();
+
+	ajax("cmsTopics/list",
+			{
+				articleType: articleType,
+				sortType: sortType,
+				topicStatus: topicStatus,
+				topicName: topicName,
+				beginTime:beginTime,
+				endTime:endTime,
+				page: start,
+				size: limit
 			},
 			sel_callback);
 }
@@ -82,11 +90,12 @@ function sel_callback(data){
         var content='<table border="1" class="table"><tr>'
             +'<td width="50px" align=center>序号</td>'
             +'<td width="8%" align=center>栏 目</td>'
-            +'<td width="8%" align=center>logo</td>'
-            +'<td width="18%" align=center>标 题</td>'
-            +'<td width="8%" align=center>作 者</td>'
+            +'<td width="18%" align=center>话题名</td>'
+            +'<td width="18%" align=center>话题阅读数</td>'
+			+'<td width="8%" align=center>排序</td>'
+            +'<td width="8%" align=center>创建人</td>'
             +'<td width="8%" align=center>发布时间</td>'
-            +'<td width="8%" align=center>审核状态</td>'
+            +'<td width="8%" align=center>话题状态</td>'
             +'<td align=center>详情</td></tr>';
         if(data.result.count==0){
             content+='<tr><td align=center colspan="11"><font color="red">未 查 到 数 据</font></td></tr>';
@@ -98,16 +107,18 @@ function sel_callback(data){
             for (var i = 0; i < list.length; i++) {
                 var obj = list[i];
                 content += '<tr id="tr_'+obj.id+'"><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
-                    + '<td align=center>' + obj.typeId + '</td>'
-                    + '<td align=center><img style="width: 80px; height: 80px;" src="' + data.result.fileUrl + obj.articleLogo + '"></td>'
-                    + '<td align=center>' + obj.articleTitle + '</td>'
-                    + '<td align=center>' + obj.articleCreateUserId + '</td>'
-                    + '<td align=center>' + obj.articleCreateTime + '</td>'
+                    + '<td align=center>' + obj.articleTypeId + '</td>'
+                    + '<td align=center><img style="width: 80px; height: 80px;" src="' + data.topicName + '"></td>'
+                    + '<td align=center>' + obj.topicSum + '</td>'
+                    + '<td align=center>' + obj.topicSort + '</td>'
+                    + '<td align=center>' + obj.topicCreateUser + '</td>'
+					+ '<td align=center>' + obj.topicCreateTime + '</td>'
+					+ '<td align=center>' + obj.topicStatus ==0?"<font color='orange'>未启用</font>":"<font color='green'>启用</font>" + '</td>'
                     + '<td align=center>' + (obj.articleCheckYn == 0 ? "<font color='orange'>审核中</font>" : obj.articleCheckYn == 1 ? "<font color='green'>通过</font>" : "<font color='red'>驳回</font>") + '</td>'
                     + '<td align=center>'
                     + '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
-                    + '<button class="check1_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">审核通过</button>'
-                    + '<button class="check2_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">审核驳回</button>'
+                    + '<button class="check1_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">启用话题</button>'
+                    + '<button class="check2_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">禁用话题</button>'
                     + '</td>'
                     + '</tr>';
             }
@@ -127,13 +138,13 @@ function sel_callback(data){
                 window.location.href="article_info.html";
             });
             $('.check1_fun').click(function(){
-                if(confirm("确认通过？")){
+                if(confirm("确认启用？")){
                     var aid = $(this).attr('aid');
                     info(aid, 1);
                 }
             });
             $('.check2_fun').click(function(){
-                if(confirm("确认驳回？")){
+                if(confirm("确认禁用？")){
                     var aid = $(this).attr('aid');
                     info(aid, 2);
                 }
@@ -145,12 +156,14 @@ function sel_callback(data){
 }
 function info(aid, check){
     $(".loading_area").fadeIn();
-    ajax("cmsArticle/check",
-        { aid: aid, check: check },
+    ajax("cmsTopics/changeStatus",
+        { id: aid, topicCreateUserId: sessionStorage.getItem("login_id"), topicCreateUser:sessionStorage.getItem("login_name")},
         function(data){
             $(".loading_area").fadeOut(300);
 			if(data.state == "success" && data.recode == 0){
-				$('#tr_'+aid).remove();
+				console.log("beginTime == " ,beginTime);
+				//$('#tr_'+aid).remove();
+				init(beginTime,endTime,articleType,sortType,topicStatus,topicName);
 			}else{
                 $.jBox.tip(data.msg);
 			}

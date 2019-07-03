@@ -17,9 +17,9 @@ public interface CmsTopicsService {
 
     Topics getTopicsById(String id);
 
-    List<Topics> queryTopicsByQue(Integer pageIndex,Integer limit,String articleType,String sortType,Integer topicStatus,String topicName);
+    List<Topics> queryTopicsByQue(Integer pageIndex,Integer limit,String articleType,String sortType,Integer topicStatus,String topicName,String beginTime,String endTime);
 
-    int queryTopicsCountByQue(String articleType,String sortType,Integer topicStatus,String topicName);
+    int queryTopicsCountByQue(String articleType,String sortType,Integer topicStatus,String topicName,String beginTime,String endTime);
 
     //启用话题
     int useTopics(String id);
