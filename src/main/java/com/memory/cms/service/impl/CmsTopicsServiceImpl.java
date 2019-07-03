@@ -9,10 +9,8 @@ import com.memory.entity.Topics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * @author INS6+
@@ -68,19 +66,25 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
         Map<String,Object> whereClause =  getQueryWhere(articleType,sortType,topicStatus,topicName,beginTime,endTime);
         stringBuffer.append(whereClause.get("where"));
-        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+        System.out.printf("%n where = " + stringBuffer.toString());
 
+        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+        System.out.printf("%n map = " + map.toString());
         return   daoUtils.findByHQL(stringBuffer.toString(),map,page);
     }
 
     @Override
     public int queryTopicsCountByQue(String articleType, String sortType, Integer topicStatus,String topicName,String beginTime,String endTime) {
 
+        Map<String,Object> whereClause =  getQueryWhere(articleType,sortType,topicStatus,topicName,beginTime,endTime);
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(" SELECT count(*) FROM Topics t Where 1=1 ");
-        Map<String,Object> whereClause =  getQueryWhere(articleType,sortType,topicStatus,topicName,beginTime,endTime);
+
         stringBuffer.append(whereClause.get("where"));
+
+        System.out.printf("%n where 2 = " + stringBuffer.toString());
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+        System.out.printf("%n  map 2 = " + map.toString());
 
         return daoUtils.getTotalByHQL(stringBuffer.toString(),map);
     }
@@ -104,25 +108,26 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
             paramMap.put("topicStatus",topicStatus);
         }
 
-        if(Utils.isNotNull(beginTime) && Utils.isNotNull(endTime)){
-            System.out.println("beginTime === " + beginTime);
-            System.out.println("endTime ====" +endTime);
-            beginTime = beginTime +" 00:00:00";
-            endTime = endTime + " 23:59:59";
-            stringBuffer.append(" AND t.topicCreateTime BETWEEN  to_date(\'" +beginTime+"\',\'yyyy-MM-dd HH:mm:ss\') AND "+"to_date(\'" +endTime+"\',\'yyyy-MM-dd HH:mm:ss\')");
-        }else {
-            String today = DateUtils.getDefaultCurrentDate();
 
-
-            if(Utils.isNotNull(beginTime)){
-                beginTime = beginTime +" 00:00:00";
-                Date todayEnd = DateUtils.strToDate(today + " 23:59:59");
-                stringBuffer.append(" AND t.topicCreateTime BETWEEN " + DateUtils.strToDate(beginTime ) +" AND " + todayEnd);
+        if(Utils.isNotNull(beginTime) ){
+            try {
+                Date sTime = Utils.sf_yMd.parse(beginTime);
+                paramMap.put("beginTime",sTime);
+                stringBuffer.append(" and t.topicCreateTime >= :beginTime");
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            if(Utils.isNotNull(endTime)){
-                endTime = endTime + " 23:59:59";
-                Date todayStart = DateUtils.strToDate(today+" 00:00:00");
-                stringBuffer.append(" AND t.topicCreateTime BETWEEN " +todayStart +" AND " +  DateUtils.strToDate(endTime) );
+        }
+        if(!Utils.isNotNull(endTime) ){
+            try {
+
+                Calendar c = Calendar.getInstance();//可以对每个时间域单独修改
+                c.setTime(Utils.sf_yMd.parse(endTime));
+                c.add(Calendar.DATE, 1);
+                paramMap.put("endTime", c.getTime());
+                stringBuffer.append(" and t.topicCreateTime <= :endTime");
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
 
         }
@@ -162,6 +167,7 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
 
         returnMap.put("where",stringBuffer.toString());
         returnMap.put("param",paramMap);
+
         return returnMap;
     }
 
