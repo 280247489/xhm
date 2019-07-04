@@ -3,11 +3,11 @@ if(window.sessionStorage.getItem("login_id")==null&&window.location.pathname.ind
 	window.location.href="login.html";
 }else if(window.location.pathname.indexOf("login.html")>-1){
 	window.sessionStorage.clear();
-}else{ 
+}else{
 
 }
-var serPath="http://localhost:8081/xhm/";
-var imgPath="http://localhost:8081/xhm/";
+var serPath="http://localhost:8089/xhm/";
+var imgPath="http://localhost:8089/xhm/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
 
@@ -110,7 +110,7 @@ var utils = {
 				if(object[i]==""){
 					isEmpty_bool=true;
 				}
-				
+
 			}
 			return isEmpty_bool;
 		}
@@ -122,7 +122,7 @@ var utils = {
 	 */
 	isPassWord : function(string){
 		var passWord=/^[a-zA-Z0-9]{6,12}$/;
-		return passWord.test(string);		
+		return passWord.test(string);
 	},
 	/**
 	 * 长度验证
@@ -180,18 +180,18 @@ var utils = {
 	 * @returns
 	 */
 	getParam : function(paramName){
-		var url = location.href;  
-        var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");  
-        var paraObj = {}; 
-        for (var i = 0; j = paraString[i]; i++) {  
-            paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);  
-        }  
-        var returnValue = paraObj[paramName.toLowerCase()];  
-        if (typeof (returnValue) == "undefined") {  
-            return "";  
-        } else {  
-            return returnValue;  
-        }  
+		var url = location.href;
+        var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+        var paraObj = {};
+        for (var i = 0; j = paraString[i]; i++) {
+            paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+        }
+        var returnValue = paraObj[paramName.toLowerCase()];
+        if (typeof (returnValue) == "undefined") {
+            return "";
+        } else {
+            return returnValue;
+        }
 	},
 	/**
 	 * 回跳页面
@@ -200,14 +200,14 @@ var utils = {
 	 */
 	getBackUrlStr : function(paramName){
 		var paramSize=paramName.length;
-	   	var url = location.href;  
+	   	var url = location.href;
 	   	var index = url.indexOf("?");
 	   	var paraString ;
 	   	if (index>0) {
 	   		paraString = url.substring(index + paramSize+2, url.length);
 		}else{
 			paraString = "index.jsp";
-		}    
+		}
 		 return paraString;
 	},
 	/**
@@ -215,22 +215,22 @@ var utils = {
 	 * @param x
 	 * @returns
 	 */
-	toDouble : function(param) {  
-		var f = parseFloat(param);  
-		if (isNaN(f)) {  
-		    return false;  
-		}  
-		var f = Math.round(param*100)/100;  
-		var s = f.toString();  
-		var rs = s.indexOf('.');  
-		if (rs < 0) {  
+	toDouble : function(param) {
+		var f = parseFloat(param);
+		if (isNaN(f)) {
+		    return false;
+		}
+		var f = Math.round(param*100)/100;
+		var s = f.toString();
+		var rs = s.indexOf('.');
+		if (rs < 0) {
 			rs = s.length;
-			s += '.';  
-		}  
-		while (s.length <= rs + 2) {  
+			s += '.';
+		}
+		while (s.length <= rs + 2) {
 			s += '0';
-		}  
-		return s;  
+		}
+		return s;
 	},
 	/**
 	 * 图片比例修改
@@ -241,15 +241,15 @@ var utils = {
 	 */
 	picUrl : function(url,w,h){
 		if(h==""){
-			
+
 			var array=url.split(".");
 			var path0=array[0]+"_"+w;
 			var picUrl=path0+"."+array[1];
 			return picUrl;
 		}
-		
+
 		 var array=url.split(".");
-		
+
 		var path0=array[0]+"_"+w+"x"+h;
 		var picUrl=path0+"."+array[1];
 		return picUrl;
@@ -283,7 +283,7 @@ function ajax(url, args, callback_fn, type){
 }
 //金额change事件，验证是否非数字,非负数,保留两位小数
 function bind_price(_id){
-	$('#'+_id).bind('input propertychange', function(e) { 
+	$('#'+_id).bind('input propertychange', function(e) {
 		if(isNaN(e.target.value)){
 			$('#'+_id).val($('#'+_id).attr("valuea"));
 		}else if(e.target.value<0){
@@ -299,7 +299,7 @@ function bind_price(_id){
 	});
 }
 function bind_price_fu(_id){
-	$('#'+_id).bind('input propertychange', function(e) { 
+	$('#'+_id).bind('input propertychange', function(e) {
 		if(isNaN(e.target.value)){
 			if(e.target.value.lastIndexOf("-")!=0){
 				$('#'+_id).val($('#'+_id).attr("valuea"));
@@ -315,7 +315,7 @@ function bind_price_fu(_id){
 	});
 }
 function bind_number(_id){
-	$('#'+_id).bind('input propertychange', function(e) { 
+	$('#'+_id).bind('input propertychange', function(e) {
 		if(isNaN(e.target.value)){
 			$('#'+_id).val($('#'+_id).attr("valuea"));
 		}else if(e.target.value<0){
@@ -328,7 +328,7 @@ function bind_number(_id){
 	});
 }
 function bind_number_class(_class){
-	$('.'+_class).bind('input propertychange', function(e) { 
+	$('.'+_class).bind('input propertychange', function(e) {
 		if(isNaN(e.target.value)){
 			$(this).val($(this).attr("valuea"));
 		}else if(e.target.value<0){

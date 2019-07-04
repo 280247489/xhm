@@ -6,8 +6,10 @@
 <link rel="shortcut icon" type="text/css" href="images/icon/favicon.ico" />
 <meta name="author" content="CuiDi" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
-<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/> 
-<!--[if lt IE 9]>
+<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/>
+<!--<link rel="stylesheet" href="css/hDialog/common.css" />-->
+<!--<link rel="stylesheet" href="css/hDialog/animate.min.css" />-->
+    <!--[if lt IE 9]>
 <script src="js/html5.js"></script>
 <![endif]-->
 <script src="js/jquery.js"></script>
@@ -15,6 +17,9 @@
 <script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
 <script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+ <script src="js/hDialog/jquery.min.js"></script>
+ <script src="js/hDialog/jquery.hDialog.js"></script>
+
 </head>
 <body>
 <header>
@@ -41,6 +46,7 @@
      </section>
      <div class="page_title">
 		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;话题管理 / 话题查询</strong></h2>
+         <a href=" " id="createTopics" class="top_rt_btn" style="margin-top: 0.2em;margin-right: 0.2em;">发布话题</a>
 		 <span class="fr">
             <input type="text" id="topicName" style="width:150px;" placeholder="话题名称.." class="textbox"/>
             文章栏目：
@@ -80,9 +86,38 @@
             </span>
 		   </span>
      </div>
-     
+
      <div style="padding-left:10px;font-size:14px;font-weight:bold;" id="content"></div>
  </div>
+
+    <div id="createTopicsBox" style="display: none">
+
+            <form action="" method="post" onsubmit="return false;">
+                <table border="1" class="table">
+                    <tbody><tr><td width="200px" align="right">类型：</td>
+                        <td width="200px" id="typeId">1</td></tr>
+                    <tr><td width="200px" align="right">文章标题图：</td>
+                        <td id="logo"><img style="width: 80px; height: 80px;" src="http://localhost:8080/xhm_file/article/7OnMYquq/0_20190616175824.png"></td></tr>
+                    <tr><td width="200px" align="right">文章标题：</td>
+                        <td id="title">测试标题6</td></tr>
+                    <tr><td width="200px" align="right">文章内容图：</td>
+                        <td id="picture"><img style="width: 80px; height: 80px;" src="http://localhost:8080/xhm_file/article/7OnMYquq/0_20190616175824.png"></td></tr>
+                    <tr><td width="200px" align="right">文章内容：</td>
+                        <td id="article_content">测试内容</td></tr>
+                    <tr><td width="200px" align="right">发布作者：</td>
+                        <td id="userId">memory</td></tr>
+                    <tr><td width="200px" align="right">发布时间：</td>
+                        <td id="createTime">2019-06-16 17:58:24</td></tr>
+                    <tr><td width="200px" align="right">统计数：</td>
+                        <td id="tjs">阅读数：0  <font color="#ffc0cb">点赞数：0</font>  <font color="#00ced1">分享数：0</font></td></tr>
+                    <tr><td width="200px" align="right">是否上线：</td>
+                        <td id="online"><font color="red">未上架</font></td></tr>
+                    <tr><td width="200px" align="right">是否审核：</td>
+                        <td id="check"><font color="orange">审核中</font></td></tr>
+                    </tbody></table>
+            </form>
+    </div>
+
 </section>
 </body>
 <script src="laydate/laydate.js"></script>

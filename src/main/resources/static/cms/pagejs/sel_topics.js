@@ -9,6 +9,20 @@ $(function(){
 			init();
 		}, 1000);
 	});
+
+	//遮罩不可关闭
+	$('.createTopics').hDialog({
+		title: '详情',
+		box: '#createTopicsBox',
+		width: 500,
+		height: 400,
+		modalHide: false,
+		beforeShow: function(){
+
+
+		},
+	});
+
 	 $('#tid').change(function(){
          init();
 	 });
@@ -70,6 +84,7 @@ function init(beginTime,endTime,articleType,sortType,topicStatus,topicName){
 	 sortType =$('#sortType').val();
 	 topicStatus =$('#topicStatus').val();
 	 topicName = $('#topicName').val();
+	 console.log("init beginTime=",beginTime)
 
 	ajax("cmsTopics/list",
 			{
@@ -85,7 +100,6 @@ function init(beginTime,endTime,articleType,sortType,topicStatus,topicName){
 			sel_callback);
 }
 function sel_callback(data){
-	console.log("data",data)
 	$(".loading_area").fadeOut(300);
     if( data.code==0){
         var content='<table border="1" class="table"><tr>'
@@ -104,45 +118,25 @@ function sel_callback(data){
             content+='</table>';
             $('#content').html(content);
         }else {
-
-        	console.log("data is ===",data.data.data)
             list = data.data.data;
           //  fileUrl = data.result.fileUrl;
             for (var i = 0; i < data.data.data.length; i++) {
-
                 var obj = list[i];
-                console.log('obj ====',obj);
-				content += '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
-					+ '<td align=center>' + obj.typeId + '</td>'
-					+ '<td align=center><img style="width: 80px; height: 80px;" src="' + data.result.fileUrl + obj.articleLogo + '"></td>'
-					+ '<td align=center>' + obj.articleTitle + '</td>'
-					//+ '<td align=center>' + obj.articleCreateUserId + '</td>'
-					+ '<td align=center>' + obj.articleCreateUserId + '</td>'
-					+ '<td align=center>' + obj.articleCreateTime + '</td>'
-					+ '<td align=center>阅读数：' + obj.articleTotalView + '<br><br>  <font color="#ffc0cb">点赞数：' + obj.articleTotalLike + '</font><br><br>  <font color="#00ced1">分享数：' + obj.articleTotalShare + '</font></td>'
-					+ '<td align=center id="td_'+obj.id+'">' + (obj.articleOnline == 1 ? "<font color='green'>已上架</font>" : "<font color='red'>未上架</font>") + '</td>'
-					+ '<td align=center>' + (obj.articleCheckYn == 0 ? "<font color='orange'>审核中</font>" : obj.articleCheckYn == 1 ? "<font color='green'>通过</font>" : "<font color='red'>驳回</font>") + '</td>'
+                content+= '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
+					+ '<td align=center>' + obj.articleTypeId + '</td>'
+					+ '<td align=center>' + obj.topicName+ '</td>'
+					+ '<td align=center>' +  obj.topicSum  + '</td>'
+					+ '<td align=center>' +obj.topicSort + '</td>'
+					+ '<td align=center>' + obj.topicCreateUser + '</td>'
+					+ '<td align=center>' +  obj.topicCreateTime + '</td>'
+					+ '<td align=center id="topicStatus_'+obj.id+'">' + (obj.topicStatus == 0 ? '<font color="orange">未启用</font>':'<font color="green">启用</font>')+'</td>'
 					+ '<td align=center>'
-					+ '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
-					+ '<button class="online_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">' + (obj.articleOnline == 1 ? "下架" : "上架") + '</button>'
+					//+ '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
+					+'<button class="check_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" value="'+obj.topicStatus+'" index="' + i + '" style="width:80px;height:30px;">' +
+					(obj.topicStatus == 0 ? '启用话题':'禁用话题')+
+					'</button>'
 					+ '</td>'
 					+ '</tr>';
-
-                content += '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
-                    + '<td align=center>' + obj.articleTypeId + '</td>'
-                    + '<td align=center><img style="width: 80px; height: 80px;" src="' + data.topicName + '"></td>'
-                    + '<td align=center>' + obj.topicSum + '</td>'
-                    + '<td align=center>' + obj.topicSort + '</td>'
-                    + '<td align=center>' + obj.topicCreateUser + '</td>'
-					+ '<td align=center>' + obj.topicCreateTime + '</td>'
-					+ '<td align=center>' + obj.topicStatus ==0?"<font color='orange'>未启用</font>":"<font color='green'>启用</font>" + '</td>'
-              //      + '<td align=center>' + (obj.articleCheckYn == 0 ? "<font color='orange'>审核中</font>" : obj.articleCheckYn == 1 ? "<font color='green'>通过</font>" : "<font color='red'>驳回</font>") + '</td>'
-                    + '<td align=center>'
-                    + '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
-                    + '<button class="check1_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">启用话题</button>'
-                    + '<button class="check2_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">禁用话题</button>'
-                    + '</td>'
-                    + '</tr>';
             }
             content += '</table>';
             content += createPage(data.data.totalElements);
@@ -153,39 +147,45 @@ function sel_callback(data){
                     init();
                 }
             });
-            $('.info_fun').click(function(){
-                var obj = list[$(this).attr("index")];
+
+
+         //   $('.info_fun').click(function(){
+
+
+            /*    var obj = list[$(this).attr("index")];
                 window.sessionStorage.setItem("article_info_obj", JSON.stringify(obj));
                 window.sessionStorage.setItem("fileUrl", fileUrl);
-                window.location.href="article_info.html";
-            });
-            $('.check1_fun').click(function(){
+                window.location.href="article_info.html";*/
+          //  });
+            $('.check_fun').click(function(){
                 if(confirm("确认启用？")){
+                	console.log("value ========",$('.check_fun').val());
                     var aid = $(this).attr('aid');
-                    info(aid, 1);
+                    info(aid, $('.check_fun').val());
                 }
             });
-            $('.check2_fun').click(function(){
-                if(confirm("确认禁用？")){
-                    var aid = $(this).attr('aid');
-                    info(aid, 2);
-                }
-            });
+
         }
 	}else{
 		$.jBox.tip(data.msg);
 	}
 }
 function info(aid, check){
-    $(".loading_area").fadeIn();
+	beginTime = $('#startTime').val();
+	endTime = $('#endTime').val();
+	articleType =$('#articleTypeId').val();
+	sortType =$('#sortType').val();
+	topicStatus =$('#topicStatus').val();
+	topicName = $('#topicName').val();
+
+   // $(".loading_area").fadeIn();
     ajax("cmsTopics/changeStatus",
         { id: aid, topicCreateUserId: sessionStorage.getItem("login_id"), topicCreateUser:sessionStorage.getItem("login_name")},
         function(data){
             $(".loading_area").fadeOut(300);
-			if(data.state == "success" && data.recode == 0){
-				console.log("beginTime == " ,beginTime);
-				//$('#tr_'+aid).remove();
-				init(beginTime,endTime,articleType,sortType,topicStatus,topicName);
+			if(data.code == 0){
+				init();
+
 			}else{
                 $.jBox.tip(data.msg);
 			}
