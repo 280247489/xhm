@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>家乐说后台管理系统</title>
+<link rel="shortcut icon" type="text/css" href="images/icon/favicon.ico" />
+<meta name="author" content="CuiDi" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/> 
+<!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<![endif]-->
+<script src="js/jquery.js"></script>
+<script src="js/utils.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+    <link rel="stylesheet" href="jodit/build/jodit.min.css">
+    <script src="jodit/build/jodit.min.js"></script>
+    <script src="js/yutil-1.0.1.js"></script>
+</head>
+<body>
+<header>
+ <h1><img src="images/logo.png"/></h1>
+ <ul class="rt_nav">
+  <li><a href="javascript:;" class="admin_icon" id="loginUserName"></a></li>
+  <li><a href="change_password.html" class="set_icon">修改密码</a></li>
+  <li><a href="javascript:;" id="esc" class="quit_icon">安全退出</a></li>
+ </ul>
+</header>
+<aside class="lt_aside_nav content mCustomScrollbar">
+ <h2><a href="index.html">主菜单</a></h2>
+ <ul class="dh_close" id="sys">
+  <!--  -->
+ </ul>
+</aside>
+<section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+     <section class="loading_area">
+      <div class="loading_cont">
+       <div class="loading_icon"><i></i><i></i><i></i><i></i><i></i></div>
+       <div class="loading_txt"><mark>数据正在加载，请稍后！</mark></div>
+      </div>
+     </section>
+     <div class="page_title">
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;广告管理 / 添加广告</strong></h2>
+     </div>
+     
+     <div style="padding-left:10px;font-size:14px;font-weight:bold;" id="content">
+         <iframe name="hidden_frame" id="hidden_frame" style="display: none"></iframe>
+             <input type="hidden" id="cid" name="cid" value="" />
+             <div class="textarea" style="width:80%;min-width:500px;">
+                 <ul class="ulColumn2">
+                     <li>
+                         <span class="item_name" style="width:120px;">广告图片：</span>
+                         <label class="uploadImg">
+                             <input type="file" name="logo" id="advertiseLogo"/>
+                             <span>广告图片</span>
+                         </label>
+                         <img style="display: none; width:100px; height:100px" src="" id="logoImg" />
+                     </li>
+                     <li>
+                         <span class="item_name" style="width:120px;">广告名称：</span>
+                         <input type="text" name="name" id="advertiseName"  class="textbox textbox_295" placeholder="广告名称..">
+                     </li>
+                     <li>
+                         <span class="item_name" style="width:120px;">广告详情：</span>
+                         <div name="content" id="advertiseContent"></div>
+                     </li>
+                 </ul>
+                 <hr>
+                 <ul class="ulColumn2">
+                     <li><span class="item_name"></span><input type="button" id="submit_btn" class="fr link_btn" value="提 交" /></li>
+                 </ul>
+             </div>
+     </div>
+ </div>
+</section>
+</body>
+<script src="laydate/laydate.js"></script>
+<script src="pagejs/add_advertise.js"></script>
+<script>
+    var editor = new Jodit('#advertiseContent', {
+        textIcons: false,
+        iframe: false,
+        iframeStyle: '*,.jodit_wysiwyg {color:red;}',
+        height: 300,
+        defaultMode: Jodit.MODE_WYSIWYG,
+        observer: {
+            timeout: 100
+        },
+        uploader: {
+            url: url_editer
+        },
+        commandToHotkeys: {
+            'openreplacedialog': 'ctrl+p'
+        }
+    });
+
+</script>
+</html>

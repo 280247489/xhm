@@ -9,7 +9,7 @@ spring:
       driverClass: com.mysql.cj.jdbc.Driver
       jdbcUrl: jdbc:mysql://39.106.227.183:13306/xhm_db?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2b8
       user: xhm
-      password: mysql-xhm
+      password: xhm
       minPoolSize: 10
       maxPoolSize: 20
       initialPoolSize: 15

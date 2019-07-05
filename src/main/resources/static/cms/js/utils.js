@@ -6,10 +6,11 @@ if(window.sessionStorage.getItem("login_id")==null&&window.location.pathname.ind
 }else{ 
 
 }
-var serPath="http://localhost:8081/xhm/";
-var imgPath="http://localhost:8081/xhm/";
+var serPath="http://localhost:8082/xhm/";
+var imgPath="http://localhost:8080/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
+var url_editer = serPath + '/jodit/uploadImg';
 
 var deBug=false;
 $(function(){
@@ -30,6 +31,20 @@ $(function(){
             sys_html+='<li><dl id="user">';
             sys_html+='<dt><a href="javascript:;">用户管理</a></dt>';
             sys_html+='<dd><a id="" href="user.html">用户查询</a></dd>';
+            sys_html+='</dl></li>';
+
+            //商品管理
+            sys_html+='<li><dl id="goods">';
+            sys_html+='<dt><a href="javascript:;">商品管理</a></dt>';
+            sys_html+='<dd><a id="" href="add_goods.html">商品添加</a></dd>';
+            sys_html+='<dd><a id="" href="sel_goods.html">商品查询</a></dd>';
+            sys_html+='</dl></li>';
+
+            //商品管理
+            sys_html+='<li><dl id="advertise">';
+            sys_html+='<dt><a href="javascript:;">广告管理</a></dt>';
+            sys_html+='<dd><a id="" href="add_advertise.html">广告添加</a></dd>';
+            sys_html+='<dd><a id="" href="sel_advertise.html">广告查询</a></dd>';
             sys_html+='</dl></li>';
 
             //系统管理

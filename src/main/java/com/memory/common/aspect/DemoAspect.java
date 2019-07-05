@@ -1,12 +1,10 @@
 package com.memory.common.aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2018/11/2
  * @Description: AOP切面，织入切入点
  */
-//@Component
-//@Aspect
+@Component
+@Aspect
 public class DemoAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(DemoAspect.class);

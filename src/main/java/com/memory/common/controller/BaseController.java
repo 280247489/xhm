@@ -56,6 +56,22 @@ public class BaseController {
         }
         return db_path;
     }
+
+    public String upload2Filse(String fileName, String dirPath, MultipartFile file){
+        String db_path = "";
+        try {
+            File dir = new File(filePath + dirPath);
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            File destFile = new File(dir.getPath() + File.separator + fileName );
+            file.transferTo(destFile);
+            db_path = dirPath + File.separator + fileName ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return db_path;
+    }
     public String upload2MP3(String fileName, String dirPath, MultipartFile file){
         String db_path = "";
         try {

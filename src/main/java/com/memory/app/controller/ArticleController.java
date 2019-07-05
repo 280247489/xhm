@@ -111,7 +111,7 @@ public class ArticleController extends BaseController {
             for (int i = 0; i < model.getPictures().size(); i++) {
                 String path = this.upload2PNG(i+"_"+Utils.idTimer.format(date), "xhm_file/article/"+model.getArticle().getId(), model.getPictures().get(i));
                 stringBuffer.append(path+",");
-                if(i==0){
+                    if(i==0){
                     model.getArticle().setArticleLogo(path);
                 }
             }
