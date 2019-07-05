@@ -7,8 +7,10 @@
 <meta name="author" content="CuiDi" />
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/>
+   <link rel="stylesheet" href="css/dialog/css/css.css"  media="all"/>
 <!--<link rel="stylesheet" href="css/hDialog/common.css" />-->
 <!--<link rel="stylesheet" href="css/hDialog/animate.min.css" />-->
+
     <!--[if lt IE 9]>
 <script src="js/html5.js"></script>
 <![endif]-->
@@ -17,8 +19,7 @@
 <script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
 <script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
- <script src="js/hDialog/jquery.min.js"></script>
- <script src="js/hDialog/jquery.hDialog.js"></script>
+    <script src="/css/dialog/jquery.min.js"></script>
 
 </head>
 <body>
@@ -46,8 +47,12 @@
      </section>
      <div class="page_title">
 		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;话题管理 / 话题查询</strong></h2>
-         <a href=" " id="createTopics" class="top_rt_btn" style="margin-top: 0.2em;margin-right: 0.2em;">发布话题</a>
+       <a href="#" id="createTopics" class="top_rt_btn theme-login" style="margin-top: 0.2em;margin-right: 0.2em;">发布话题</a>
+
 		 <span class="fr">
+   <!--                <div class="theme-buy">
+             <a class="btn btn-primary btn-large theme-login fl" href="javascript:;">点击查看效果</a>
+         </div>-->
             <input type="text" id="topicName" style="width:150px;" placeholder="话题名称.." class="textbox"/>
             文章栏目：
             <select class="select" id="articleTypeId" style="width:100px">
@@ -90,36 +95,64 @@
      <div style="padding-left:10px;font-size:14px;font-weight:bold;" id="content"></div>
  </div>
 
-    <div id="createTopicsBox" style="display: none">
 
-            <form action="" method="post" onsubmit="return false;">
-                <table border="1" class="table">
-                    <tbody><tr><td width="200px" align="right">类型：</td>
-                        <td width="200px" id="typeId">1</td></tr>
-                    <tr><td width="200px" align="right">文章标题图：</td>
-                        <td id="logo"><img style="width: 80px; height: 80px;" src="http://localhost:8080/xhm_file/article/7OnMYquq/0_20190616175824.png"></td></tr>
-                    <tr><td width="200px" align="right">文章标题：</td>
-                        <td id="title">测试标题6</td></tr>
-                    <tr><td width="200px" align="right">文章内容图：</td>
-                        <td id="picture"><img style="width: 80px; height: 80px;" src="http://localhost:8080/xhm_file/article/7OnMYquq/0_20190616175824.png"></td></tr>
-                    <tr><td width="200px" align="right">文章内容：</td>
-                        <td id="article_content">测试内容</td></tr>
-                    <tr><td width="200px" align="right">发布作者：</td>
-                        <td id="userId">memory</td></tr>
-                    <tr><td width="200px" align="right">发布时间：</td>
-                        <td id="createTime">2019-06-16 17:58:24</td></tr>
-                    <tr><td width="200px" align="right">统计数：</td>
-                        <td id="tjs">阅读数：0  <font color="#ffc0cb">点赞数：0</font>  <font color="#00ced1">分享数：0</font></td></tr>
-                    <tr><td width="200px" align="right">是否上线：</td>
-                        <td id="online"><font color="red">未上架</font></td></tr>
-                    <tr><td width="200px" align="right">是否审核：</td>
-                        <td id="check"><font color="orange">审核中</font></td></tr>
-                    </tbody></table>
+
+    <div class="theme-popover">
+        <div class="theme-poptit">
+            <a href="javascript:;" title="关闭" class="close">×</a>
+            <h3>发布话题</h3>
+        </div>
+        <div class="theme-popbod dform">
+            <form class="theme-signin" name="loginform" action="" method="post">
+                <ol>
+
+                    <li><strong>话题名称：</strong><input class="ipt articleName_add" type="text" value="" /></li>
+                    <li><strong> 文章栏目：</strong>
+                        <select class="ipt select" id="articleTypeId_add" style="width:100px">
+                            <option value="">全 部</option>
+                            <option value="宝妈团">宝妈团</option>
+                            <option value="出游">出游</option>
+                            <option value="吃喝">吃喝</option>
+                            <option value="专栏">专栏</option>
+                        </select></li>
+                    <li><strong>话题排序：</strong><input class="ipt sort_add" type="text"  value="" size="11" /></li>
+
+                    <li><input class="btn btn-primary create-topics"   value=" 发布 " /></li>
+                </ol>
             </form>
+        </div>
     </div>
+    <div class="theme-popover-mask"></div>
+
 
 </section>
 </body>
+
+<script>
+
+    jQuery(document).ready(function($) {
+
+        $('.theme-login').click(function(){
+
+            $('.theme-popover-mask').fadeIn(100);
+
+            $('.theme-popover').slideDown(200);
+
+        })
+
+        $('.theme-poptit .close').click(function(){
+
+            $('.theme-popover-mask').fadeOut(100);
+
+            $('.theme-popover').slideUp(200);
+
+        })
+
+
+
+    })
+
+</script>
 <script src="laydate/laydate.js"></script>
 <script src="pagejs/sel_topics.js"></script>
 </html>

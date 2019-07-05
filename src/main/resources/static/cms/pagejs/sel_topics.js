@@ -10,18 +10,12 @@ $(function(){
 		}, 1000);
 	});
 
-	//遮罩不可关闭
-	$('.createTopics').hDialog({
-		title: '详情',
-		box: '#createTopicsBox',
-		width: 500,
-		height: 400,
-		modalHide: false,
-		beforeShow: function(){
+	$(".create-topics").click(function () {
+		create_topics();
+
+	})
 
 
-		},
-	});
 
 	 $('#tid').change(function(){
          init();
@@ -227,4 +221,33 @@ function createPage(count){
 		c+='<a class="fy">最后一页</a></aside></section>';
 	}
 	return c;
+}
+
+function create_topics() {
+
+	var topicName = $(".articleName_add").val();
+	var articleType=$("#articleTypeId_add").val();
+	var sort=$(".sort_add").val();
+
+	console.log("topicName=",topicName)
+	console.log("articleType=",articleType)
+	console.log("sort=",sort)
+
+/*	ajax("cmsTopics/list",
+		{
+			articleType: articleType,
+			sortType: sortType,
+			topicStatus: topicStatus,
+			topicName: topicName,
+			beginTime:beginTime,
+			endTime:endTime,
+			page: start,
+			size: limit
+		},
+		sel_callback);*/
+
+
+
+	alert(1111111111)
+
 }
