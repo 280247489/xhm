@@ -12,6 +12,10 @@
         .wrapper{
             margin-bottom: 10px;
         }
+        .text-light-blue{
+            color: #3c8dbc !important;
+        }
+
     </style>
 <!--<link rel="stylesheet" href="css/hDialog/common.css" />-->
 <!--<link rel="stylesheet" href="css/hDialog/animate.min.css" />-->
@@ -52,38 +56,21 @@
       </div>
      </section>
      <div class="page_title">
-		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;话题管理 / 话题查询</strong></h2>
-       <a href="#" id="createTopics" class="top_rt_btn theme-login" style="margin-top: 0.2em;margin-right: 0.2em;">发布话题</a>
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;评论管理 / 评论查询</strong></h2>
+ <!--      <a href="#" id="createTopics" class="top_rt_btn theme-login" style="margin-top: 0.2em;margin-right: 0.2em;">发布话题</a>-->
 
 		 <span class="fr">
-   <!--                <div class="theme-buy">
-             <a class="btn btn-primary btn-large theme-login fl" href="javascript:;">点击查看效果</a>
-         </div>-->
-            <input type="text" id="topicName" style="width:150px;" placeholder="话题名称.." class="textbox"/>
-            文章栏目：
-            <select class="select" id="articleTypeId" style="width:100px">
-                <option value="">全 部</option>
-                <option value="宝妈团">宝妈团</option>
-                <option value="出游">出游</option>
-                <option value="吃喝">吃喝</option>
-                 <option value="专栏">专栏</option>
-            </select>
-            话题启用状态：
-            <select class="select" id="topicStatus" style="width:100px">
-                <option value="">全 部</option>
-                <option value=0>未启用</option>
-                <option value=1>启用</option>
-            </select>
-            话题排序方式：
+
+            <input type="text" style="width:150px;" placeholder="评论内容关键字.." class="textbox key_words"/>
+
+             <input type="text" style="width:150px;" placeholder="文章名称.." class="textbox article_title"/>
+            <input type="text" style="width:150px;" placeholder="用户昵称.." class="textbox user_name"/>
+            评论类型：
              <!--  1. sumDesc   sumAsc 阅读数 2. sortDesc sortAsc  排序 3.timeDesc timeAsc 创建时间-->
-            <select class="select" id="sortType" style="width:100px">
-                <option value="">默认时间倒叙</option>
-                <option value="sumDesc">阅读数倒叙</option>
-                <option value="sumAsc">阅读数正叙</option>
-                <option value="sortDesc">排序倒叙</option>
-                 <option value="sortAsc">排序正叙</option>
-                 <option value="timeDesc">时间倒叙</option>
-                 <option value="timeAsc">时间正叙</option>
+            <select class="select comment_type" id="comment_type"  style="width:100px">
+                <option value="">全部</option>
+                <option value="0">评论</option>
+                <option value="1">回复</option>
             </select>
             <!--是否删除：
             <select class="select" id="del" style="width:100px">
@@ -106,25 +93,15 @@
     <div class="theme-popover">
         <div class="theme-poptit">
             <a href="javascript:;" title="关闭" class="close">×</a>
-            <h3>发布话题</h3>
+            <h3 id="articleComment-title">评论回复</h3>
         </div>
         <div class="theme-popbod dform">
             <form class="theme-signin" name="loginform" action="" method="post">
                 <ol>
+                    <li><strong>回复内容：</strong>  <textarea class="ipt form-control comment_content_callback" rows="7" name="content"></textarea>
+                    </li>
 
-                    <li><strong>话题名称：</strong><input class="ipt articleName_add 	required" type="text" value="" /></li>
-                    <li><strong> 文章栏目：</strong>
-                        <select class="ipt select" id="articleTypeId_add" style="width:100px">
-                            <option value="">全 部</option>
-                            <option value="宝妈团">宝妈团</option>
-                            <option value="出游">出游</option>
-                            <option value="吃喝">吃喝</option>
-                            <option value="专栏">专栏</option>
-                        </select></li>
-
-                    <li><strong>话题排序：</strong><input class="ipt sort_add"   onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " name="f_order" type="text"  value="" size="11" /></li>
-
-                    <li><input class="btn btn-primary create-topics"   value=" 发布 " /></li>
+                    <li><input class="btn btn-primary callback-articleComment"   value=" 回复 " /></li>
                 </ol>
             </form>
         </div>
@@ -139,21 +116,7 @@
 
     jQuery(document).ready(function($) {
 
-        $('.theme-login').click(function(){
 
-            $('.theme-popover-mask').fadeIn(100);
-
-            $('.theme-popover').slideDown(200);
-
-        })
-
-        $('.theme-poptit .close').click(function(){
-
-            $('.theme-popover-mask').fadeOut(100);
-
-            $('.theme-popover').slideUp(200);
-
-        })
 
 
 
@@ -162,5 +125,5 @@
 
 </script>
 <script src="laydate/laydate.js"></script>
-<script src="pagejs/sel_topics.js"></script>
+<script src="pagejs/sel_articleComment.js"></script>
 </html>

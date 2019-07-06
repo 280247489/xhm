@@ -6,8 +6,8 @@ if(window.sessionStorage.getItem("login_id")==null&&window.location.pathname.ind
 }else{
 
 }
-var serPath="http://localhost:8089/xhm/";
-var imgPath="http://localhost:8089/xhm/";
+var serPath="http://localhost:8099/xhm/";
+var imgPath="http://localhost:8099/xhm/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
 
@@ -43,6 +43,13 @@ $(function(){
 			sys_html+='<dt><a href="javascript:;">话题管理</a></dt>';
 			sys_html+='<dd><a id="sel_topics" href="sel_topics.html">话题查询</a></dd>';
 			sys_html+='</dl></li>';
+
+			//评论管理
+			sys_html+='<li><dl id="articleComment">';
+			sys_html+='<dt><a href="javascript:;">评论管理</a></dt>';
+			sys_html+='<dd><a id="sel_articleComment" href="sel_articleComment.html">评论查询</a></dd>';
+			sys_html+='</dl></li>';
+
 			/*var permissionList = JSON.parse(window.sessionStorage.getItem("login_permission"));
 			for ( var i = 0; i < permissionList.length; i++) {
 				var obj = permissionList[i];

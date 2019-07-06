@@ -28,9 +28,34 @@ public class CmsArticleServiceImpl implements CmsArticleService {
     @Override
     public Map<String, Object> sel(String userName, String typeId, Integer online, Integer check, Integer del, String startTime, String endTime, Integer start, Integer limit) {
         Map<String, Object> reutnrMap = new HashMap<>();
+        /**
+         *    this.id = id;
+         *         this.typeId = typeId;
+         *         this.articleTitle = articleTitle;
+         *         this.articleLogo = articleLogo;
+         *         this.articlePicture = articlePicture;
+         *         this.articleContent = articleContent;
+         *         this.articleTopicsId = articleTopicsId;
+         *         this.articleTopics = articleTopics;
+         *         this.articleLabel = articleLabel;
+         *         this.articleKeyWords = articleKeyWords;
+         *         this.articleOnline = articleOnline;
+         *         this.articleTotalView = articleTotalView;
+         *         this.articleTotalShare = articleTotalShare;
+         *         this.articleTotalLike = articleTotalLike;
+         *         this.articleCreateTime = articleCreateTime;
+         *         this.articleCreateUserId = articleCreateUserId;
+         *         this.articleCheckYn = articleCheckYn;
+         *         this.articleCheckTime = articleCheckTime;
+         *         this.articleCheckAdminId = articleCheckAdminId;
+         *         this.articleDelYn = articleDelYn;
+         *         this.articleTopYn = articleTopYn;
+         */
+
         StringBuffer sb =new StringBuffer("select new Article(a.id, a.typeId, " +
                 "a.articleTitle, a.articleLogo, " +
                 "a.articlePicture, a.articleContent, " +
+                "a.articleTopicsId, a.articleTopics, " +
                 "a.articleLabel, a.articleKeyWords, " +
                 "a.articleOnline, a.articleTotalView, " +
                 "a.articleTotalShare, a.articleTotalLike, " +
@@ -104,6 +129,7 @@ public class CmsArticleServiceImpl implements CmsArticleService {
         StringBuffer sb =new StringBuffer("select new Article(a.id, a.typeId, " +
                 "a.articleTitle, a.articleLogo, " +
                 "a.articlePicture, a.articleContent, " +
+                "a.articleTopicsId, a.articleTopics, " +
                 "a.articleLabel, a.articleKeyWords, " +
                 "a.articleOnline, a.articleTotalView, " +
                 "a.articleTotalShare, a.articleTotalLike, " +

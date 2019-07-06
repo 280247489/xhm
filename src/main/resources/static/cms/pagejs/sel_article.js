@@ -22,7 +22,7 @@ $(function(){
         init();
     });*/
 	laydate.render({
-		  elem: '#startTime', 
+		  elem: '#startTime',
 		  /*value: new Date(),*/
 		  max: 0,
 		  showBottom: false,
@@ -34,7 +34,7 @@ $(function(){
 			  $('#endTime').val(fff);
 			  init();
 			  laydate.render({
-				  elem: '#endTime', 
+				  elem: '#endTime',
 				  min: value,
 				 /* max: 0,*/
 				  showBottom: false,
@@ -45,7 +45,7 @@ $(function(){
 			}
 		});
 	laydate.render({
-		  elem: '#endTime', 
+		  elem: '#endTime',
 		  value: new Date(),
 	/*	  max: 0,
 		  min: 0,*/
@@ -89,6 +89,7 @@ function sel_callback(data){
         var content='<table border="1" class="table"><tr>'
             +'<td width="50px" align=center>序号</td>'
             +'<td width="8%" align=center>栏 目</td>'
+			+'<td width="8%" align=center>话 题</td>'
             +'<td width="8%" align=center>logo</td>'
             +'<td width="18%" align=center>标 题</td>'
             +'<td width="8%" align=center>作 者</td>'
@@ -108,6 +109,7 @@ function sel_callback(data){
                 var obj = list[i];
                 content += '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
                     + '<td align=center>' + obj.typeId + '</td>'
+					+ '<td align=center>' + obj.articleTopics + '</td>'
                     + '<td align=center><img style="width: 80px; height: 80px;" src="' + data.result.fileUrl + obj.articleLogo + '"></td>'
                     + '<td align=center>' + obj.articleTitle + '</td>'
                     //+ '<td align=center>' + obj.articleCreateUserId + '</td>'

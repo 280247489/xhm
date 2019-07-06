@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @author Liuty
- * @date 2019-06-23 15:11
+ * @author INS6+
+ * @date 2019/7/6 14:18
  */
 
 @Entity
@@ -20,6 +20,8 @@ public class Article {
     private String articleLogo;
     private String articlePicture;
     private String articleContent;
+    private String articleTopicsId;
+    private String articleTopics;
     private String articleLabel;
     private String articleKeyWords;
     private int articleOnline;
@@ -92,6 +94,26 @@ public class Article {
 
     public void setArticleContent(String articleContent) {
         this.articleContent = articleContent;
+    }
+
+    @Basic
+    @Column(name = "article_topics_id")
+    public String getArticleTopicsId() {
+        return articleTopicsId;
+    }
+
+    public void setArticleTopicsId(String articleTopicsId) {
+        this.articleTopicsId = articleTopicsId;
+    }
+
+    @Basic
+    @Column(name = "article_topics")
+    public String getArticleTopics() {
+        return articleTopics;
+    }
+
+    public void setArticleTopics(String articleTopics) {
+        this.articleTopics = articleTopics;
     }
 
     @Basic
@@ -224,6 +246,33 @@ public class Article {
         this.articleTopYn = articleTopYn;
     }
 
+    public Article() {
+    }
+
+    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleTopicsId, String articleTopics, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn, int articleTopYn) {
+        this.id = id;
+        this.typeId = typeId;
+        this.articleTitle = articleTitle;
+        this.articleLogo = articleLogo;
+        this.articlePicture = articlePicture;
+        this.articleContent = articleContent;
+        this.articleTopicsId = articleTopicsId;
+        this.articleTopics = articleTopics;
+        this.articleLabel = articleLabel;
+        this.articleKeyWords = articleKeyWords;
+        this.articleOnline = articleOnline;
+        this.articleTotalView = articleTotalView;
+        this.articleTotalShare = articleTotalShare;
+        this.articleTotalLike = articleTotalLike;
+        this.articleCreateTime = articleCreateTime;
+        this.articleCreateUserId = articleCreateUserId;
+        this.articleCheckYn = articleCheckYn;
+        this.articleCheckTime = articleCheckTime;
+        this.articleCheckAdminId = articleCheckAdminId;
+        this.articleDelYn = articleDelYn;
+        this.articleTopYn = articleTopYn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -242,6 +291,8 @@ public class Article {
                 Objects.equals(articleLogo, article.articleLogo) &&
                 Objects.equals(articlePicture, article.articlePicture) &&
                 Objects.equals(articleContent, article.articleContent) &&
+                Objects.equals(articleTopicsId, article.articleTopicsId) &&
+                Objects.equals(articleTopics, article.articleTopics) &&
                 Objects.equals(articleLabel, article.articleLabel) &&
                 Objects.equals(articleKeyWords, article.articleKeyWords) &&
                 Objects.equals(articleCreateTime, article.articleCreateTime) &&
@@ -252,32 +303,6 @@ public class Article {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, typeId, articleTitle, articleLogo, articlePicture, articleContent, articleLabel, articleKeyWords, articleOnline, articleTotalView, articleTotalShare, articleTotalLike, articleCreateTime, articleCreateUserId, articleCheckYn, articleCheckTime, articleCheckAdminId, articleDelYn, articleTopYn);
-    }
-
-    public Article() {
-    }
-
-
-    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn, int articleTopYn) {
-        this.id = id;
-        this.typeId = typeId;
-        this.articleTitle = articleTitle;
-        this.articleLogo = articleLogo;
-        this.articlePicture = articlePicture;
-        this.articleContent = articleContent;
-        this.articleLabel = articleLabel;
-        this.articleKeyWords = articleKeyWords;
-        this.articleOnline = articleOnline;
-        this.articleTotalView = articleTotalView;
-        this.articleTotalShare = articleTotalShare;
-        this.articleTotalLike = articleTotalLike;
-        this.articleCreateTime = articleCreateTime;
-        this.articleCreateUserId = articleCreateUserId;
-        this.articleCheckYn = articleCheckYn;
-        this.articleCheckTime = articleCheckTime;
-        this.articleCheckAdminId = articleCheckAdminId;
-        this.articleDelYn = articleDelYn;
-        this.articleTopYn = articleTopYn;
+        return Objects.hash(id, typeId, articleTitle, articleLogo, articlePicture, articleContent, articleTopicsId, articleTopics, articleLabel, articleKeyWords, articleOnline, articleTotalView, articleTotalShare, articleTotalLike, articleCreateTime, articleCreateUserId, articleCheckYn, articleCheckTime, articleCheckAdminId, articleDelYn, articleTopYn);
     }
 }

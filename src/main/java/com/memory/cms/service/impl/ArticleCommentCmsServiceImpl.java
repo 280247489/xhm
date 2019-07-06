@@ -34,8 +34,8 @@ public class ArticleCommentCmsServiceImpl implements ArticleCommentCmsService {
     public int queryArticleCommentByQueHqlCount(String key_words, String phone_number, String article_name, String user_name, Integer comment_type, String query_start_time, String query_end_time, Integer sort_role,String comment_root_id,String id,String article_id) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("SELECT count(*) " +
-                "FROM ArticleComment  ac , Article a ,User us " +
-                "WHERE ac.articleId = a.id  and ac.userId = us.id ");
+                "FROM ArticleComment  ac , Article a " +
+                "WHERE ac.articleId = a.id  ");
         Map<String,Object> whereClause = getWhereClause(key_words, phone_number, article_name, user_name, comment_type, query_start_time, query_end_time, sort_role,comment_root_id,id,article_id);
         stringBuffer.append(whereClause.get("where"));
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
@@ -49,10 +49,10 @@ public class ArticleCommentCmsServiceImpl implements ArticleCommentCmsService {
         StringBuffer stringBuffer = new StringBuffer();
         //    private String commentParentId;
         //    private String commentParentUserName;
-        stringBuffer.append("SELECT new com.memory.entity.bean.ArticleComment(ac.id, ac.userName, us.userTel, a.articleTitle, ac.commentContent,ac.commentRootId , ac.commentTotalLike, (select count(*) from ArticleComment WHERE commentRootId = ac.commentRootId AND commentRootId != id ) as commentSum," +
+        stringBuffer.append("SELECT new com.memory.entity.model.ArticleComment(ac.id, ac.userName, a.articleTitle, ac.commentContent,ac.commentRootId , ac.commentTotalLike, (select count(*) from ArticleComment WHERE commentRootId = ac.commentRootId AND commentRootId != id ) as commentSum," +
                 "ac.commentCreateTime,ac.commentType,ac.commentParentId,ac.commentParentUserName,ac.commentContentReplace,ac.articleId,ac.commentParentContent) " +
-                                "FROM ArticleComment  ac , Article a ,User us " +
-                                "WHERE ac.articleId = a.id  and ac.userId = us.id ");
+                                "FROM ArticleComment  ac , Article a  " +
+                                "WHERE ac.articleId = a.id  ");
 
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
         Map<String,Object> whereClause = getWhereClause(key_words, phone_number, article_name, user_name, comment_type, query_start_time, query_end_time, sort_role,comment_root_id,id,article_id);
@@ -105,12 +105,6 @@ public class ArticleCommentCmsServiceImpl implements ArticleCommentCmsService {
             if(Utils.isNotNull(user_name)){
                 stringBuffer.append(" AND ac.userName like :userName  ");
                 paramMap.put("userName",'%'+ user_name+'%');
-            }
-
-            //手机号 模糊查询
-            if(Utils.isNotNull(phone_number)){
-                stringBuffer.append(" AND us.userTel like :userTel  ");
-                paramMap.put("userTel",'%'+ phone_number+'%');
             }
 
             //评论类型 0 评论 1 评论回复

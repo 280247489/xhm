@@ -1,7 +1,7 @@
 $(function(){
     $(".loading_area").fadeIn();
-	$("#topics").addClass("dh_dl_open");
-	$("#sel_topics").addClass("active");
+	$("#articleComment").addClass("dh_dl_open");
+	$("#sel_articleComment").addClass("active");
 	$('#userName').bind('input propertychange', function(){
 		clearTimeout(sel_flag);
 		sel_flag = setTimeout(function(){
@@ -9,17 +9,17 @@ $(function(){
 			init();
 		}, 1000);
 	});
-	$('#topicName').change(function(){
+	$('.key_words').change(function(){
 		init();
 	});
-	$('#articleTypeId').change(function(){
+	$('.article_title').change(function(){
 		init();
 	});
-	$('#topicStatus').change(function(){
+	$('.user_name').change(function(){
 		init();
 	});
 
-	$('#sortType').change(function(){
+	$('.comment_type').change(function(){
 		init();
 	});
 
@@ -81,28 +81,31 @@ $(function(){
 var sel_flag, time_flag;
 var start=1, limit=10;
 var list, fileUrl;
-var beginTime,endTime,articleType,sortType,topicStatus,topicName;
-function init(beginTime,endTime,articleType,sortType,topicStatus,topicName){
+var key_words,article_title,user_name,comment_type,query_start_time,query_end_time;
+function init(){
 	$(".loading_area").fadeIn();
 
-	 beginTime = $('#startTime').val();
-	 endTime = $('#endTime').val();
-	 articleType =$('#articleTypeId').val();
-	 sortType =$('#sortType').val();
-	 topicStatus =$('#topicStatus').val();
-	 topicName = $('#topicName').val();
-	 console.log("init beginTime=",beginTime)
+	key_words = $('.key_words').val();
+	article_title=$('.article_title').val();
+	user_name=$('.user_name').val();
+	comment_type=$('.comment_type').val();
+	query_start_time = $('#startTime').val();
+	query_end_time = $('#endTime').val();
+	console.log("comment_type === " ,comment_type);
 
-	ajax("cmsTopics/list",
+	ajax("cmsArticleComment/list",
 			{
-				articleType: articleType,
-				sortType: sortType,
-				topicStatus: topicStatus,
-				topicName: topicName,
-				beginTime:beginTime,
-				endTime:endTime,
 				page: start,
-				size: limit
+				size: limit,
+				key_words: key_words,
+				article_title: article_title,
+				user_name:user_name,
+				comment_type:comment_type,
+				query_start_time: query_start_time,
+				query_end_time: query_end_time,
+				sort_role:'',
+				comment_root_id:'',
+				article_id:''
 			},
 			sel_callback);
 }
@@ -111,14 +114,13 @@ function sel_callback(data){
     if( data.code==0){
         var content='<table border="1" class="table"><tr>'
             +'<td width="50px" align=center>序号</td>'
-            +'<td width="8%" align=center>栏 目</td>'
-            +'<td width="18%" align=center>话题名</td>'
-            +'<td width="18%" align=center>话题阅读数</td>'
-			+'<td width="8%" align=center>排序</td>'
-            +'<td width="8%" align=center>创建人</td>'
-            +'<td width="8%" align=center>发布时间</td>'
-            +'<td width="8%" align=center>话题状态</td>'
-            +'<td align=center>详情</td></tr>';
+			+'<td width="8%" align=center>评论类型</td>'
+            +'<td width="8%" align=center>用户昵称</td>'
+            +'<td width="18%" align=center>文章名称</td>'
+            +'<td width="18%" align=center>评论内容</td>'
+			+'<td width="8%" align=center>评论时间</td>'
+            +'<td width="8%" align=center>统计信息</td>'
+            +'<td align=center>操作</td></tr>';
         if(data.data.totalElements==0){
 
             content+='<tr><td align=center colspan="11"><font color="red">未 查 到 数 据</font></td></tr>';
@@ -130,18 +132,18 @@ function sel_callback(data){
             for (var i = 0; i < data.data.data.length; i++) {
                 var obj = list[i];
                 content+= '<tr><td width="50px" align=center>' + ((start - 1) * limit + i + 1) + '</td>'
-					+ '<td align=center>' + obj.articleTypeId + '</td>'
-					+ '<td align=center>' + obj.topicName+ '</td>'
-					+ '<td align=center>' +  obj.topicSum  + '</td>'
-					+ '<td align=center>' +obj.topicSort + '</td>'
-					+ '<td align=center>' + obj.topicCreateUser + '</td>'
-					+ '<td align=center>' +  obj.topicCreateTime + '</td>'
-					+ '<td align=center id="topicStatus_'+obj.id+'">' + (obj.topicStatus == 0 ? '<font color="orange">未启用</font>':'<font color="green">启用</font>')+'</td>'
+					+ '<td align=center>' +(obj.commentType == 0 ? '评论':'回复') + '</td>'
+					+ '<td align=center>' + obj.userName + '</td>'
+					+ '<td align=center>' + obj.articleTitle+ '</td>'
+					+ '<td align=center>' +  (obj.commentType == 0 ?obj.commentContentReplace:obj.commentContentReplace+'<span class="text-light-blue">&nbsp;//'+obj.commentParentUserName+'：</span>'+obj.commentParentContent)  + '</td>'
+					+ '<td align=center>' +obj.createTime + '</td>'
+					+ '<td align=center>' + (obj.commentType == 0 ? '<span>点赞:'+obj.like+'</span><br><span>回复:'+obj.commentSum+'</span>':'') + '</td>'
 					+ '<td align=center>'
-					//+ '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
-					+'<button class="check_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" value="'+obj.topicStatus+'" index="' + i + '" style="width:80px;height:30px;">' +
-					(obj.topicStatus == 0 ? '启用话题':'禁用话题')+
-					'</button>'
+
+					+(obj.commentType == 0 ? '<button class =""  style="width:80px;height:30px;margin-right: 20px;"> 查看</button>':'')
+					+'<button class="theme-login" id="call_'+obj.id+'" aid="'+obj.id+'" value="'+obj.userName+'"  onclick="articleComment_click(this)" style="width:80px;height:30px;">回复</button>'
+					+''
+					+'<button class="del" id="del_'+obj.id+'"  aid="'+obj.id+'"   style="width:80px;height:30px;margin-right: 20px;">删除</button>'
 					+ '</td>'
 					+ '</tr>';
             }
@@ -164,13 +166,36 @@ function sel_callback(data){
                 window.sessionStorage.setItem("fileUrl", fileUrl);
                 window.location.href="article_info.html";*/
           //  });
-            $('.check_fun').click(function(){
-                if(confirm("确认启用？")){
+           // $('.check_fun').click(function(){
+
+/*				$('.theme-login').click(function(){
+					console.log("111", $('.theme-login'));
+
+					var username = '';
+					username = $('.theme-login').val();
+					$('#articleComment-title').html('对'+'<span class="text-light-blue">&nbsp;'+username+'：</span>'+'的回复');
+
+					$('.theme-popover-mask').fadeIn(100);
+
+					$('.theme-popover').slideDown(200);
+
+
+				})*/
+
+				$('.theme-poptit .close').click(function(){
+
+					$('.theme-popover-mask').fadeOut(100);
+
+					$('.theme-popover').slideUp(200);
+
+				})
+
+          /*      if(confirm("确认启用？")){
                 	console.log("value ========",$('.check_fun').val());
                     var aid = $(this).attr('aid');
                     info(aid, $('.check_fun').val());
-                }
-            });
+                }*/
+            //});
 
         }
 	}else{
@@ -236,7 +261,7 @@ function createPage(count){
 	return c;
 }
 
-function create_topics() {
+function create_callComment() {
 
 	var topicName = $(".articleName_add").val();
 	var articleType=$("#articleTypeId_add").val();
@@ -246,7 +271,7 @@ function create_topics() {
 
 
 	if(!topicName || !articleType || !sort ){
-		alert("请完善话题信息再提交")
+		alert("回复信息不能为空！")
 		return;
 	}
 	console.log("topicName=",topicName)
@@ -284,6 +309,20 @@ function create_callback(data) {
 	}else{
 		$.jBox.tip(data.msg);
 	}
+
+}
+
+
+function articleComment_click(index) {
+	console.log("index is ",index)
+
+
+	$('#articleComment-title').html('对'+'<span class="text-light-blue">&nbsp;'+index.value+'：</span>'+'的回复');
+
+	$('.theme-popover-mask').fadeIn(100);
+
+	$('.theme-popover').slideDown(200);
+
 
 }
 

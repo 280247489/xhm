@@ -66,10 +66,9 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
         Map<String,Object> whereClause =  getQueryWhere(articleType,sortType,topicStatus,topicName,beginTime,endTime);
         stringBuffer.append(whereClause.get("where"));
-        System.out.printf("%n where = " + stringBuffer.toString());
+        System.out.printf(" where = " + stringBuffer.toString());
 
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
-        System.out.printf("%n map = " + map.toString());
         return   daoUtils.findByHQL(stringBuffer.toString(),map,page);
     }
 
@@ -82,9 +81,8 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
 
         stringBuffer.append(whereClause.get("where"));
 
-        System.out.printf("%n where 2 = " + stringBuffer.toString());
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
-        System.out.printf("%n  map 2 = " + map.toString());
+
 
         return daoUtils.getTotalByHQL(stringBuffer.toString(),map);
     }
@@ -95,11 +93,11 @@ public class CmsTopicsServiceImpl implements CmsTopicsService {
         Map<String,Object> paramMap = new HashMap<String, Object>();
         if(Utils.isNotNull(topicName)){
             stringBuffer.append(" AND t.topicName like :topicName");
-            paramMap.put("topicName",'%'+ topicName+'%');
+            paramMap.put("topicName","%"+ topicName+"%");
         }
 
         if(Utils.isNotNull(articleType) ){
-            stringBuffer.append(" AND t.articleType = :articleType");
+            stringBuffer.append(" AND t.articleTypeId = :articleType");
             paramMap.put("articleType",articleType);
         }
 

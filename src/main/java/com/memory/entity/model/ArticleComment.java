@@ -11,7 +11,6 @@ import java.util.Date;
 public class ArticleComment {
     private String id;
     private String userName;
-    private String tel;
     private String articleTitle;
     private String commentContent;
     private int like;
@@ -29,10 +28,10 @@ public class ArticleComment {
     public ArticleComment() {
     }
 
-    public ArticleComment(String id, String userName, String tel, String articleTitle, String commentContent, String commentRootId, int like , long commentSum, Date createTime, int commentType, String commentParentId, String commentParentUserName, String commentContentReplace, String articleId, String commentParentContent) {
+    public ArticleComment(String id, String userName,  String articleTitle, String commentContent, String commentRootId, int like , long commentSum, Date createTime, int commentType, String commentParentId, String commentParentUserName, String commentContentReplace, String articleId, String commentParentContent) {
         this.id = id;
         this.userName = userName;
-        this.tel = tel;
+
         this.articleTitle = articleTitle;
         this.commentContent = commentContent;
         this.commentRootId = commentRootId;
@@ -65,13 +64,6 @@ public class ArticleComment {
         this.userName = userName;
     }
 
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
 
     public String getArticleTitle() {
         return articleTitle;
@@ -175,7 +167,6 @@ public class ArticleComment {
         return "ArticleComment{" +
                 "id='" + id + '\'' +
                 ", userName='" + userName + '\'' +
-                ", tel='" + tel + '\'' +
                 ", articleTitle='" + articleTitle + '\'' +
                 ", commentContent='" + commentContent + '\'' +
                 ", like=" + like +
