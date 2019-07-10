@@ -74,29 +74,35 @@ public class CmsArticleCommentController {
 
             System.out.println("content_replace == " + content_replace);
             com.memory.entity.ArticleComment parentArticleComment =  articleCommentCmsService.getArticleCommentById(comment_parent_id);
-            com.memory.entity.ArticleComment articleComment  = new com.memory.entity.ArticleComment();
-            articleComment.setId(Utils.getShortUUID());
-            articleComment.setUserId(user_id);
-            articleComment.setUserLogo(user_logo);
-            articleComment.setUserName(user_name);
-            articleComment.setArticleId(parentArticleComment.getArticleId());
-            articleComment.setCommentType(1);
-            articleComment.setCommentRootId(parentArticleComment.getCommentRootId());
-            articleComment.setCommentParentId(comment_parent_id);
-            //     if(parentArticleComment.getCommentType() == 1){
-            System.out.println("parentUserName = " + "@"+parentArticleComment.getUserName());
-            articleComment.setCommentParentUserName("@"+parentArticleComment.getUserName());
-            articleComment.setCommentParentContent(parentArticleComment.getCommentContentReplace());
+            if(Utils.isNotNull(parentArticleComment)){
+                com.memory.entity.ArticleComment articleComment  = new com.memory.entity.ArticleComment();
+                articleComment.setId(Utils.getShortUUID());
+                articleComment.setUserId(user_id);
+                articleComment.setUserLogo(user_logo);
+                articleComment.setUserName(user_name);
+                articleComment.setArticleId(parentArticleComment.getArticleId());
+                articleComment.setCommentType(1);
+                articleComment.setCommentRootId(parentArticleComment.getCommentRootId());
+                articleComment.setCommentParentId(comment_parent_id);
+                //     if(parentArticleComment.getCommentType() == 1){
+                System.out.println("parentUserName = " + "@"+parentArticleComment.getUserName());
+                articleComment.setCommentParentUserName("@"+parentArticleComment.getUserName());
+                articleComment.setCommentParentContent(parentArticleComment.getCommentContentReplace());
      /*       }else{
                 articleComment.setCommentParentUserName("");
                 articleComment.setCommentParentContent("");
             }*/
-            articleComment.setCommentContent(content);
-            articleComment.setCommentCreateTime(new Date());
-            articleComment.setCommentTotalLike(0);
-            articleComment.setCommentContentReplace(content_replace);
-            com.memory.entity.ArticleComment articleComment1 =   articleCommentCmsService.addArticleComment(articleComment);
-            result = ResultUtil.success(articleComment1);
+                articleComment.setCommentContent(content);
+                articleComment.setCommentCreateTime(new Date());
+                articleComment.setCommentTotalLike(0);
+                articleComment.setCommentContentReplace(content_replace);
+                com.memory.entity.ArticleComment articleComment1 =   articleCommentCmsService.addArticleComment(articleComment);
+                result = ResultUtil.success(articleComment1);
+
+            }else {
+                result = ResultUtil.error(-1,"非法评论id");
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }

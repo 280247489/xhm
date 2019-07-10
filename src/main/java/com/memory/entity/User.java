@@ -8,36 +8,12 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @Auther: cui.Memory
- * @Date: 2019/6/5 0005 21:12
- * @Description:
+ * @author INS6+
+ * @date 2019/7/10 16:34
  */
+
 @Entity
 public class User {
-    public User() {
-    }
-
-    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel, String parentId) {
-        this.id = id;
-        this.password = password;
-        this.userUnionId = userUnionId;
-        this.userOpenId = userOpenId;
-        this.userTel = userTel;
-        this.userName = userName;
-        this.userLogo = userLogo;
-        this.userSex = userSex;
-        this.userBirthday = userBirthday;
-        this.userProvince = userProvince;
-        this.userCity = userCity;
-        this.userArea = userArea;
-        this.userAddress = userAddress;
-        this.userCreateTime = userCreateTime;
-        this.userForbidden = userForbidden;
-        this.userNologin = userNologin;
-        this.userCancel = userCancel;
-        this.parentId = parentId;
-    }
-
     private String id;
     private String password;
     private String userUnionId;
@@ -58,7 +34,7 @@ public class User {
     private String parentId;
 
     @Id
-    @Column(name = "id", nullable = false, length = 255)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -68,7 +44,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -78,7 +54,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_union_id", nullable = false, length = 255)
+    @Column(name = "user_union_id")
     public String getUserUnionId() {
         return userUnionId;
     }
@@ -88,7 +64,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_open_id", nullable = false, length = 255)
+    @Column(name = "user_open_id")
     public String getUserOpenId() {
         return userOpenId;
     }
@@ -98,7 +74,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_tel", nullable = false, length = 255)
+    @Column(name = "user_tel")
     public String getUserTel() {
         return userTel;
     }
@@ -108,7 +84,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = false, length = 255)
+    @Column(name = "user_name")
     public String getUserName() {
         return userName;
     }
@@ -118,7 +94,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_logo", nullable = false, length = 255)
+    @Column(name = "user_logo")
     public String getUserLogo() {
         return userLogo;
     }
@@ -128,7 +104,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_sex", nullable = false, length = 255)
+    @Column(name = "user_sex")
     public String getUserSex() {
         return userSex;
     }
@@ -138,7 +114,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_birthday", nullable = false, length = 255)
+    @Column(name = "user_birthday")
     public String getUserBirthday() {
         return userBirthday;
     }
@@ -148,7 +124,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_province", nullable = false, length = 255)
+    @Column(name = "user_province")
     public String getUserProvince() {
         return userProvince;
     }
@@ -158,7 +134,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_city", nullable = false, length = 255)
+    @Column(name = "user_city")
     public String getUserCity() {
         return userCity;
     }
@@ -168,7 +144,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_area", nullable = false, length = 255)
+    @Column(name = "user_area")
     public String getUserArea() {
         return userArea;
     }
@@ -178,7 +154,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_address", nullable = false, length = 255)
+    @Column(name = "user_address")
     public String getUserAddress() {
         return userAddress;
     }
@@ -188,7 +164,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_create_time", nullable = false)
+    @Column(name = "user_create_time")
     public Date getUserCreateTime() {
         return userCreateTime;
     }
@@ -198,7 +174,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_forbidden", nullable = false)
+    @Column(name = "user_forbidden")
     public int getUserForbidden() {
         return userForbidden;
     }
@@ -208,7 +184,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_nologin", nullable = false)
+    @Column(name = "user_nologin")
     public int getUserNologin() {
         return userNologin;
     }
@@ -218,7 +194,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "user_cancel", nullable = false)
+    @Column(name = "user_cancel")
     public int getUserCancel() {
         return userCancel;
     }
@@ -228,7 +204,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "parent_id", nullable = false, length = 255)
+    @Column(name = "parent_id")
     public String getParentId() {
         return parentId;
     }
@@ -266,4 +242,29 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, password, userUnionId, userOpenId, userTel, userName, userLogo, userSex, userBirthday, userProvince, userCity, userArea, userAddress, userCreateTime, userForbidden, userNologin, userCancel, parentId);
     }
+
+    public User() {
+    }
+
+    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel, String parentId) {
+        this.id = id;
+        this.password = password;
+        this.userUnionId = userUnionId;
+        this.userOpenId = userOpenId;
+        this.userTel = userTel;
+        this.userName = userName;
+        this.userLogo = userLogo;
+        this.userSex = userSex;
+        this.userBirthday = userBirthday;
+        this.userProvince = userProvince;
+        this.userCity = userCity;
+        this.userArea = userArea;
+        this.userAddress = userAddress;
+        this.userCreateTime = userCreateTime;
+        this.userForbidden = userForbidden;
+        this.userNologin = userNologin;
+        this.userCancel = userCancel;
+        this.parentId = parentId;
+    }
+
 }

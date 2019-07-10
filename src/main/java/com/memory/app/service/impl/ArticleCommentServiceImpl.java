@@ -1,6 +1,7 @@
-package com.memory.cms.service.impl;
+package com.memory.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.memory.app.service.ArticleCommentService;
 import com.memory.cms.repository.ArticleCommentCmsRepository;
 import com.memory.cms.service.ArticleCommentCmsService;
 import com.memory.common.utils.Utils;
@@ -20,7 +21,7 @@ import java.util.*;
  * @date 2019/5/23 17:01
  */
 @Service
-public class ArticleCommentCmsServiceImpl implements ArticleCommentCmsService {
+public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Autowired
     private DaoUtils daoUtils;
@@ -217,6 +218,93 @@ public class ArticleCommentCmsServiceImpl implements ArticleCommentCmsService {
 
     @Override
     public void delete(String id) {
+    }
+
+    @Override
+    public List<com.memory.entity.ArticleComment> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+        stringBuffer.append(" FROM ArticleComment a Where 1=1 ");
+        Map<String,Object> whereClause =getWhereClauseFirst(articleId);
+        stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+/*        System.out.println("where ==========="+whereClause.get("where").toString());
+        System.out.println("hql ============= " + stringBuffer.toString() );
+        System.out.println("map ============= " + JSON.toJSONString(map));*/
+        return  daoUtils.findByHQL(stringBuffer.toString(), map, page);
+    }
+
+
+    private  Map<String,Object> getWhereClauseFirst(String articleId){
+        Map<String,Object> returnMap = new HashMap<String, Object>();
+        StringBuffer stringBuffer = new StringBuffer();
+        Map<String,Object> paramMap = new HashMap<String, Object>();
+
+        stringBuffer.append(" AND a.commentType = 0");
+        stringBuffer.append(" AND a.articleId = :articleId");
+        paramMap.put("articleId", articleId);
+
+        stringBuffer.append(" ORDER BY a.commentCreateTime desc");
+
+        returnMap.put("where",stringBuffer.toString());
+        returnMap.put("param",paramMap);
+        return returnMap;
+    }
+
+    @Override
+    public int queryArticleCommentFirstCountByArticleId(String articleId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("SELECT count(*) FROM ArticleComment a Where 1=1 ");
+
+        Map<String,Object> whereClause =getWhereClauseFirst(articleId);
+        stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+
+        return daoUtils.getTotalByHQL(stringBuffer.toString(),map);
+    }
+
+
+
+    @Override
+    public List<com.memory.entity.ArticleComment> getArticleCommentSecondByArticleId(String articleId, Integer pageIndex, Integer limit) {
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+        stringBuffer.append(" FROM ArticleComment a Where 1=1 ");
+        Map<String,Object> whereClause =getWhereClauseSecond(articleId);
+        stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), map, page);
+    }
+
+    @Override
+    public int getArticleCommentSecondCountByArticleId(String articleId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("SELECT count(*) FROM ArticleComment a Where 1=1 ");
+        Map<String,Object> whereClause =getWhereClauseSecond(articleId);
+        stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
+
+        return daoUtils.getTotalByHQL(stringBuffer.toString(),map);
+    }
+
+
+    private Map<String,Object> getWhereClauseSecond(String articleId){
+        Map<String,Object> returnMap = new HashMap<String, Object>();
+        StringBuffer stringBuffer = new StringBuffer();
+        Map<String,Object> paramMap = new HashMap<String, Object>();
+
+        stringBuffer.append(" AND a.commentType = 1");
+        stringBuffer.append(" AND a.articleId = :articleId");
+
+        stringBuffer.append(" ORDER BY a.commentCreateTime desc");
+
+        returnMap.put("where",stringBuffer.toString());
+        returnMap.put("param",paramMap);
+        return returnMap;
 
     }
+
+
+
 }

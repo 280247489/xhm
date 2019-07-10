@@ -1,10 +1,16 @@
 package com.memory.app.controller;
 import com.alibaba.fastjson.JSON;
+import com.memory.app.service.ArticleCommentService;
+import com.memory.app.service.UserService;
 import com.memory.cms.service.ArticleCommentCmsService;
 import com.memory.common.utils.PageResult;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
+import com.memory.common.utils.Utils;
+import com.memory.entity.User;
 import com.memory.entity.model.ArticleComment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,58 +24,59 @@ import java.util.List;
  * @date 2019/5/23 17:03
  */
 @RestController
-@RequestMapping(value = "articleComment/cms")
-public class ArticleCommentCmsController {
+@RequestMapping(value = "articleComment")
+public class ArticleCommentController {
+
+    private final static Logger log = LoggerFactory.getLogger(ArticleCommentController.class);
 
     @Autowired
-    private ArticleCommentCmsService articleCommentCmsService;
+    private ArticleCommentService articleCommentService;
+
+    @Autowired
+    private UserService userService;
+
 
 
 
     /**
-     *
+     * 添加评论
      * @param user_id
-     * @param user_logo
-     * @param user_name
      * @param comment_parent_id
      * @param content
      * @return
      */
     @RequestMapping(value = "add")
-    public  Result addAdminComment(@RequestParam("user_id") String user_id,@RequestParam("user_logo") String user_logo,@RequestParam("user_name") String user_name,@RequestParam("comment_parent_id") String comment_parent_id,@RequestParam("content") String content ,@RequestParam("content_replace") String content_replace  ){
+    public  Result addAdminComment(@RequestParam("user_id") String user_id,@RequestParam("comment_parent_id") String comment_parent_id,@RequestParam("content") String content ,@RequestParam("content_replace") String content_replace  ){
         Result result = new Result();
         try{
-/*
-            SysAdmin sysAdmin =sysAdminCmsService.getSysAdminById(user_id);
-            if(sysAdmin==null){
+
+            User user =userService.getUserById(user_id);
+            if(user==null){
                 return ResultUtil.error(-1,"非法用户！");
             }
 
             System.out.println("content_replace == " + content_replace);
-            com.memory.entity.jpa.ArticleComment parentArticleComment =  articleCommentCmsService.getArticleCommentById(comment_parent_id);
-            com.memory.entity.jpa.ArticleComment articleComment  = new com.memory.entity.jpa.ArticleComment();
-            articleComment.setId(Utils.getShortUUTimeStamp());
-            articleComment.setUserId(user_id);
-            articleComment.setUserLogo(user_logo);
-            articleComment.setUserName(user_name);
+            com.memory.entity.ArticleComment parentArticleComment =  articleCommentService.getArticleCommentById(comment_parent_id);
+            com.memory.entity.ArticleComment articleComment  = new com.memory.entity.ArticleComment();
+            articleComment.setId(Utils.getShortUUID());
+            articleComment.setUserId(user.getId());
+            articleComment.setUserLogo(user.getUserLogo());
+            articleComment.setUserName(user.getUserName());
             articleComment.setArticleId(parentArticleComment.getArticleId());
             articleComment.setCommentType(1);
             articleComment.setCommentRootId(parentArticleComment.getCommentRootId());
             articleComment.setCommentParentId(comment_parent_id);
-            //     if(parentArticleComment.getCommentType() == 1){
+
             System.out.println("parentUserName = " + "@"+parentArticleComment.getUserName());
             articleComment.setCommentParentUserName("@"+parentArticleComment.getUserName());
             articleComment.setCommentParentContent(parentArticleComment.getCommentContentReplace());
-     *//*       }else{
-                articleComment.setCommentParentUserName("");
-                articleComment.setCommentParentContent("");
-            }*//*
+
             articleComment.setCommentContent(content);
             articleComment.setCommentCreateTime(new Date());
             articleComment.setCommentTotalLike(0);
             articleComment.setCommentContentReplace(content_replace);
-            com.memory.entity.jpa.ArticleComment articleComment1 =   articleCommentCmsService.addArticleComment(articleComment);
-            result = ResultUtil.success(articleComment1);*/
+            com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
+            result = ResultUtil.success(articleComment1);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -92,12 +99,50 @@ public class ArticleCommentCmsController {
 
         int pageIndex = page+1;
         int limit = size;
-        List<ArticleComment> list = articleCommentCmsService.queryArticleCommentByQueHql( pageIndex, limit, key_words, phone_number,  article_name,  user_name,  comment_type,  query_start_time,  query_end_time,  sort_role,comment_root_id,id,article_id);
-        int totalElements = articleCommentCmsService.queryArticleCommentByQueHqlCount(  key_words, phone_number,  article_name,  user_name,  comment_type,  query_start_time,  query_end_time,  sort_role,comment_root_id,id,article_id);
+        List<ArticleComment> list = articleCommentService.queryArticleCommentByQueHql( pageIndex, limit, key_words, phone_number,  article_name,  user_name,  comment_type,  query_start_time,  query_end_time,  sort_role,comment_root_id,id,article_id);
+        int totalElements = articleCommentService.queryArticleCommentByQueHqlCount(  key_words, phone_number,  article_name,  user_name,  comment_type,  query_start_time,  query_end_time,  sort_role,comment_root_id,id,article_id);
         PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
         return ResultUtil.success(pageResult);
     }
 
+
+
+    @RequestMapping("listFirst")
+    public Result listFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
+                            @RequestParam String articleId){
+        Result result = new Result();
+        try {
+            int pageIndex = page+1;
+            int limit = size;
+            List<com.memory.entity.ArticleComment> list = articleCommentService.queryArticleCommentFirstByArticleId(pageIndex,limit,articleId);
+            int totalElements = articleCommentService.queryArticleCommentFirstCountByArticleId(articleId);
+            PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
+            return ResultUtil.success(pageResult);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("listFirst",e.getMessage());
+        }
+        return result;
+    }
+
+
+    @RequestMapping("secondFirst")
+    public Result secondFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
+                            @RequestParam String articleId){
+        Result result = new Result();
+        try {
+            int pageIndex = page+1;
+            int limit = size;
+            List<com.memory.entity.ArticleComment> list = articleCommentService.getArticleCommentSecondByArticleId(articleId,pageIndex,limit);
+            int totalElements = articleCommentService.getArticleCommentSecondCountByArticleId(articleId);
+            PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
+            return ResultUtil.success(pageResult);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("secondFirst",e.getMessage());
+        }
+        return result;
+    }
 
 
 
@@ -112,7 +157,7 @@ public class ArticleCommentCmsController {
 
             List<com.memory.entity.ArticleComment> removeList = new ArrayList<>();
 
-            com.memory.entity.ArticleComment articleComment = articleCommentCmsService.getArticleCommentById(comment_id);
+            com.memory.entity.ArticleComment articleComment = articleCommentService.getArticleCommentById(comment_id);
 
             if(articleComment == null){
                 return ResultUtil.error(-1,"非法id");
@@ -121,10 +166,10 @@ public class ArticleCommentCmsController {
 
 
             if(comment_id.equals(comment_root_id)){
-                articleCommentCmsService.deleteArticleCommentByCommentRootId(comment_root_id);
+                articleCommentService.deleteArticleCommentByCommentRootId(comment_root_id);
             }else{
                 Date comment_create_time = articleComment.getCommentCreateTime();
-                List<com.memory.entity.ArticleComment> list = articleCommentCmsService.queryArticleCommentList(comment_root_id,comment_create_time);
+                List<com.memory.entity.ArticleComment> list = articleCommentService.queryArticleCommentList(comment_root_id,comment_create_time);
                 System.out.println("query msg = " );
                 System.out.println(JSON.toJSONString(list));
 
@@ -139,7 +184,7 @@ public class ArticleCommentCmsController {
             }
            // System.out.println("remove list size ================== " +removeList.size());
           //  System.out.println("remove list = " + JSON.toJSONString(removeList));
-            articleCommentCmsService.deleteAll(removeList);
+            articleCommentService.deleteAll(removeList);
             result = ResultUtil.success("删除成功");
 
         }catch (Exception e){

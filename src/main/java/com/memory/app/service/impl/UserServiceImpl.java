@@ -69,4 +69,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public User getUserById(String id) {
+        if(userRepository.findById(id).hashCode() != 0){
+            return userRepository.findById(id).get();
+        }else{
+            return null;
+        }
+    }
 }

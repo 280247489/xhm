@@ -1,4 +1,6 @@
 $(function(){
+	//console.log("init sel_articleComment_two view ...")
+	//console.log("commentRootId====",getRequestParamByName('commentRootId'));
     $(".loading_area").fadeIn();
 	$("#articleComment").addClass("dh_dl_open");
 	$("#sel_articleComment").addClass("active");
@@ -63,7 +65,7 @@ $(function(){
 			  init();
 			  laydate.render({
 				  elem: '#endTime',
-				  min: value,
+				//  min: value,
 				 /* max: 0,*/
 				  showBottom: false,
 				  done: function(value, date){
@@ -74,7 +76,7 @@ $(function(){
 		});
 	laydate.render({
 		  elem: '#endTime',
-		  value: new Date(),
+		 // value: new Date(),
 	/*	  max: 0,
 		  min: 0,*/
 		  showBottom: false
@@ -92,26 +94,28 @@ var key_words,article_title,user_name,comment_type,query_start_time,query_end_ti
 function init(){
 	$(".loading_area").fadeIn();
 
+	var commentRootId = getRequestParamByName('commentRootId')
+
 	key_words = $('.key_words').val();
 	article_title=$('.article_title').val();
 	user_name=$('.user_name').val();
 	comment_type=$('.comment_type').val();
 	query_start_time = $('#startTime').val();
 	query_end_time = $('#endTime').val();
-	console.log("comment_type === " ,comment_type);
+
 
 	ajax("cmsArticleComment/list",
 			{
 				page: start,
 				size: limit,
 				key_words: key_words,
-				article_title: article_title,
+				article_title: '',
 				user_name:user_name,
-				comment_type:comment_type,
+				comment_type:'',
 				query_start_time: query_start_time,
 				query_end_time: query_end_time,
 				sort_role:'',
-				comment_root_id:'',
+				comment_root_id:commentRootId,
 				article_id:''
 			},
 			sel_callback);
@@ -146,8 +150,6 @@ function sel_callback(data){
 					+ '<td align=center>' +obj.createTime + '</td>'
 					+ '<td align=center>' + (obj.commentType == 0 ? '<span>点赞:'+obj.like+'</span><br><span>回复:'+obj.commentSum+'</span>':'') + '</td>'
 					+ '<td align=center>'
-
-					+(obj.commentType == 0 ? '<button class =""  style="width:80px;height:30px;margin-right: 20px;" onclick="show_two_list(this)" value="'+obj.commentRootId+'"> 查看</button>':'')
 					+'<button class="theme-login" id="'+obj.id+'" aid="'+obj.id+'" value="'+obj.userName+'"  onclick="articleComment_click(this)" style="width:80px;height:30px;">回复</button>'
 					+''
 					+'<button class="del" id="del_'+obj.id+'"  value="'+obj.id+'" onclick="articleComment_remove(this)"   style="width:80px;height:30px;margin-right: 20px;">删除</button>'
@@ -271,6 +273,9 @@ function createPage(count){
 
 //评论回复弹出层显示
 function articleComment_click(index) {
+	console.log("index is ",index)
+	console.log("index value = ",index.value)
+console.log("index id=",index.id)
 	$('#articleComment-title').html('对'+'<span class="text-light-blue " value="'+index.id+'">&nbsp;'+index.value+'：</span><input type="text" id="comment-title" value="'+index.id+'" style="display: none"/>'+'的回复');
 
 	$('.theme-popover-mask').fadeIn(100);
@@ -304,6 +309,7 @@ function articleComment_remove(index) {
 //topicCreateUserId: sessionStorage.getItem("login_id"), topicCreateUser:sessionStorage.getItem("login_name")
 //评论回复
 function articleComment_callback() {
+
 	if(confirm("确认回复评论内容吗？")){
 		var content = $(".comment_content_callback").val();
 
@@ -331,16 +337,13 @@ function articleComment_callback() {
 				}
 			});
 	}
-
-
 }
-//评论二级列表
-function show_two_list(index) {
-	console.log("commentRootId == " ,index.value);
 
-	var url = "sel_articleComment_two.html?commentRootId="+index.value;
-	console.log("redirect Url = " ,url);
-	window.location.href = url;
+
+function getRequestParamByName(name) {
+	var sValue = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]*)(\&?)", "i"));
+	//decodeURIComponent解码
+	return sValue ? decodeURIComponent(sValue[1]) : decodeURIComponent(sValue);
 
 }
 
