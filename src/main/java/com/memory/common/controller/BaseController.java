@@ -71,4 +71,20 @@ public class BaseController {
         }
         return db_path;
     }
+
+    public String upload2MP4(String fileName, String dirPath, MultipartFile file){
+        String db_path = "";
+        try {
+            File dir = new File(filePath + dirPath);
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            File destFile = new File(dir.getPath() + File.separator + fileName + ".mp4");
+            file.transferTo(destFile);
+            db_path = dirPath + File.separator + fileName + ".mp4";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return db_path;
+    }
 }
