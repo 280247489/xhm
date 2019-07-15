@@ -33,9 +33,9 @@ public class BaseController {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File destFile = new File(dir.getPath() + File.separator + fileName + suffix);
+            File destFile = new File(dir.getPath() +"/" + fileName + suffix);
             file.transferTo(destFile);
-            db_path = dirPath + File.separator + fileName + suffix;
+            db_path = dirPath + "/" + fileName + suffix;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,9 +48,9 @@ public class BaseController {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File destFile = new File(dir.getPath() + File.separator + fileName + ".png");
+            File destFile = new File(dir.getPath() +"/" + fileName + ".png");
             file.transferTo(destFile);
-            db_path = dirPath + File.separator + fileName + ".png";
+            db_path = dirPath + "/" + fileName + ".png";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,9 +63,9 @@ public class BaseController {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File destFile = new File(dir.getPath() + File.separator + fileName + ".mp3");
+            File destFile = new File(dir.getPath()  +"/" + fileName + ".mp3");
             file.transferTo(destFile);
-            db_path = dirPath + File.separator + fileName + ".mp3";
+            db_path = dirPath + "/" + fileName + ".mp3";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,9 +79,9 @@ public class BaseController {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File destFile = new File(dir.getPath() + File.separator + fileName + ".mp4");
+            File destFile = new File(dir.getPath() +"/" + fileName + ".mp4");
             file.transferTo(destFile);
-            db_path = dirPath + File.separator + fileName + ".mp4";
+            db_path = dirPath + "/" + fileName + ".mp4";
         } catch (Exception e) {
             e.printStackTrace();
         }

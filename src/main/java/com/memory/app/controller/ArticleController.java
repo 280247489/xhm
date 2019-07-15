@@ -1,5 +1,7 @@
 package com.memory.app.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.memory.app.service.UserService;
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
 import com.memory.common.utils.Result;
@@ -7,6 +9,7 @@ import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
 import com.memory.entity.Article;
 import com.memory.entity.ArticleLike;
+import com.memory.entity.User;
 import com.memory.entity.model.ArticleModel;
 import com.memory.app.service.ArticleService;
 import org.slf4j.Logger;
@@ -35,6 +38,9 @@ public class ArticleController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 查询文章
      * @param tid
@@ -46,8 +52,27 @@ public class ArticleController extends BaseController {
     public Message sel(@RequestParam(name="tid") String tid, @RequestParam(name="start") Integer start, @RequestParam(name="limit") Integer limit) {
         msg = Message.success();
         Map<String, Object> map = new HashMap<>();
+        List<User> userList = userService.getUserList();
+
+        System.out.println("userList =="+ JSON.toJSONString(userList));
+
+        Map<String,Object> resultMap = articleService.sel(tid, start, limit);
+        List<Article> list = (List<Article>) resultMap.get("list");
+        for (Article article : list) {
+            for (User user : userList) {
+                System.out.println("article userId = " +article.getArticleCreateUserId());
+                System.out.println("user id = " + user.getId());
+                if(article.getArticleCreateUserId().equals(user.getId())){
+                    System.out.println("=============================================================");
+                    System.out.println("= id ===" +user.getId());
+                    System.out.println("= name = " +user.getUserName());
+                    article.setArticleCreateUserName(user.getUserName());
+                }
+            }
+        }
+        resultMap.put("list",list);
         map.put("fileUrl", this.getFileUrl());
-        map.put("data", articleService.sel(tid, start, limit));
+        map.put("data", resultMap);
         msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("sel{ start: {} - limit: {} }", start, limit);
@@ -87,8 +112,28 @@ public class ArticleController extends BaseController {
     public Message selByUserId(@RequestParam(name="uid") String uid, @RequestParam(name="start") Integer start, @RequestParam(name="limit") Integer limit) {
         msg = Message.success();
         Map<String, Object> map = new HashMap<>();
+        List<User> userList = userService.getUserList();
+
+
+
+        Map<String,Object> resultMap = articleService.selByUserId(uid, start, limit);
+        List<Article> list = (List<Article>) resultMap.get("list");
+        for (Article article : list) {
+            for (User user : userList) {
+                System.out.println("article userId = " +article.getArticleCreateUserId());
+                System.out.println("user id = " + user.getId());
+                if(article.getArticleCreateUserId().equals(user.getId())){
+                    System.out.println("=============================================================");
+                    System.out.println("= id ===" +user.getId());
+                    System.out.println("= name = " +user.getUserName());
+                    article.setArticleCreateUserName(user.getUserName());
+                }
+            }
+        }
+        resultMap.put("list",list);
+
         map.put("fileUrl", this.getFileUrl());
-        map.put("data", articleService.selByUserId(uid, start, limit));
+        map.put("data", resultMap);
         msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("selByUserId{ start: {} - limit: {} }", start, limit);
@@ -228,27 +273,6 @@ public class ArticleController extends BaseController {
         try {
 
 
-            // private String id;
-            //    private String typeId;
-            //    private String articleTitle;
-            //    private String articleLogo;
-            //    private String articlePicture;
-            //    private String articleContent;
-            //    private String articleTopicsId;
-            //    private String articleTopics;
-            //    private String articleLabel;
-            //    private String articleKeyWords;
-            //    private int articleOnline;
-            //    private int articleTotalView;
-            //    private int articleTotalShare;
-            //    private int articleTotalLike;
-            //    private Date articleCreateTime;
-            //    private String articleCreateUserId;
-            //    private int articleCheckYn;
-            //    private Date articleCheckTime;
-            //    private String articleCheckAdminId;
-            //    private int articleDelYn;
-            //    private int articleTopYn;
             Article article = new Article();
             article.setId(uuid);
             article.setTypeId(typeId);

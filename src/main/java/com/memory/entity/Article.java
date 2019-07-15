@@ -35,6 +35,7 @@ public class Article {
     private String articleCheckAdminId;
     private int articleDelYn;
     private int articleTopYn;
+    private String articleCreateUserName;
 
     @Id
     @Column(name = "id")
@@ -244,6 +245,14 @@ public class Article {
 
     public void setArticleTopYn(int articleTopYn) {
         this.articleTopYn = articleTopYn;
+    }
+
+    public String getArticleCreateUserName() {
+        return articleCreateUserName;
+    }
+
+    public void setArticleCreateUserName(String articleCreateUserName) {
+        this.articleCreateUserName = articleCreateUserName;
     }
 
     public Article() {

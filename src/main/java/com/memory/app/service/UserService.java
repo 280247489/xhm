@@ -2,6 +2,8 @@ package com.memory.app.service;
 
 import com.memory.entity.User;
 
+import java.util.List;
+
 /**
  * @Auther: cui.Memory
  * @Date: 2019/5/8 0008 13:46
@@ -20,5 +22,7 @@ public interface UserService {
     User checkTel(String userTel);
 
     User getUserById(String id);
+
+    List<User> getUserList();
 
 }
