@@ -38,7 +38,8 @@ public class DemoAspect {
 
 
     @Pointcut("execution(public * com.memory.cms.controller.*.addAdminComment(..))  || " +
-            "execution(public * com.memory.cms.controller.*.addAdminComment(..))" )
+            "execution(public * com.memory.cms.controller.*.addAdminComment(..)) ||"+
+            "execution(public * com.memory.app.controller.*.addFirstLevelComment(..))")
     public void filterWords(){
     }
 

@@ -1,12 +1,14 @@
 package com.memory.app.controller;
 import com.alibaba.fastjson.JSON;
 import com.memory.app.service.ArticleCommentService;
+import com.memory.app.service.ArticleService;
 import com.memory.app.service.UserService;
 import com.memory.cms.service.ArticleCommentCmsService;
 import com.memory.common.utils.PageResult;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
+import com.memory.entity.Article;
 import com.memory.entity.User;
 import com.memory.entity.model.ArticleComment;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class ArticleCommentController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
 
 
 
@@ -84,6 +89,48 @@ public class ArticleCommentController {
     }
 
 
+    //添加一级评论
+    @RequestMapping("addFirstLevelComment")
+    public Result addFirstLevelComment(@RequestParam String articleId,@RequestParam String userId,@RequestParam("content") String content ,@RequestParam("content_replace") String content_replace   ){
+        Result result = new Result();
+        try {
+
+            User user =userService.getUserById(userId);
+            if(user==null){
+                return ResultUtil.error(-1,"非法用户！");
+            }
+            Article article = articleService.getArticleById(articleId);
+            if(article==null){
+                return ResultUtil.error(-1,"非法文章！");
+            }
+
+            String uuid = Utils.getShortUUID();
+            System.out.println("content_replace == " + content_replace);
+            com.memory.entity.ArticleComment articleComment  = new com.memory.entity.ArticleComment();
+            articleComment.setId(uuid);
+            articleComment.setUserId(user.getId());
+            articleComment.setUserLogo(user.getUserLogo());
+            articleComment.setUserName(user.getUserName());
+            articleComment.setArticleId(articleId);
+            articleComment.setCommentType(0);
+            articleComment.setCommentRootId(uuid);
+            articleComment.setCommentParentId("");
+
+            articleComment.setCommentParentUserName("");
+            articleComment.setCommentParentContent("");
+            articleComment.setCommentContent(content);
+            articleComment.setCommentCreateTime(new Date());
+            articleComment.setCommentTotalLike(0);
+            articleComment.setCommentContentReplace(content_replace);
+            com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
+            result = ResultUtil.success(articleComment1);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("addFirstLevelComment",e.getMessage());
+        }
+        return result;
+    }
 
 
 
@@ -126,9 +173,9 @@ public class ArticleCommentController {
     }
 
 
-    @RequestMapping("secondFirst")
+    @RequestMapping("listSecond")
     public Result secondFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
-                            @RequestParam String articleId){
+                            @RequestParam("articleId") String articleId){
         Result result = new Result();
         try {
             int pageIndex = page+1;
@@ -143,6 +190,7 @@ public class ArticleCommentController {
         }
         return result;
     }
+
 
 
 

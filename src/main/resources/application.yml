@@ -1,5 +1,5 @@
-filePath: /G:/upload\
-fileUrl: http://192.168.1.200:8091/file/
+filePath: /opt/tomcat8/webapps/
+fileUrl: http://server.momjia.com/
 server:
   port: 8081
   servlet:
@@ -10,4 +10,8 @@ spring:
     time-zone: GMT+8
   profiles:
     active: c3p0, redis, solr
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
 #debug: true

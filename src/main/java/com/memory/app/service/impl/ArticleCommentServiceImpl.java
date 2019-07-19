@@ -296,6 +296,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
         stringBuffer.append(" AND a.commentType = 1");
         stringBuffer.append(" AND a.articleId = :articleId");
+        paramMap.put("articleId",articleId);
 
         stringBuffer.append(" ORDER BY a.commentCreateTime desc");
 

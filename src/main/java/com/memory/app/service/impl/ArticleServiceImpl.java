@@ -142,4 +142,13 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleLike articleLike = (ArticleLike) daoUtils.findObjectHQL(sb.toString(), map);
         return articleLike;
     }
+
+    @Override
+    public Article getArticleById(String id) {
+        if(articleRepository.findById(id).hashCode() != 0){
+            return articleRepository.findById(id).get();
+        }else{
+            return null;
+        }
+    }
 }

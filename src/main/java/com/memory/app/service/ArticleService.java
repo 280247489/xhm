@@ -23,4 +23,6 @@ public interface ArticleService {
     Article del(String aid, String userId);
     //文章点赞
     ArticleLike like(String aid, String userId);
+
+    Article getArticleById(String id);
 }
