@@ -151,4 +151,11 @@ public class ArticleServiceImpl implements ArticleService {
             return null;
         }
     }
+
+    @Override
+    public Article update(Article article) {
+        //daoUtils.save(article);
+        return articleRepository.save(article);
+
+    }
 }

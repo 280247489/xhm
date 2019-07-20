@@ -25,4 +25,7 @@ public interface ArticleService {
     ArticleLike like(String aid, String userId);
 
     Article getArticleById(String id);
+
+    //修改文章
+    Article update(Article article);
 }

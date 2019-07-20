@@ -17,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 
 /**
  * @author INS6+
@@ -51,14 +50,21 @@ public class ArticleCommentController {
      * @return
      */
     @RequestMapping(value = "add")
-    public  Result addAdminComment(@RequestParam("user_id") String user_id,@RequestParam("comment_parent_id") String comment_parent_id,@RequestParam("content") String content ,@RequestParam("content_replace") String content_replace  ){
+    public  Result addAdminComment(@RequestParam("user_id") String user_id,@RequestParam String articleId,@RequestParam("comment_parent_id") String comment_parent_id,@RequestParam("content") String content ,@RequestParam("content_replace") String content_replace  ){
         Result result = new Result();
         try{
+            Article article = articleService.getArticleById(articleId);
+            if(article==null){
+                return ResultUtil.error(-1,"非法文章！");
+            }
 
             User user =userService.getUserById(user_id);
             if(user==null){
                 return ResultUtil.error(-1,"非法用户！");
             }
+
+            article.setArticleTotalComment(article.getArticleTotalComment()+1);
+
 
             System.out.println("content_replace == " + content_replace);
             com.memory.entity.ArticleComment parentArticleComment =  articleCommentService.getArticleCommentById(comment_parent_id);
@@ -80,7 +86,9 @@ public class ArticleCommentController {
             articleComment.setCommentCreateTime(new Date());
             articleComment.setCommentTotalLike(0);
             articleComment.setCommentContentReplace(content_replace);
+
             com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
+            articleService.update(article);
             result = ResultUtil.success(articleComment1);
         }catch (Exception e){
             e.printStackTrace();
@@ -103,6 +111,7 @@ public class ArticleCommentController {
             if(article==null){
                 return ResultUtil.error(-1,"非法文章！");
             }
+            article.setArticleTotalComment(article.getArticleTotalComment()+1);
 
             String uuid = Utils.getShortUUID();
             System.out.println("content_replace == " + content_replace);
@@ -122,6 +131,7 @@ public class ArticleCommentController {
             articleComment.setCommentCreateTime(new Date());
             articleComment.setCommentTotalLike(0);
             articleComment.setCommentContentReplace(content_replace);
+            articleService.update(article);
             com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
             result = ResultUtil.success(articleComment1);
 
@@ -131,6 +141,8 @@ public class ArticleCommentController {
         }
         return result;
     }
+
+
 
 
 
@@ -175,13 +187,13 @@ public class ArticleCommentController {
 
     @RequestMapping("listSecond")
     public Result secondFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
-                            @RequestParam("articleId") String articleId){
+                           @RequestParam String commentRootId){
         Result result = new Result();
         try {
             int pageIndex = page+1;
             int limit = size;
-            List<com.memory.entity.ArticleComment> list = articleCommentService.getArticleCommentSecondByArticleId(articleId,pageIndex,limit);
-            int totalElements = articleCommentService.getArticleCommentSecondCountByArticleId(articleId);
+            List<com.memory.entity.ArticleComment> list = articleCommentService.getArticleCommentSecondByArticleId(commentRootId,pageIndex,limit);
+            int totalElements = articleCommentService.getArticleCommentSecondCountByArticleId(commentRootId);
             PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
             return ResultUtil.success(pageResult);
         }catch (Exception e){
@@ -191,6 +203,24 @@ public class ArticleCommentController {
         return result;
     }
 
+
+
+    //查询文章详情
+    @RequestMapping("getArticleCommentById")
+    public Result getArticleCommentById(@RequestParam String articleCommentId){
+        Result result = new Result();
+        try {
+            com.memory.entity.ArticleComment articleComment =articleCommentService.getArticleCommentById(articleCommentId);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("data",articleComment);
+            map.put("fileUrl","");
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("getArticleCommentById",e.getMessage());
+        }
+        return result;
+    }
 
 
 

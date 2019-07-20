@@ -36,6 +36,7 @@ public class Article {
     private int articleDelYn;
     private int articleTopYn;
     private String articleCreateUserName;
+    private int articleTotalComment;
 
     @Id
     @Column(name = "id")
@@ -253,6 +254,15 @@ public class Article {
 
     public void setArticleCreateUserName(String articleCreateUserName) {
         this.articleCreateUserName = articleCreateUserName;
+    }
+    @Basic
+    @Column(name = "article_total_comment")
+    public int getArticleTotalComment() {
+        return articleTotalComment;
+    }
+
+    public void setArticleTotalComment(int articleTotalComment) {
+        this.articleTotalComment = articleTotalComment;
     }
 
     public Article() {

@@ -173,6 +173,7 @@ public class ArticleController extends BaseController {
         model.getArticle().setArticleCheckYn(0);
         model.getArticle().setArticleDelYn(0);
         model.getArticle().setArticleTopYn(0);
+        model.getArticle().setArticleTotalComment(0);
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", articleService.add(model.getArticle()));
@@ -295,6 +296,7 @@ public class ArticleController extends BaseController {
             article.setArticleCheckAdminId("");
             article.setArticleDelYn(0);
             article.setArticleTopYn(0);
+            article.setArticleTotalComment(0);
             Article article1 =articleService.add(article);
 
            result = ResultUtil.success(article1);

@@ -224,7 +224,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     public List<com.memory.entity.ArticleComment> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId) {
         StringBuffer stringBuffer = new StringBuffer();
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
-        stringBuffer.append(" FROM ArticleComment a Where 1=1 ");
+
+        stringBuffer.append(" select new com.memory.entity.model.ArticleCommentApp(a.id,a.articleId,a.userId,a.userLogo,a.userName,a.commentType,a.commentRootId," +
+                "a.commentParentId,a.commentParentUserName,a.commentContent,a.commentParentContent,a.commentContentReplace,a.commentCreateTime,a.commentTotalLike,(select count(*) from ArticleComment WHERE commentRootId = a.commentRootId AND commentRootId != id ) as commentSum) FROM ArticleComment a Where 1=1 ");
         Map<String,Object> whereClause =getWhereClauseFirst(articleId);
         stringBuffer.append(whereClause.get("where"));
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
@@ -266,11 +268,11 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
 
     @Override
-    public List<com.memory.entity.ArticleComment> getArticleCommentSecondByArticleId(String articleId, Integer pageIndex, Integer limit) {
+    public List<com.memory.entity.ArticleComment> getArticleCommentSecondByArticleId(String commentRootId, Integer pageIndex, Integer limit) {
         StringBuffer stringBuffer = new StringBuffer();
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
         stringBuffer.append(" FROM ArticleComment a Where 1=1 ");
-        Map<String,Object> whereClause =getWhereClauseSecond(articleId);
+        Map<String,Object> whereClause =getWhereClauseSecond(commentRootId);
         stringBuffer.append(whereClause.get("where"));
         Map<String,Object> map = (  Map<String,Object>) whereClause.get("param");
 
@@ -289,14 +291,14 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     }
 
 
-    private Map<String,Object> getWhereClauseSecond(String articleId){
+    private Map<String,Object> getWhereClauseSecond(String commentRootId){
         Map<String,Object> returnMap = new HashMap<String, Object>();
         StringBuffer stringBuffer = new StringBuffer();
         Map<String,Object> paramMap = new HashMap<String, Object>();
 
         stringBuffer.append(" AND a.commentType = 1");
-        stringBuffer.append(" AND a.articleId = :articleId");
-        paramMap.put("articleId",articleId);
+        stringBuffer.append(" AND a.commentRootId = :commentRootId");
+        paramMap.put("commentRootId",commentRootId);
 
         stringBuffer.append(" ORDER BY a.commentCreateTime desc");
 
