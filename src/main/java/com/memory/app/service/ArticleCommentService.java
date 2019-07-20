@@ -48,4 +48,9 @@ public interface ArticleCommentService {
 
     int getArticleCommentSecondCountByArticleId(String commentRootId);
 
+
+    int queryArticleCommentCount(String articleId);
+
+    int queryCommentCountByCommentId(String commentId);
+
 }

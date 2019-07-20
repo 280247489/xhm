@@ -63,7 +63,6 @@ public class ArticleCommentController {
                 return ResultUtil.error(-1,"非法用户！");
             }
 
-            article.setArticleTotalComment(article.getArticleTotalComment()+1);
 
 
             System.out.println("content_replace == " + content_replace);
@@ -88,6 +87,9 @@ public class ArticleCommentController {
             articleComment.setCommentContentReplace(content_replace);
 
             com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
+            int count = articleCommentService.queryArticleCommentCount(articleId);
+            article.setArticleTotalComment(count);
+
             articleService.update(article);
             result = ResultUtil.success(articleComment1);
         }catch (Exception e){
@@ -111,7 +113,8 @@ public class ArticleCommentController {
             if(article==null){
                 return ResultUtil.error(-1,"非法文章！");
             }
-            article.setArticleTotalComment(article.getArticleTotalComment()+1);
+
+
 
             String uuid = Utils.getShortUUID();
             System.out.println("content_replace == " + content_replace);
@@ -131,8 +134,10 @@ public class ArticleCommentController {
             articleComment.setCommentCreateTime(new Date());
             articleComment.setCommentTotalLike(0);
             articleComment.setCommentContentReplace(content_replace);
-            articleService.update(article);
             com.memory.entity.ArticleComment articleComment1 =   articleCommentService.addArticleComment(articleComment);
+            int count = articleCommentService.queryArticleCommentCount(articleId);
+            article.setArticleTotalComment(count);
+            articleService.update(article);
             result = ResultUtil.success(articleComment1);
 
         }catch (Exception e){
@@ -294,5 +299,33 @@ public class ArticleCommentController {
         }
         return removeList;
     }
+
+
+    @RequestMapping("queryArticleCommentCount")
+    public Result queryArticleCommentCount(@RequestParam String articleId){
+        Result result = new Result();
+        try {
+            int count = articleCommentService.queryArticleCommentCount(articleId);
+            result = ResultUtil.success(count);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("queryArticleCommentCount",e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("queryCommentCountByCommentId")
+    public Result queryCommentCountByCommentId(@RequestParam String commentId){
+        Result result = new Result();
+        try {
+            int count = articleCommentService.queryCommentCountByCommentId(commentId);
+            result = ResultUtil.success(count);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("queryCommentCountByCommentId",e.getMessage());
+        }
+        return result;
+    }
+
 
 }

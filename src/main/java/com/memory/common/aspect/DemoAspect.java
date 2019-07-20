@@ -37,9 +37,12 @@ public class DemoAspect {
     }
 
 
+
+
     @Pointcut("execution(public * com.memory.cms.controller.*.addAdminComment(..))  || " +
             "execution(public * com.memory.cms.controller.*.addAdminComment(..)) ||"+
-            "execution(public * com.memory.app.controller.*.addFirstLevelComment(..))")
+            "execution(public * com.memory.app.controller.*.addFirstLevelComment(..)) ||"+
+            "execution(public * com.memory.app.controller.*.addAdminComment(..)) ")
     public void filterWords(){
     }
 
@@ -70,7 +73,7 @@ public class DemoAspect {
         try {
             String methodName = proceedingJoinPoint.getSignature().getName();
             String Url = request.getRequestURL().toString();
-            String ClassMethod =  proceedingJoinPoint.getSignature().getDeclaringTypeName()+ methodName;
+            String ClassMethod =  proceedingJoinPoint.getSignature().getDeclaringTypeName()+"."+ methodName;
             String HttpMethod = request.getMethod();
             String IP = request.getRemoteAddr();
             Object RequestArgs= new Gson().toJson(getParamInfo(proceedingJoinPoint).get("args"));

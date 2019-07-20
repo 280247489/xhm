@@ -308,6 +308,30 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     }
 
+    @Override
+    public int queryArticleCommentCount(String articleId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("SELECT count(*) FROM ArticleComment a Where 1=1 ");
+        stringBuffer.append("  AND a.articleId = :articleId");
+       // stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("articleId",articleId);
+        return daoUtils.getTotalByHQL(stringBuffer.toString(),map);
+    }
 
-
+    @Override
+    public int queryCommentCountByCommentId(String commentId) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("SELECT count(*) FROM ArticleComment a Where 1=1 ");
+        stringBuffer.append("  AND a.commentRootId = :commentRootId");
+        // stringBuffer.append(whereClause.get("where"));
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("commentRootId",commentId);
+        int count =daoUtils.getTotalByHQL(stringBuffer.toString(),map);
+        int realCount =0;
+        if(count>1){
+             realCount = count -1;
+        }
+        return  realCount;
+    }
 }
