@@ -87,15 +87,25 @@ public class ArticleController extends BaseController {
     @RequestMapping("selById")
     public Message selById(@RequestParam(name="aid") String aid) {
         msg = Message.success();
+
         Article article = articleService.selById(aid);
+        String userId ="";
+
+
         if(article != null){
             msg.setMsg("查询成功");
+            userId = article.getArticleCreateUserId();
+
         }else{
             msg.setMsg("失败");
         }
+        System.out.println("userId ===="+userId);
+        User user = userService.getUserById(userId);
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
+        map.put("user", user);
+
         msg.setResult(map);
         logger.info("selById{ aid: {} }", aid);
         return msg;

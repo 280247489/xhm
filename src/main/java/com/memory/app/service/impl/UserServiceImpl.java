@@ -29,10 +29,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserOpenId(userOpenId);
         //第一次微信授权登录，注册
         if(user == null){
-            user = new User(Utils.generateUUID(), "", userUnionId, userOpenId, "", userName, userLogo,
+        /*    user = new User(Utils.generateUUID(), "", userUnionId, userOpenId, "", userName, userLogo,
                     "", "", "", "", "", "",
                     new Date(), 0, 0, 0, "");
-
+*/
         }else{
             user.setUserLogo(userLogo);
         }
@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
     public User register(String userTel, String password) {
         User user = userRepository.findByUserTel(userTel);
         if(user == null){
-            user = new User(Utils.generateUUID(), password, "", "", userTel, "", "",
+       /*     user = new User(Utils.generateUUID(), password, "", "", userTel, "", "",
                     "", "", "", "", "", "",
-                    new Date(), 0, 0, 0, "");
+                    new Date(), 0, 0, 0, "");*/
             userRepository.save(user);
         }else{
             user = null;
@@ -82,5 +82,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUserList() {
         return userRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public void syncUserFollowAndFans(User myself, User there) {
+        userRepository.save(myself);
+        userRepository.save(there);
     }
 }

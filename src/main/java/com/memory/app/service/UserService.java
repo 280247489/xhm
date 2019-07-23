@@ -25,4 +25,7 @@ public interface UserService {
 
     List<User> getUserList();
 
+    //同步用户关注和被关注人的粉丝数量
+    void syncUserFollowAndFans(User myself,User there);
+
 }

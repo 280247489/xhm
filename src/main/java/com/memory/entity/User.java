@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * @author INS6+
- * @date 2019/7/10 16:34
+ * @date 2019/7/23 19:35
  */
 
 @Entity
@@ -32,6 +32,12 @@ public class User {
     private int userNologin;
     private int userCancel;
     private String parentId;
+    private int userFollow;
+    private int userFans;
+    private int userLike;
+    private int userGroup;
+    private double userIntegral;
+    private int userArticles;
 
     @Id
     @Column(name = "id")
@@ -213,6 +219,66 @@ public class User {
         this.parentId = parentId;
     }
 
+    @Basic
+    @Column(name = "user_follow")
+    public int getUserFollow() {
+        return userFollow;
+    }
+
+    public void setUserFollow(int userFollow) {
+        this.userFollow = userFollow;
+    }
+
+    @Basic
+    @Column(name = "user_fans")
+    public int getUserFans() {
+        return userFans;
+    }
+
+    public void setUserFans(int userFans) {
+        this.userFans = userFans;
+    }
+
+    @Basic
+    @Column(name = "user_like")
+    public int getUserLike() {
+        return userLike;
+    }
+
+    public void setUserLike(int userLike) {
+        this.userLike = userLike;
+    }
+
+    @Basic
+    @Column(name = "user_group")
+    public int getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(int userGroup) {
+        this.userGroup = userGroup;
+    }
+
+    @Basic
+    @Column(name = "user_integral")
+    public double getUserIntegral() {
+        return userIntegral;
+    }
+
+    public void setUserIntegral(double userIntegral) {
+        this.userIntegral = userIntegral;
+    }
+
+    @Basic
+    @Column(name = "user_articles")
+    public int getUserArticles() {
+        return userArticles;
+    }
+
+    public void setUserArticles(int userArticles) {
+        this.userArticles = userArticles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -221,6 +287,12 @@ public class User {
         return userForbidden == user.userForbidden &&
                 userNologin == user.userNologin &&
                 userCancel == user.userCancel &&
+                userFollow == user.userFollow &&
+                userFans == user.userFans &&
+                userLike == user.userLike &&
+                userGroup == user.userGroup &&
+                Double.compare(user.userIntegral, userIntegral) == 0 &&
+                userArticles == user.userArticles &&
                 Objects.equals(id, user.id) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(userUnionId, user.userUnionId) &&
@@ -240,31 +312,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, password, userUnionId, userOpenId, userTel, userName, userLogo, userSex, userBirthday, userProvince, userCity, userArea, userAddress, userCreateTime, userForbidden, userNologin, userCancel, parentId);
+        return Objects.hash(id, password, userUnionId, userOpenId, userTel, userName, userLogo, userSex, userBirthday, userProvince, userCity, userArea, userAddress, userCreateTime, userForbidden, userNologin, userCancel, parentId, userFollow, userFans, userLike, userGroup, userIntegral, userArticles);
     }
-
-    public User() {
-    }
-
-    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel, String parentId) {
-        this.id = id;
-        this.password = password;
-        this.userUnionId = userUnionId;
-        this.userOpenId = userOpenId;
-        this.userTel = userTel;
-        this.userName = userName;
-        this.userLogo = userLogo;
-        this.userSex = userSex;
-        this.userBirthday = userBirthday;
-        this.userProvince = userProvince;
-        this.userCity = userCity;
-        this.userArea = userArea;
-        this.userAddress = userAddress;
-        this.userCreateTime = userCreateTime;
-        this.userForbidden = userForbidden;
-        this.userNologin = userNologin;
-        this.userCancel = userCancel;
-        this.parentId = parentId;
-    }
-
 }
