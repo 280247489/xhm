@@ -16,7 +16,7 @@ public interface UserCollectionService {
     UserCollection update(UserCollection userCollection);
 
     //查询某个人的关注列表
-    List<UserCollection> queryUserCollectionListByQue(int pageIndex,int pageLimit,String collection_user_id);
+    List<com.memory.entity.model.UserCollection> queryUserCollectionListByQue(int pageIndex,int pageLimit,String collection_user_id);
 
     //查询某个人关注了多少个用户
     int queryUserCollectionCountByQue(String collection_user_id);

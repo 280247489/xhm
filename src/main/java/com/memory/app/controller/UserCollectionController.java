@@ -1,11 +1,14 @@
 package com.memory.app.controller;
 
+import com.memory.app.service.ArticleService;
 import com.memory.app.service.UserCollectionService;
 import com.memory.app.service.UserService;
+import com.memory.common.controller.BaseController;
 import com.memory.common.utils.PageResult;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
+import com.memory.entity.Article;
 import com.memory.entity.User;
 import com.memory.entity.UserCollection;
 import org.slf4j.Logger;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author INS6+
@@ -24,7 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("userCollection")
-public class UserCollectionController {
+public class UserCollectionController extends BaseController {
 
     private final static Logger log = LoggerFactory.getLogger(UserCollectionController.class);
 
@@ -33,6 +38,9 @@ public class UserCollectionController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
 
     //添加关注
     @RequestMapping("addCollection")
@@ -62,20 +70,24 @@ public class UserCollectionController {
         return result;
     }
 
-    private void syncUserFollowAndFans(@RequestParam String userId, @RequestParam String attentionUserId) {
+    private  Map<String,Integer> queryUserFollowAndFans(@RequestParam String userId) {
         //用户自己
-        User myself =userService.getUserById(userId);
+       // User myself =userService.getUserById(userId);
         int getFollowCount = userCollectionService.queryUserCollectionCountByQue(userId);
         //关注数增加
-        myself.setUserFollow(getFollowCount);
+      //  myself.setUserFollow(getFollowCount);
 
         //被关注用户
-        User there = userService.getUserById(attentionUserId);
+       // User there = userService.getUserById(attentionUserId);
         int getFansCount = userCollectionService.queryUserCollectionFansByQue(userId);
         //粉丝数增加
-        there.setUserFans(getFansCount);
+        //there.setUserFans(getFansCount);
         //事务 更新数据库
-        userService.syncUserFollowAndFans(myself,there);
+      //  userService.syncUserFollowAndFans(myself,there);
+        Map<String,Integer> returnMap = new HashMap<String,Integer>();
+        returnMap.put("follow",getFollowCount);
+        returnMap.put("fans",getFansCount);
+        return returnMap;
     }
 
     //取消关注
@@ -113,10 +125,11 @@ public class UserCollectionController {
 
             int pageIndex = page+1;
 
-            List<UserCollection> list = userCollectionService.queryUserCollectionListByQue(pageIndex,pageLimit,userId);
-            int totalElements = userCollectionService.queryUserCollectionCountByQue(userId);
-            PageResult pageResult = PageResult.getPageResult(page, pageLimit, list, totalElements);
-            return ResultUtil.success(pageResult);
+            List<com.memory.entity.model.UserCollection> list = userCollectionService.queryUserCollectionListByQue(pageIndex,pageLimit,userId);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",list);
+            result = ResultUtil.success(map);
         }catch (Exception e){
             e.printStackTrace();
             log.error("myCollectionList",e.getMessage());
@@ -126,11 +139,28 @@ public class UserCollectionController {
 
     //查询关注详情
     @RequestMapping("collectionDetail")
-    public Result method(){
+    public Result collectionDetail(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,@RequestParam String userId){
         Result result = new Result();
+        Map<String,Object> resultMap = new HashMap<String, Object>();
         try {
+            User user = userService.getUserById(userId);
+            if(Utils.isNotNull(user)){
+                Map<String,Integer> mapper = this.queryUserFollowAndFans(userId);
+                user.setUserFollow(mapper.get("follow"));
+                user.setUserFans(mapper.get("fans"));
 
-            result = ResultUtil.success();
+                int pageIndex = page+1;
+                int limit = size;
+                List<Article> articleList = articleService.queryArticleByUserId(userId,pageIndex,limit);
+                resultMap.put("fileUrl", this.getFileUrl());
+                resultMap.put("userInfo",user);
+                resultMap.put("articleList",articleList);
+                result = ResultUtil.success(resultMap);
+
+            }else{
+                result = ResultUtil.error(-1,"非法用户");
+            }
+
         }catch (Exception e){
             e.printStackTrace();
             log.error("route",e.getMessage());

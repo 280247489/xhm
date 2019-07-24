@@ -8,6 +8,7 @@ import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
 import com.memory.entity.Article;
+import com.memory.entity.ArticleComment;
 import com.memory.entity.ArticleLike;
 import com.memory.entity.User;
 import com.memory.entity.model.ArticleModel;
@@ -137,6 +138,7 @@ public class ArticleController extends BaseController {
                     System.out.println("= id ===" +user.getId());
                     System.out.println("= name = " +user.getUserName());
                     article.setArticleCreateUserName(user.getUserName());
+                    article.setArticleCreateUserLogo(user.getUserLogo());
                 }
             }
         }
@@ -315,5 +317,24 @@ public class ArticleController extends BaseController {
         }
         return result;
     }
+
+    @RequestMapping("queryArticleByUserId")
+    public Result queryArticleByUserId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,@RequestParam String userId){
+        Result result = new Result();
+        try {
+            int pageIndex = page+1;
+            int limit = size;
+            List<Article> articleList = articleService.queryArticleByUserId(userId,pageIndex,limit);
+
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",articleList);
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.memory.app.service.impl;
 import com.memory.common.utils.Utils;
 import com.memory.domain.dao.DaoUtils;
 import com.memory.entity.Article;
+import com.memory.entity.ArticleComment;
 import com.memory.entity.ArticleLike;
 import com.memory.app.repository.ArticleRepository;
 import com.memory.app.service.ArticleService;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -158,4 +160,23 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.save(article);
 
     }
+
+    @Override
+    public List<Article> queryArticleByUserId(String userId, Integer pageIndex, Integer limit) {
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+        stringBuffer.append(" FROM Article a Where 1=1 ");
+        stringBuffer.append(" AND articleCreateUserId = :articleCreateUserId");
+        stringBuffer.append(" AND articleCheckYn = 1");
+        stringBuffer.append(" ORDER BY articleCreateTime DESC");
+        Map<String,Object> param =new HashMap<String, Object>();
+        param.put("articleCreateUserId",userId);
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), param, page);
+    }
+
+
+
+
+
 }

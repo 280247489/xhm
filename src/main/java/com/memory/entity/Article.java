@@ -37,6 +37,7 @@ public class Article {
     private int articleTopYn;
     private String articleCreateUserName;
     private int articleTotalComment;
+    private String articleCreateUserLogo;
 
     @Id
     @Column(name = "id")
@@ -255,6 +256,15 @@ public class Article {
     public void setArticleCreateUserName(String articleCreateUserName) {
         this.articleCreateUserName = articleCreateUserName;
     }
+
+    public String getArticleCreateUserLogo() {
+        return articleCreateUserLogo;
+    }
+
+    public void setArticleCreateUserLogo(String articleCreateUserLogo) {
+        this.articleCreateUserLogo = articleCreateUserLogo;
+    }
+
     @Basic
     @Column(name = "article_total_comment")
     public int getArticleTotalComment() {

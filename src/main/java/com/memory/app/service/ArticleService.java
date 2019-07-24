@@ -1,8 +1,10 @@
 package com.memory.app.service;
 
 import com.memory.entity.Article;
+import com.memory.entity.ArticleComment;
 import com.memory.entity.ArticleLike;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,4 +30,6 @@ public interface ArticleService {
 
     //修改文章
     Article update(Article article);
+
+    List<Article> queryArticleByUserId(String userId, Integer pageIndex, Integer limit);
 }
