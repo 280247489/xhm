@@ -44,34 +44,15 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
     @Override
     public List< com.memory.entity.model.ArticleLike> queryArticleLikeByQue(Integer pageIndex, Integer limit, String userId){
         StringBuffer sb = new StringBuffer();
-        /**
-         this.id = id;
-         this.userId = userId;
-         this.articleId = articleId;
-         this.likeStatus = likeStatus;
-         this.createTime = createTime;
-         this.typeId = typeId;
-         this.articleTitle = articleTitle;
-         this.articleLogo = articleLogo;
-         this.articleTopicsId = articleTopicsId;
-         this.articleTopics = articleTopics;
-         this.articleTotalView = articleTotalView;
-         this.articleTotalShare = articleTotalShare;
-         this.articleTotalLike = articleTotalLike;
-         this.articleCreateUserId = articleCreateUserId;
-         this.articleCreateUserName = articleCreateUserName;
-         this.articleTotalComment = articleTotalComment;
-         this.articleCreateUserLogo = articleCreateUserLogo;
-         */
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
         sb.append("select new  com.memory.entity.model.ArticleLike (al.id,al.userId,al.articleId,al.likeStatus," +
                 "al.createTime,a.typeId,a.articleTitle,a.articleLogo," +
                 "a.articleTopicsId,a.articleTopics,a.articleTotalView,a.articleTotalShare," +
-                "a.articleTotalLike,a.articleCreateUserId,a.articleCreateUserName,a.articleTotalComment,a.articleCreateUserLogo)  ");
+                "a.articleTotalLike,a.articleCreateUserId,u.userName,a.articleTotalComment,u.userLogo)  ");
 
         //sb.append(" from  ArticleLike al  left join  Article a  on al.articleId = a.id where 1=1");
-        sb.append(" from  Article a   left join   ArticleLike al on al.articleId = a.id where 1=1");
-       // sb.append(" from ArticleLike al, Article a where al.articleId = a.id  ");
+        //sb.append(" from  Article a   left join   ArticleLike al on al.articleId = a.id where 1=1");
+       sb.append(" from ArticleLike al, Article a,User u where al.articleId = a.id   and a.articleCreateUserId = u.id");
 
         sb.append(" AND al.userId = :userId");
         sb.append(" AND al.likeStatus = 1");
@@ -83,6 +64,10 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
         System.out.println("hql ==" + sb.toString());
         return daoUtils.findByHQL(sb.toString(), map, page);
     }
+
+
+
+
 
 
 

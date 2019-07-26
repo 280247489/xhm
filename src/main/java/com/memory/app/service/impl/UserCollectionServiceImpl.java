@@ -110,4 +110,31 @@ public class UserCollectionServiceImpl implements UserCollectionService {
 
         return daoUtils.getTotalByHQL(sb.toString(),paramMap);
     }
+
+    @Override
+    public List<com.memory.entity.model.UserCollection> queryUserFansListByQue(int pageIndex, int pageLimit, String collection_user_id) {
+        StringBuffer sb = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, pageLimit);
+        Map<String,Object> paramMap = new HashMap<String, Object>();
+        /**
+         *  this.id = id;
+         *         this.collectionUserId = collectionUserId;
+         *         this.attentionUserId = attentionUserId;
+         *         this.isFollow = isFollow;
+         *         this.createTime = createTime;
+         *         this.userName = userName;
+         *         this.userLogo = userLogo;
+         *         this.userId = userId;
+         */
+        sb.append(" select new com.memory.entity.model.UserCollection(uc.id,uc.collectionUserId,uc.attentionUserId,uc.isFollow," +
+                "uc.createTime,u.userName,u.userLogo,u.id) ");
+        sb.append(" from UserCollection uc ,User u where uc.attentionUserId = u.id ");
+        sb.append(" AND uc.attentionUserId =:attentionUserId");
+        sb.append(" AND uc.isFollow = 1");
+        sb.append(" ORDER by uc.createTime desc");
+        paramMap.put("attentionUserId",collection_user_id);
+        return  daoUtils.findByHQL(sb.toString(), paramMap, null);
+    }
+
+
 }

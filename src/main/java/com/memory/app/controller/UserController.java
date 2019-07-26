@@ -3,6 +3,9 @@ package com.memory.app.controller;
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
 import com.memory.app.service.UserService;
+import com.memory.common.utils.Result;
+import com.memory.common.utils.ResultUtil;
+import com.memory.common.utils.Utils;
 import com.memory.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Auther: cui.Memory
@@ -107,4 +115,94 @@ public class UserController extends BaseController {
         }
         return msg;
     }
+
+
+    @RequestMapping("getUserInfo")
+    public Result getUserInfo(@RequestParam String userId){
+        Result result = new Result();
+        try {
+            User user = userService.getUserById(userId);
+            Map<String, Object> map = new HashMap<>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("user", user);
+
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //小程序用户头像上传接口
+    @RequestMapping(value = "userLogo")
+    public Result userLogo(@RequestParam MultipartFile file,@RequestParam(value = "userId",required = false) String userId){
+        Result result = new Result();
+        String path ="";
+        try {
+
+
+
+            Date date = new Date();
+
+                path = this.upload2PNG("logo"+"_"+Utils.idTimer.format(date), "xhm_file/user/"+userId, file);
+
+            System.out.printf("file upload path ==="+path);
+
+            Map<String,Object> returnMap = new HashMap <String, Object>();
+            returnMap.put("uuid", "");
+            returnMap.put("path", path);
+
+            result = ResultUtil.success(returnMap);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //更新用户信息
+    @RequestMapping("upgradeUser")
+    public Result upgradeUser(@RequestParam String userLogo,@RequestParam String userName,@RequestParam String userTel,
+                              @RequestParam String userSex,@RequestParam String birthday,@RequestParam String userId){
+        Result result = new Result();
+        try {
+            User user = userService.getUserById(userId);
+            if(Utils.isNotNull(user)){
+                if(Utils.isNotNull(userLogo)){
+                    user.setUserLogo(userLogo);
+                }
+
+                if(Utils.isNotNull(userName)){
+                    user.setUserName(userName);
+                }
+
+                if(Utils.isNotNull(userTel)){
+                    user.setUserTel(userTel);
+                }
+
+                if(Utils.isNotNull(userSex)){
+                    user.setUserSex(userSex);
+                }
+
+                if(Utils.isNotNull(birthday)){
+                    user.setUserBirthday(birthday);
+                }
+                User resultUser = userService.update(user);
+                Map<String, Object> map = new HashMap<>();
+                map.put("fileUrl", this.getFileUrl());
+                map.put("user", resultUser);
+
+                result = ResultUtil.success(map);
+            }else{
+                result = ResultUtil.error(-1,"非法用户");
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+
 }

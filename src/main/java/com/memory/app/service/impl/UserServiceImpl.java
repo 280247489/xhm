@@ -90,4 +90,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(myself);
         userRepository.save(there);
     }
+
+    @Override
+    public User update(User user){
+        return userRepository.save(user);
+    }
+
+
 }

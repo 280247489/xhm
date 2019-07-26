@@ -34,4 +34,5 @@ public interface UserCollectionService {
     UserCollection getUserCollectionByCollectionUserIdAndAttentionUserId(String userId,String attentionUserId);
 
 
+    List<com.memory.entity.model.UserCollection> queryUserFansListByQue(int pageIndex, int pageLimit, String collection_user_id);
 }

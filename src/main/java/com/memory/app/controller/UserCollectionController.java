@@ -47,8 +47,18 @@ public class UserCollectionController extends BaseController {
     public Result addCollection(@RequestParam String userId,@RequestParam String attentionUserId){
         Result result = new Result();
         try {
-            int sum = userCollectionService.getUserCollectionByIdAndAttentionUserId(userId,attentionUserId);
-            if(sum == 0){
+            UserCollection userCollectionShow = userCollectionService.getUserCollectionByCollectionUserIdAndAttentionUserId(userId,attentionUserId);
+
+            if(Utils.isNotNull(userCollectionShow)){
+                if(userCollectionShow.getIsFollow() == 0){
+                    userCollectionShow.setIsFollow(1);
+                    UserCollection resultUserCo = userCollectionService.add(userCollectionShow);
+
+                    result = ResultUtil.success(resultUserCo);
+                }else {
+                    result = ResultUtil.error(-1,"该用户已关注过，不可重复关注");
+                }
+            }else {
                 UserCollection userCollection = new UserCollection();
                 userCollection.setId(Utils.getShortUUID());
                 userCollection.setCollectionUserId(userId);
@@ -59,9 +69,9 @@ public class UserCollectionController extends BaseController {
 
 
                 result = ResultUtil.success(resultUserCo);
-            }else {
-                result = ResultUtil.error(-1,"该用户已关注过，不可重复关注");
             }
+
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -136,6 +146,29 @@ public class UserCollectionController extends BaseController {
         }
         return result;
     }
+
+    //查找我的粉丝列表
+    @RequestMapping("myFansList")
+    public Result myFansList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer pageLimit,@RequestParam String userId){
+        Result result = new Result();
+        try {
+
+            int pageIndex = page+1;
+
+            List<com.memory.entity.model.UserCollection> list = userCollectionService.queryUserFansListByQue(pageIndex,pageLimit,userId);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",list);
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("myCollectionList",e.getMessage());
+        }
+        return result;
+    }
+
+
+
 
     //查询关注详情
     @RequestMapping("collectionDetail")

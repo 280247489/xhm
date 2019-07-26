@@ -32,4 +32,8 @@ public interface ArticleService {
     Article update(Article article);
 
     List<Article> queryArticleByUserId(String userId, Integer pageIndex, Integer limit);
+
+    List<com.memory.entity.model.Article> queryArticleByQue(String type, Integer pageIndex, Integer limit);
+
+    List<Article> search(String searchWords);
 }

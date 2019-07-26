@@ -165,16 +165,68 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> queryArticleByUserId(String userId, Integer pageIndex, Integer limit) {
         StringBuffer stringBuffer = new StringBuffer();
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
-        stringBuffer.append(" FROM Article a Where 1=1 ");
-        stringBuffer.append(" AND articleCreateUserId = :articleCreateUserId");
-        stringBuffer.append(" AND articleCheckYn = 1");
-        stringBuffer.append(" ORDER BY articleCreateTime DESC");
+        //stringBuffer.append(" FROM Article a Where 1=1 ");
+
+        stringBuffer.append("select new com.memory.entity.model.Article(a.id,a.typeId,a.articleTitle,a.articleLogo,a.articlePicture,a.articleContent,a.articleTopicsId," +
+                "a.articleTopics,a.articleLabel,a.articleKeyWords,a.articleOnline,a.articleTotalView,a.articleTotalShare,a.articleTotalLike," +
+                "a.articleCreateTime,a.articleCreateUserId,a.articleCheckYn,a.articleCheckTime,a.articleCheckAdminId,a.articleDelYn,a.articleTopYn,u.userName,a.articleTotalComment,u.userLogo)  ");
+        stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
+        stringBuffer.append(" AND a.articleCreateUserId = :articleCreateUserId");
+        stringBuffer.append(" AND a.articleCheckYn = 1");
+        stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
         Map<String,Object> param =new HashMap<String, Object>();
         param.put("articleCreateUserId",userId);
 
         return  daoUtils.findByHQL(stringBuffer.toString(), param, page);
     }
 
+
+    @Override
+    public List<com.memory.entity.model.Article> queryArticleByQue(String type, Integer pageIndex, Integer limit){
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+
+        Map<String,Object> param =new HashMap<String, Object>();
+        stringBuffer.append("select new com.memory.entity.model.Article(a.id,a.typeId,a.articleTitle,a.articleLogo,a.articlePicture,a.articleContent,a.articleTopicsId," +
+                "a.articleTopics,a.articleLabel,a.articleKeyWords,a.articleOnline,a.articleTotalView,a.articleTotalShare,a.articleTotalLike," +
+                "a.articleCreateTime,a.articleCreateUserId,a.articleCheckYn,a.articleCheckTime,a.articleCheckAdminId,a.articleDelYn,a.articleTopYn,u.userName,a.articleTotalComment,u.userLogo)  ");
+        stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
+        if(type.equals("推荐")){
+            stringBuffer.append(" AND a.articleTopYn =1");
+        }else{
+            stringBuffer.append(" AND a.typeId = :typeId");
+            stringBuffer.append(" AND a.articleCheckYn = 1");
+            stringBuffer.append(" AND a.articleOnline = 1");
+            stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
+            param.put("typeId",type);
+
+        }
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), param, page);
+
+    }
+
+
+
+
+
+    @Override
+    public List<Article> search(String searchWords){
+        StringBuffer stringBuffer = new StringBuffer();
+
+        stringBuffer.append(" FROM Article a where 1=1");
+        stringBuffer.append(" AND (a.articleTopics like :articleTopics or a.articleTitle like :articleTitle)");
+       stringBuffer.append(" AND a.articleCheckYn = 0");
+        stringBuffer.append(" AND a.articleOnline = 0");
+        stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
+        Map<String,Object> param =new HashMap<String, Object>();
+        param.put("articleTopics","%"+searchWords+"%");
+        param.put("articleTitle","%"+searchWords+"%");
+
+        System.out.println("hql =="+stringBuffer.toString());
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), param, null);
+    }
 
 
 

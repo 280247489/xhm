@@ -1,16 +1,15 @@
 package com.memory.app.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.memory.app.service.ArticleLikeService;
+import com.memory.app.service.UserCollectionService;
 import com.memory.app.service.UserService;
 import com.memory.common.controller.BaseController;
 import com.memory.common.utils.Message;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
-import com.memory.entity.Article;
-import com.memory.entity.ArticleComment;
-import com.memory.entity.ArticleLike;
-import com.memory.entity.User;
+import com.memory.entity.*;
 import com.memory.entity.model.ArticleModel;
 import com.memory.app.service.ArticleService;
 import org.slf4j.Logger;
@@ -41,6 +40,12 @@ public class ArticleController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserCollectionService userCollectionService;
+
+    @Autowired
+    private ArticleLikeService articleLikeService;
 
     /**
      * 查询文章
@@ -86,26 +91,47 @@ public class ArticleController extends BaseController {
      * @return
      */
     @RequestMapping("selById")
-    public Message selById(@RequestParam(name="aid") String aid) {
+    public Message selById(@RequestParam(name="aid") String aid,@RequestParam String userId) {
         msg = Message.success();
-
+        Boolean isCollection =false;
+        Boolean isLike =false;
         Article article = articleService.selById(aid);
-        String userId ="";
+        String articleUserId ="";
 
 
         if(article != null){
             msg.setMsg("查询成功");
-            userId = article.getArticleCreateUserId();
+            articleUserId = article.getArticleCreateUserId();
 
         }else{
             msg.setMsg("失败");
         }
-        System.out.println("userId ===="+userId);
-        User user = userService.getUserById(userId);
+        System.out.println("articleUserId ===="+articleUserId);
+        User user = userService.getUserById(articleUserId);
+
+        UserCollection userCollection = userCollectionService.getUserCollectionByCollectionUserIdAndAttentionUserId(userId,articleUserId);
+        if(Utils.isNotNull(userCollection)){
+            if(userCollection.getIsFollow() == 1){
+                isCollection =true;
+            }
+
+        }
+
+        ArticleLike articleLike = articleLikeService.getArticleLike(userId,aid);
+        if(Utils.isNotNull(articleLike)){
+            if(articleLike.getLikeStatus() == 1){
+                isLike = true;
+            }
+        }
+
+
+
         Map<String, Object> map = new HashMap<>();
         map.put("fileUrl", this.getFileUrl());
         map.put("obj", article);
         map.put("user", user);
+        map.put("isCollection", isCollection);
+        map.put("isLike", isLike);
 
         msg.setResult(map);
         logger.info("selById{ aid: {} }", aid);
@@ -143,9 +169,18 @@ public class ArticleController extends BaseController {
             }
         }
         resultMap.put("list",list);
+        User user = userService.getUserById(uid);
+
+        if(Utils.isNotNull(user)){
+
+            Map<String,Integer> sumMap = this.queryUserFollowAndFans(uid);
+            user.setUserFans(sumMap.get("fans"));
+            user.setUserFollow(sumMap.get("follow"));
+        }
 
         map.put("fileUrl", this.getFileUrl());
         map.put("data", resultMap);
+        map.put("user", user);
         msg.setResult(map);
         msg.setMsg("查询成功");
         logger.info("selByUserId{ start: {} - limit: {} }", start, limit);
@@ -335,6 +370,61 @@ public class ArticleController extends BaseController {
         }
         return result;
     }
+
+    private  Map<String,Integer> queryUserFollowAndFans(@RequestParam String userId) {
+        //用户自己
+        // User myself =userService.getUserById(userId);
+        int getFollowCount = userCollectionService.queryUserCollectionCountByQue(userId);
+        //关注数增加
+        //  myself.setUserFollow(getFollowCount);
+
+        //被关注用户
+        // User there = userService.getUserById(attentionUserId);
+        int getFansCount = userCollectionService.queryUserCollectionFansByQue(userId);
+        //粉丝数增加
+        //there.setUserFans(getFansCount);
+        //事务 更新数据库
+        //  userService.syncUserFollowAndFans(myself,there);
+        Map<String,Integer> returnMap = new HashMap<String,Integer>();
+        returnMap.put("follow",getFollowCount);
+        returnMap.put("fans",getFansCount);
+        return returnMap;
+    }
+
+
+    @RequestMapping("search")
+    public Result search(@RequestParam String searchWords){
+        Result result = new Result();
+        try {
+           List<Article> list = articleService.search(searchWords);
+
+
+            result = ResultUtil.success(list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @RequestMapping("mainList")
+    public Result mainList(@RequestParam String type,@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size){
+        Result result = new Result();
+        try {
+            int pageIndex = page +1;
+            int pageLimit = size;
+            List<com.memory.entity.model.Article> list = articleService.queryArticleByQue(type,pageIndex,pageLimit);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",list);
+
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 
 
 }
