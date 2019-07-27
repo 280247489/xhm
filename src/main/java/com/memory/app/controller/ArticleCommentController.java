@@ -3,6 +3,7 @@ import com.alibaba.fastjson.JSON;
 import com.memory.app.service.ArticleCommentService;
 import com.memory.app.service.ArticleService;
 import com.memory.app.service.UserService;
+import com.memory.common.controller.BaseController;
 import com.memory.common.utils.PageResult;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
@@ -25,7 +26,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping(value = "articleComment")
-public class ArticleCommentController {
+public class ArticleCommentController extends BaseController {
 
     private final static Logger log = LoggerFactory.getLogger(ArticleCommentController.class);
 
@@ -217,7 +218,7 @@ public class ArticleCommentController {
             com.memory.entity.ArticleComment articleComment =articleCommentService.getArticleCommentById(articleCommentId);
             Map<String,Object> map = new HashMap<String, Object>();
             map.put("data",articleComment);
-            map.put("fileUrl","");
+            map.put("fileUrl", this.getFileUrl());
             result = ResultUtil.success(map);
         }catch (Exception e){
             e.printStackTrace();

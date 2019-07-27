@@ -216,8 +216,8 @@ public class ArticleServiceImpl implements ArticleService {
 
         stringBuffer.append(" FROM Article a where 1=1");
         stringBuffer.append(" AND (a.articleTopics like :articleTopics or a.articleTitle like :articleTitle)");
-       stringBuffer.append(" AND a.articleCheckYn = 0");
-        stringBuffer.append(" AND a.articleOnline = 0");
+       stringBuffer.append(" AND a.articleCheckYn = 1");
+        stringBuffer.append(" AND a.articleOnline = 1");
         stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
         Map<String,Object> param =new HashMap<String, Object>();
         param.put("articleTopics","%"+searchWords+"%");

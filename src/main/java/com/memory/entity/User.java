@@ -39,6 +39,36 @@ public class User {
     private double userIntegral;
     private int userArticles;
 
+    public User() {
+    }
+
+    public User(String id, String password, String userUnionId, String userOpenId, String userTel, String userName, String userLogo, String userSex, String userBirthday, String userProvince, String userCity, String userArea, String userAddress, Date userCreateTime, int userForbidden, int userNologin, int userCancel, String parentId, int userFollow, int userFans, int userLike, int userGroup, double userIntegral, int userArticles) {
+        this.id = id;
+        this.password = password;
+        this.userUnionId = userUnionId;
+        this.userOpenId = userOpenId;
+        this.userTel = userTel;
+        this.userName = userName;
+        this.userLogo = userLogo;
+        this.userSex = userSex;
+        this.userBirthday = userBirthday;
+        this.userProvince = userProvince;
+        this.userCity = userCity;
+        this.userArea = userArea;
+        this.userAddress = userAddress;
+        this.userCreateTime = userCreateTime;
+        this.userForbidden = userForbidden;
+        this.userNologin = userNologin;
+        this.userCancel = userCancel;
+        this.parentId = parentId;
+        this.userFollow = userFollow;
+        this.userFans = userFans;
+        this.userLike = userLike;
+        this.userGroup = userGroup;
+        this.userIntegral = userIntegral;
+        this.userArticles = userArticles;
+    }
+
     @Id
     @Column(name = "id")
     public String getId() {

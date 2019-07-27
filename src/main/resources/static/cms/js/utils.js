@@ -50,6 +50,14 @@ $(function(){
 			sys_html+='<dd><a id="sel_articleComment" href="sel_articleComment.html">评论查询</a></dd>';
 			sys_html+='</dl></li>';
 
+			//商品管理
+			sys_html+='<li><dl id="goods">';
+			sys_html+='<dt><a href="javascript:;">商品管理</a></dt>';
+			sys_html+='<dd><a id="" href="add_goods.html">商品添加</a></dd>';
+			sys_html+='<dd><a id="" href="sel_goods.html">商品查询</a></dd>';
+			sys_html+='</dl></li>';
+
+
 			/*var permissionList = JSON.parse(window.sessionStorage.getItem("login_permission"));
 			for ( var i = 0; i < permissionList.length; i++) {
 				var obj = permissionList[i];
