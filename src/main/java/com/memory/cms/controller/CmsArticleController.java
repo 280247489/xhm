@@ -115,6 +115,29 @@ public class CmsArticleController extends BaseController {
     }
 
     /**
+     * 置顶和取消置顶
+     * @param aid
+     * @return
+     */
+    @RequestMapping("isTop")
+    public Message toTop(@RequestParam(name="aid") String aid) {
+        msg = Message.success();
+        Article article = cmsArticleService.isTop(aid);
+        if(article != null){
+            msg.setMsg("操作成功");
+        }else{
+            msg.setMsg("ID不存在");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("fileUrl", this.getFileUrl());
+        map.put("obj", article);
+        msg.setResult(map);
+        return msg;
+    }
+
+
+
+    /**
      * 上下架文章
      * @param aid
      * @return

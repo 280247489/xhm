@@ -207,6 +207,25 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Transactional
     @Override
+    public Article isTop(String aid) {
+        Article article = (Article) daoUtils.getById("Article", aid);
+        if(article != null){
+            //原来被取消置顶了
+            if(article.getArticleTopYn() == 0){
+                article.setArticleTopYn(1);
+                article.setArticleOnline(1);
+                article.setArticleCheckYn(1);
+                article.setArticleCheckTime(new Date());
+            }else{
+                article.setArticleTopYn(0);
+            }
+
+        }
+        return article;
+    }
+
+    @Transactional
+    @Override
     public Article online(String aid) {
         Article article = (Article) daoUtils.getById("Article", aid);
         if(article != null){

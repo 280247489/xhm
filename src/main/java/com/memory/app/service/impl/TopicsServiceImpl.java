@@ -49,6 +49,7 @@ public class TopicsServiceImpl implements TopicsService {
         Map<String,Object> mapper = new HashMap<String, Object>();
         stringBuffer.append(" FROM Topics t where 1=1 ");
         stringBuffer.append(" AND t.topicName like :topicName");
+        stringBuffer.append(" AND t.topicStatus = 1 ");
         stringBuffer.append(" ORDER BY t.topicSort,t.topicSum,t.topicCreateTime");
         mapper.put("topicName","%"+topicName+"%");
         return daoUtils.findByHQL(stringBuffer.toString(),mapper,null);

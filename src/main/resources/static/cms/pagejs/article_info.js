@@ -12,7 +12,7 @@ function init(){
     $('#typeId').html(obj.typeId);
     $('#logo').html('<img style="width: 80px; height: 80px;" src="' + fileUrl + obj.articleLogo + '">');
     $('#title').html(obj.articleTitle);
-    pictures = obj.articlePicture.split(",");
+    pictures = obj.articlePicture.split(";");
     var picture_img="";
     for (var i = 0; i< pictures.length; i++) {
         picture_img+='<img style="width: 80px; height: 80px;" src="' + fileUrl + pictures[i] + '">-'

@@ -110,6 +110,7 @@ function sel_callback(data){
                     + '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
                     + '<button class="check1_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">审核通过</button>'
                     + '<button class="check2_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">审核驳回</button>'
+					+ '<button class="top_fn"  aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">置顶</button>'
                     + '</td>'
                     + '</tr>';
             }
@@ -140,6 +141,13 @@ function sel_callback(data){
                     info(aid, 2);
                 }
             });
+			$('.top_fn').click(function(){
+				if(confirm("确认置顶文章？文章将被放到推荐栏！")){
+					var aid = $(this).attr('aid');
+					toTop(aid, 1);
+				}
+			});
+
         }
 	}else{
 		$.jBox.tip(data.msg);
@@ -155,6 +163,19 @@ function info(aid, check){
 				$('#tr_'+aid).remove();
 			}else{
                 $.jBox.tip(data.msg);
+			}
+		});
+}
+function toTop(aid, isTop){
+	$(".loading_area").fadeIn();
+	ajax("cmsArticle/isTop",
+		{ aid: aid, isTop: isTop },
+		function(data){
+			$(".loading_area").fadeOut(300);
+			if(data.state == "success" && data.recode == 0){
+				$('#tr_'+aid).remove();
+			}else{
+				$.jBox.tip(data.msg);
 			}
 		});
 }

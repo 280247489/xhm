@@ -106,6 +106,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
         Map<String,Object> paramMap = new HashMap<String, Object>();
         sb.append(" select count(*) from UserCollection where 1=1 ");
         sb.append(" AND attentionUserId = :attentionUserId");
+        sb.append(" AND isFollow = 1");
         paramMap.put("attentionUserId",userId);
 
         return daoUtils.getTotalByHQL(sb.toString(),paramMap);
@@ -116,16 +117,6 @@ public class UserCollectionServiceImpl implements UserCollectionService {
         StringBuffer sb = new StringBuffer();
         DaoUtils.Page page = daoUtils.getPage(pageIndex, pageLimit);
         Map<String,Object> paramMap = new HashMap<String, Object>();
-        /**
-         *  this.id = id;
-         *         this.collectionUserId = collectionUserId;
-         *         this.attentionUserId = attentionUserId;
-         *         this.isFollow = isFollow;
-         *         this.createTime = createTime;
-         *         this.userName = userName;
-         *         this.userLogo = userLogo;
-         *         this.userId = userId;
-         */
         sb.append(" select new com.memory.entity.model.UserCollection(uc.id,uc.collectionUserId,uc.attentionUserId,uc.isFollow," +
                 "uc.createTime,u.userName,u.userLogo,u.id) ");
         sb.append(" from UserCollection uc ,User u where uc.attentionUserId = u.id ");

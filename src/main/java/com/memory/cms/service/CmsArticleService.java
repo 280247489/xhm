@@ -1,6 +1,7 @@
 package com.memory.cms.service;
 
 import com.memory.entity.Article;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -20,6 +21,10 @@ public interface CmsArticleService {
     Article selById(String aid);
     //审核文章
     Article check(String aid, Integer checkYn);
+
+    @Transactional
+    Article isTop(String aid);
+
     //上下架文章
     Article online(String aid);
     //删除文章

@@ -97,6 +97,7 @@ function sel_callback(data){
             +'<td width="15%" align=center>统计数</td>'
             +'<td width="8%" align=center>上下架状态</td>'
             +'<td width="8%" align=center>审核状态</td>'
+			+'<td width="8%" align=center>是否置顶推荐</td>'
             +'<td align=center>详情</td></tr>';
         if(data.result.count==0){
             content+='<tr><td align=center colspan="11"><font color="red">未 查 到 数 据</font></td></tr>';
@@ -118,9 +119,11 @@ function sel_callback(data){
                     + '<td align=center>阅读数：' + obj.articleTotalView + '<br><br>  <font color="#ffc0cb">点赞数：' + obj.articleTotalLike + '</font><br><br>  <font color="#00ced1">分享数：' + obj.articleTotalShare + '</font></td>'
                     + '<td align=center id="td_'+obj.id+'">' + (obj.articleOnline == 1 ? "<font color='green'>已上架</font>" : "<font color='red'>未上架</font>") + '</td>'
                     + '<td align=center>' + (obj.articleCheckYn == 0 ? "<font color='orange'>审核中</font>" : obj.articleCheckYn == 1 ? "<font color='green'>通过</font>" : "<font color='red'>驳回</font>") + '</td>'
+					+ '<td align=center id="top_'+obj.id+'">' + (obj.articleTopYn == 1 ? "<font color='green'>已推荐置顶</font>" : "<font color='red'>未推荐置顶</font>") + '</td>'
                     + '<td align=center>'
                     + '<button class="info_fun" index="' + i + '" style="width:80px;height:30px;margin-right: 20px;">详 情</button>'
                     + '<button class="online_fun" id="btn_'+obj.id+'" aid="'+obj.id+'" index="' + i + '" style="width:80px;height:30px;">' + (obj.articleOnline == 1 ? "下架" : "上架") + '</button>'
+					+ '<button class="top_fun" id="topBtn_'+obj.id+'" aid="'+obj.id+'" dataValue="'+obj.articleTopYn+'" index="' + i + '" style="width:80px;height:30px;">' + (obj.articleTopYn == 1 ? "取消置顶" : "置顶") + '</button>'
                     + '</td>'
                     + '</tr>';
             }
@@ -143,6 +146,19 @@ function sel_callback(data){
                 var aid = $(this).attr('aid');
                 info(aid);
             });
+            //
+			$('.top_fun').click(function(){
+				var aid = $(this).attr('aid');
+				var isTopYn =$(this).attr('dataValue');
+				console.log("isTopYn ==== ",isTopYn)
+				if(isTopYn == 1 ){
+					toTop(aid,0);
+				}else{
+					toTop(aid,1);
+				}
+
+			});
+
         }
 	}else{
 		$.jBox.tip(data.msg);
@@ -162,6 +178,22 @@ function info(aid){
 			}
 		});
 }
+function toTop(aid,isTop){
+	$(".loading_area").fadeIn();
+	ajax("cmsArticle/isTop",
+		{ aid: aid, isTop: isTop },
+		function(data){
+			$(".loading_area").fadeOut(300);
+			if(data.state == "success" && data.recode == 0){
+				$('#top_'+aid).html(data.result.obj.articleTopYn ==1 ?"<font color='green'>已推荐置顶</font>" : "<font color='red'>未推荐置顶</font>")
+				$('#topBtn_'+aid).html(data.result.obj.articleTopYn == 1 ? "取消置顶" : "置顶");
+				//topBtn_
+			}else{
+				$.jBox.tip(data.msg);
+			}
+		});
+}
+
 //分页
 function createPage(count){
 	sum=Math.ceil(count/limit);
