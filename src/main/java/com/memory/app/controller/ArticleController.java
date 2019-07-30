@@ -9,6 +9,7 @@ import com.memory.common.utils.Message;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
+import com.memory.common.video.VideoUtils;
 import com.memory.entity.*;
 import com.memory.entity.model.ArticleModel;
 import com.memory.app.service.ArticleService;
@@ -279,10 +280,12 @@ public class ArticleController extends BaseController {
     //小程序图片、视频上传接口
     @RequestMapping(value = "picture")
     public Result uploadArticleFile(@RequestParam  MultipartFile file,@RequestParam String type,
-                                    @RequestParam(value = "uuid",required = false) String uuid,@RequestParam(value = "num",required = false) Integer num){
+                                    @RequestParam(value = "uuid",required = false) String uuid,@RequestParam(value = "num",required = false) Integer num,@RequestParam String os){
         Result result = new Result();
         String path ="";
         try {
+
+
 
             System.out.println("type =="+type);
             System.out.println("uuid =="+uuid);
@@ -296,6 +299,16 @@ public class ArticleController extends BaseController {
                 path = this.upload2PNG(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
             }else {
                 path = this.upload2MP4(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
+
+                //文件在服务器上的存储路径
+                String realPath = this.getFilePath() + path;
+                System.out.println("show final Img path = "+realPath.replace(".mp4",".png"));
+                String finalPath = realPath.replace(".mp4",".png");
+                //取视频某一帧作为封面图。
+                VideoUtils.fetchFrame(realPath, realPath.replace(".mp4",".png"),os);
+
+                //path = finalPath;
+
             }
 
             System.out.printf("file upload path ==="+path);
@@ -313,10 +326,11 @@ public class ArticleController extends BaseController {
     }
 
 
+    //articleLabel 暂时用次字段存储文章类型 mp4/img
     @RequestMapping(value = "create")
     public Result create(@RequestParam String uuid,@RequestParam String typeId,@RequestParam String articleTitle,@RequestParam String articleContent,
                          @RequestParam String articleTopicsId,@RequestParam String articleTopics,@RequestParam String userId,
-                         @RequestParam String articleLogo,@RequestParam String articlePicture){
+                         @RequestParam String articleLogo,@RequestParam String articlePicture,@RequestParam String articleLabel){
         Result result = new Result();
         try {
 
@@ -325,7 +339,7 @@ public class ArticleController extends BaseController {
             article.setId(uuid);
             article.setTypeId(typeId);
             article.setArticleTitle(articleTitle);
-            article.setArticleLogo(articleLogo);
+
             article.setArticlePicture(articlePicture);
             article.setArticleContent(articleContent);
             article.setArticleTopicsId(articleTopicsId);
@@ -344,6 +358,14 @@ public class ArticleController extends BaseController {
             article.setArticleDelYn(0);
             article.setArticleTopYn(0);
             article.setArticleTotalComment(0);
+            article.setArticleLabel(articleLabel);
+
+            if(Utils.isNotNull(articleLabel) && articleLabel.equals("video")){
+                String finalPath = articlePicture.replace(".mp4",".png");
+                System.out.println("视频保存路径。。。" +finalPath );
+                article.setArticleLogo(finalPath);
+            }
+
             Article article1 =articleService.add(article);
 
            result = ResultUtil.success(article1);

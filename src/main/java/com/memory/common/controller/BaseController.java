@@ -25,6 +25,12 @@ public class BaseController {
         return fileUrl;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+
+
     public String upload(String fileName, String dirPath, MultipartFile file){
         String db_path = "";
         try {

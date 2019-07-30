@@ -7,7 +7,7 @@ if(window.sessionStorage.getItem("login_id")==null&&window.location.pathname.ind
 
 }
 var serPath="http://server.momjia.com/xhm/";
-var imgPath="http://localhost:8099/xhm/";
+var imgPath="http://server.momjia.com/xhm/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
 

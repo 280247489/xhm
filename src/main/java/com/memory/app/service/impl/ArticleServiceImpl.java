@@ -173,6 +173,7 @@ public class ArticleServiceImpl implements ArticleService {
         stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
         stringBuffer.append(" AND a.articleCreateUserId = :articleCreateUserId");
         stringBuffer.append(" AND a.articleCheckYn = 1");
+        stringBuffer.append(" AND a.articleOnline = 1");
         stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
         Map<String,Object> param =new HashMap<String, Object>();
         param.put("articleCreateUserId",userId);
