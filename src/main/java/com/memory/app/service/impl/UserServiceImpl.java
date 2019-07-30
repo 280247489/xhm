@@ -97,5 +97,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public User getUserByOpenId(String userOpenId) {
+        User user = userRepository.findByUserOpenId(userOpenId);
+        return user;
+    }
+
+
 
 }

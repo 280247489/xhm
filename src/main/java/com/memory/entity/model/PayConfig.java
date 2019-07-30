@@ -41,4 +41,10 @@ public class PayConfig {
     // 关闭订单
     public static String CLOSEORDER = "https://api.mch.weixin.qq.com/pay/closeorder";
 
+    //获取openId 请求地址
+    public static  String GETOPENID = "https://api.weixin.qq.com/sns/jscode2session";
+
+    public static  String SECRET = "11ea62781d3c77e00417caf7603c5506";
+
+
 }

@@ -177,6 +177,13 @@ public class ArticleController extends BaseController {
             Map<String,Integer> sumMap = this.queryUserFollowAndFans(uid);
             user.setUserFans(sumMap.get("fans"));
             user.setUserFollow(sumMap.get("follow"));
+            String userLogo = user.getUserLogo();
+            System.out.println("userLogo ===" + userLogo);
+            if(userLogo.indexOf("http")<0){
+                user.setUserLogo(this.getFileUrl() +userLogo);
+            }
+
+
         }
 
         map.put("fileUrl", this.getFileUrl());

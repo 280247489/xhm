@@ -70,22 +70,27 @@ public class OrderController extends BaseController {
     public Message pay(HttpServletRequest request, HttpServletResponse response){
         try {
             msg = Message.success();
-            String xmlStr  = getXmlString(request);
-            Map<String,String> map = WXPayUtil.xmlToMap(xmlStr);
+//            String xmlStr  = getXmlString(request);
+            System.out.println("request========"+request.toString());
+            Map<String,String> map = WXPayUtil.xmlToMap(request.toString());
             //验证返回结果是否成功
             if (map.get("return_code").equals("SUCCESS")){
                 String result_code = map.get("result_code");//业务结果
                 String out_trade_no = map.get("out_trade_no");//订单号
                 String transaction_id = map.get("transaction_id");//微信支付订单号
+                System.out.println("====回调成功====");
+                System.out.println("====result_code===="+result_code);
                 if ("SUCCESS".equals(result_code)){
                     //查询订单支付状态
                     OrderMaster orderMaster = orderMasterRepository.findByOrderNo(out_trade_no);
                     if (orderMaster!=null){
                         if (orderMaster.getOrderStatus()!=1){
+                            System.out.println("====if====");
                             String str = returnXML(map.get("return_code").toString());
                             response.getWriter().write(str);
                             response.getWriter().flush();
                         }else{
+                            System.out.println("====else====");
                            Map<String,Object> returnMap =  orderService.updOrder(out_trade_no,transaction_id);
                            //判断订单状态
                             if (returnMap.get("code").equals("SUCCESS")){
@@ -156,24 +161,6 @@ public class OrderController extends BaseController {
         return "<xml><return_code><![CDATA["+ return_code+ "]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
     }
 
-    @RequestMapping("a")
-    public Message aa(){
-        msg = Message.success();
 
-        try {
-            Map<String,String> payMap = new HashMap<>();
-            long time = System.currentTimeMillis()/1000;
-            payMap.put("appId","wxa6ff759682482521");//小程序Id
-            payMap.put("timeStamp", "1564402325");//时间戳
-            payMap.put("nonceStr","c2GYx1vg4W9LqHeQ");//调用微信统一支付接口生成的随机字符串【否则签名错误】
-            payMap.put("package","prepay_id=wx291955058316984c05c61ff61286498100");
-            payMap.put("signType","MD5");
-            String  a = WXPayUtil.generateSignature(payMap,"61bd639e350b484ab641c763e5eb4e2c", WXPayConstants.SignType.MD5);
-            msg.setResult(a);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return msg;
-    }
 }
 

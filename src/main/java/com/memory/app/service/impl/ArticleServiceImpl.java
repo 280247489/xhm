@@ -194,6 +194,9 @@ public class ArticleServiceImpl implements ArticleService {
         stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
         if(type.equals("推荐")){
             stringBuffer.append(" AND a.articleTopYn =1");
+            stringBuffer.append(" AND a.articleCheckYn = 1");
+            stringBuffer.append(" AND a.articleOnline = 1");
+            stringBuffer.append(" ORDER BY a.articleCreateTime DESC");
         }else{
             stringBuffer.append(" AND a.typeId = :typeId");
             stringBuffer.append(" AND a.articleCheckYn = 1");

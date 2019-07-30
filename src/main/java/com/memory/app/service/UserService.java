@@ -29,4 +29,6 @@ public interface UserService {
     void syncUserFollowAndFans(User myself,User there);
 
     User update(User user);
+
+    User getUserByOpenId(String userOpenId);
 }

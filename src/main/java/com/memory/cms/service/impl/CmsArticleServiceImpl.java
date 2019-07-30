@@ -1,5 +1,6 @@
 package com.memory.cms.service.impl;
 
+import com.memory.app.repository.ArticleRepository;
 import com.memory.cms.service.CmsArticleService;
 import com.memory.common.utils.Utils;
 import com.memory.domain.dao.DaoUtils;
@@ -24,6 +25,9 @@ public class CmsArticleServiceImpl implements CmsArticleService {
 
     @Autowired
     private DaoUtils daoUtils;
+
+    @Autowired
+    private ArticleRepository repository;
 
     @Override
     public Map<String, Object> sel(String userName, String typeId, Integer online, Integer check, Integer del, String startTime, String endTime, Integer start, Integer limit) {
@@ -218,10 +222,11 @@ public class CmsArticleServiceImpl implements CmsArticleService {
                 article.setArticleCheckTime(new Date());
             }else{
                 article.setArticleTopYn(0);
+                article.setArticleCheckTime(new Date());
             }
 
         }
-        return article;
+        return  repository.save(article);
     }
 
     @Transactional
