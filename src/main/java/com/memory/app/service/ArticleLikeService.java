@@ -18,4 +18,6 @@ public interface ArticleLikeService {
     ArticleLike getArticleLike(String userId, String articleId);
 
     List<com.memory.entity.model.ArticleLike> queryArticleLikeByQue(Integer pageIndex, Integer limit, String userId);
+
+    int getArticleLikeCount(String articleId);
 }

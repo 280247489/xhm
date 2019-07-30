@@ -65,6 +65,17 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
         return daoUtils.findByHQL(sb.toString(), map, page);
     }
 
+    @Override
+    public int getArticleLikeCount(String articleId){
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(" From ArticleLike where articleId=:articleId and likeStatus=1");
+        Map<String,Object> map = new HashMap<>();
+        map.put("articleId",articleId);
+
+        return  daoUtils.getTotalByHQL(sb.toString(), map);
+    }
+
 
 
 

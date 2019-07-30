@@ -364,6 +364,8 @@ public class ArticleController extends BaseController {
                 String finalPath = articlePicture.replace(".mp4",".png");
                 System.out.println("视频保存路径。。。" +finalPath );
                 article.setArticleLogo(finalPath);
+            }else{
+                article.setArticleLogo(articleLogo);
             }
 
             Article article1 =articleService.add(article);
@@ -413,7 +415,6 @@ public class ArticleController extends BaseController {
         return returnMap;
     }
 
-
     @RequestMapping("search")
     public Result search(@RequestParam String searchWords){
         Result result = new Result();
@@ -435,6 +436,8 @@ public class ArticleController extends BaseController {
             int pageIndex = page +1;
             int pageLimit = size;
             List<com.memory.entity.model.Article> list = articleService.queryArticleByQue(type,pageIndex,pageLimit);
+
+
             Map<String,Object> map = new HashMap<String, Object>();
             map.put("fileUrl", this.getFileUrl());
             map.put("data",list);
