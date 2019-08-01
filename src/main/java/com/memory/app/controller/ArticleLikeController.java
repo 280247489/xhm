@@ -55,13 +55,16 @@ public class ArticleLikeController  extends BaseController {
                 like.setCreateTime(new Date());
 
             }
+            ArticleLike resultLike = articleLikeService.updateArticleLike(like);
+
             //从表里查询出article数量并存入article 表
             Article article =articleService.getArticleById(articleId);
+
             int likeCount = articleLikeService.getArticleLikeCount(articleId);
             article.setArticleTotalLike(likeCount);
             articleService.update(article);
 
-            ArticleLike resultLike = articleLikeService.updateArticleLike(like);
+
             result = ResultUtil.success(resultLike);
         }catch (Exception e){
             e.printStackTrace();

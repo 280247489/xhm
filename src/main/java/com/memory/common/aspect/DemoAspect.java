@@ -32,7 +32,7 @@ public class DemoAspect {
     private final static Logger logger = LoggerFactory.getLogger(DemoAspect.class);
 
 
-    @Pointcut("execution(public * com.memory.*.controller.*.*(..))")
+    @Pointcut("execution(public * com.memory.cms.controller.*.*(..))")
     public void request_log(){
     }
 
@@ -79,6 +79,13 @@ public class DemoAspect {
             Object RequestArgs= new Gson().toJson(getParamInfo(proceedingJoinPoint).get("args"));
             //字符串参数过滤 < >
             Object[] obj = proceedingJoinPoint.getArgs();
+
+            System.out.println("method===" + methodName);
+            if(methodName.equals("pay")){
+
+                return "weChat callback .....................";
+            }
+
             //jodit富文本编辑器内容不做<>过滤处理
             if(!methodName.equals("addComment")  && !methodName.equals("updateComment")){
                 for (int i=0; i<obj.length;i++){
