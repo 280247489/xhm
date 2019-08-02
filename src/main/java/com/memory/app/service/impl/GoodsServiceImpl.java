@@ -1,13 +1,13 @@
 package com.memory.app.service.impl;
 
 import com.memory.app.service.GoodsService;
-import com.memory.common.utils.Utils;
 import com.memory.domain.dao.DaoUtils;
 import com.memory.entity.Goods;
+import com.memory.entity.model.GoodsOrder;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -43,4 +43,33 @@ public class GoodsServiceImpl implements GoodsService {
         returnMap.put("goodsCount",goodsCount);
         return  returnMap;
     }
+
+    @Override
+    public Map<String,Object> getGoodsList(String goodsList){
+        Map<String,Object> returnMap = new HashMap<>();
+        try {
+            Double sum = 0.0;
+            JSONArray array = JSONArray.fromObject(goodsList);
+            List<GoodsOrder> goodsOrderList = new ArrayList<GoodsOrder>();
+         for (int i =0; i< array.size(); i++){
+             JSONObject obj = array.getJSONObject(i);
+             Goods goods = (Goods) daoUtils.getById("Goods",obj.getString("goodsId"));
+             if (goods!=null){
+                int count = obj.getInt("goodsNumber");
+                double s_sum = goods.getGoodsCurrentPrice()*count;
+                String[] imgUrls = goods.getGoodsImg().split(",");
+                GoodsOrder goodsOrder = new GoodsOrder(goods.getId(),imgUrls[0],goods.getGoodsName(),count,goods.getGoodsCurrentPrice(),s_sum);
+                goodsOrderList.add(goodsOrder);
+                sum+=s_sum;
+             }
+         }
+         returnMap.put("goodsOrderList",goodsOrderList);
+         returnMap.put("sum",sum);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  returnMap;
+    }
+
+
 }

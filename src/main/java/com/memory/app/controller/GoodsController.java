@@ -23,7 +23,7 @@ import java.util.Map;
  * @Date 2019/7/10 19:04
  */
 @RestController
-@RequestMapping("goods")
+@RequestMapping(value = "goods")
 public class GoodsController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(GoodsController.class);
     @Autowired
@@ -52,6 +52,16 @@ public class GoodsController extends BaseController {
         msg.setResult(returnMap);
         msg.setMsg("查询成功");
         logger.info("byId{ id: {}  }", id);
+        return msg;
+    }
+
+    @RequestMapping(value = "getGoodsList",method = RequestMethod.POST )
+    public Message getGoodsList(@RequestParam(name = "goList") String goodsList) {
+        msg = Message.success();
+        Map<String, Object> map = goodsService.getGoodsList(goodsList);
+        map.put("fileUrl", this.getFileUrl());
+        msg.setResult(map);
+        msg.setMsg("查询成功");
         return msg;
     }
 }

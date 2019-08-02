@@ -21,4 +21,8 @@ public interface OrderService {
     Map<String,Object> updOrder(String orderNo, String transactionId);
 
     Map<String,Object> getOrderById(String orderMasterId);
+
+    Map<String,Object> orderListByUserId(String userId, Integer orderStatus, Integer start, Integer limit);
+
+    int updOrderStatus(String orderId);
 }

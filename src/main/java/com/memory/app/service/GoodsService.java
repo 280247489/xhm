@@ -10,4 +10,6 @@ import java.util.Map;
  */
 public interface GoodsService {
     Map<String,Object> findGoodsList(Integer start, Integer limit, String goodsName);
+
+    Map<String,Object> getGoodsList(String goodsList);
 }

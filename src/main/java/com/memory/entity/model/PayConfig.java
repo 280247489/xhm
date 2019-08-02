@@ -32,7 +32,7 @@ public class PayConfig {
     // 请求地址
     public static String UFDODER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
-    // 微信支付V2账单查询接口
+    // 微信支付账单查询接口
     public static String ORDERQUERY = "https://api.mch.weixin.qq.com/pay/orderquery";
 
     // 微信支付场景地址:WAP网站URL地址,可为项目地址

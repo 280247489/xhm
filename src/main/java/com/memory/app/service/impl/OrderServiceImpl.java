@@ -194,6 +194,7 @@ public class OrderServiceImpl implements OrderService {
                 //修改订单状态
                 orderMaster.setOrderStatus(2);
                 orderMaster.setWxTransactionId(transactionId);
+                orderMaster.setPayTime(date);
                 //生成积分记录
                 UserGroup userGroup = userGroupRepository.findByUserId(orderMaster.getUserId());
                 if (userGroup!=null){
@@ -240,25 +241,31 @@ public class OrderServiceImpl implements OrderService {
                 List<OrderSlave> list = daoUtils.findByHQL(stringBuffer.toString(),null,null);
                 //如果订单未支付，再次构建签名数据
                 if (orderMaster.getOrderStatus()==1){
-                    Map<String,String> payMap = new HashMap<>();
-                    long time = System.currentTimeMillis()/1000;
-                    payMap.put("appId",PayConfig.APP_ID);//小程序Id
-                    payMap.put("timeStamp", String.valueOf(time));//时间戳
-                    payMap.put("nonceStr",orderMaster.getWxNonceStr());//调用微信统一支付接口生成的随机字符串【否则签名错误】
-                    payMap.put("package","prepay_id="+orderMaster.getWxPrepayId());
-                    payMap.put("signType","MD5");
-                    String paySign = WXPayUtil.generateSignature(payMap,PayConfig.API_KEY, WXPayConstants.SignType.MD5);
-                    returnMap.put("paySign",paySign);
-                    returnMap.put("timeStamp",String.valueOf(time));
+                    Map<String,String> orderQuery = wxOrderQuery(orderMaster.getOrderNo(),orderMaster.getWxNonceStr());
+                    String result_code = orderQuery.get("result_code");
+                    String trade_state = orderQuery.get("trade_state");
+                    String transaction_id = orderQuery.get("transaction_id");
 
-
-                    System.out.println(paySign);
-                    System.out.println(time);
+                    if ("SUCCESS".equals(result_code)){
+                        if ("SUCCESS".equals(trade_state)){//支付成功
+                            this.updOrder(orderMaster.getOrderNo(),transaction_id);
+                        }else if ("NOTPAY".equals(trade_state)){//未支付
+                            Map<String,String> payMap = new HashMap<>();
+                            long time = System.currentTimeMillis()/1000;
+                            payMap.put("appId",PayConfig.APP_ID);//小程序Id
+                            payMap.put("timeStamp", String.valueOf(time));//时间戳
+                            payMap.put("nonceStr",orderMaster.getWxNonceStr());//调用微信统一支付接口生成的随机字符串【否则签名错误】
+                            payMap.put("package","prepay_id="+orderMaster.getWxPrepayId());
+                            payMap.put("signType","MD5");
+                            String paySign = WXPayUtil.generateSignature(payMap,PayConfig.API_KEY, WXPayConstants.SignType.MD5);
+                            returnMap.put("paySign",paySign);
+                            returnMap.put("timeStamp",String.valueOf(time));
+                        }
+                    }
                 }
                 returnMap.put("orderMaster",orderMaster);
                 returnMap.put("orderSlaveList",list);
             }
-
         }catch (Exception e){
 
         }
@@ -306,16 +313,122 @@ public class OrderServiceImpl implements OrderService {
         return fourRandom;
     }
 
+    /**
+     * 查询订单结果
+     * @param out_trade_no
+     * @param wxNonceStr
+     * @return
+     */
+    public Map<String,String> wxOrderQuery(String out_trade_no, String wxNonceStr){
+        // 封装需要的信息
+        Map<String, String> returnMap = new HashMap<String, String>();
+        try {
+            // 1. 拼接查询地址参数
+            Map<String,String> map = new HashMap<String,String>();
+            map.put("appid", PayConfig.APP_ID); // 小程序ID
+            map.put("mch_id", PayConfig.MCH_ID); // 商户号ID
+            map.put("out_trade_no", out_trade_no);  // 订单号
+            map.put("nonce_str", wxNonceStr); // 随机字符串
+            map.put("sign_type", "MD5"); // 小程序支付类型
 
+            // 生成签名,官方默认MD5+商户秘钥+参数信息
+            String sign = WXPayUtil.generateSignature(map, PayConfig.API_KEY,WXPayConstants.SignType.MD5);
+            map.put("sign", sign);
 
-    public static void main(String[] args) {
+            // 将所有参数转换为xml形式
+            String xmlParam = WXPayUtil.mapToXml(map);
 
+            // 2. 发送请求
+            HttpClient httpClient = new HttpClient(PayConfig.ORDERQUERY);
+            httpClient.setHttps(true);// https协议
+            httpClient.setXmlParam(xmlParam);
+            httpClient.post();
 
+            // 获取结果
+            String xmlResult = httpClient.getContent();
+            //以下内容是返回前端页面的json数据
+            if (xmlResult.indexOf("SUCCESS") != -1) {  // 只要执行了下发接口,都会包含SUCCESS的
+                Map<String, String> xmlMap = WXPayUtil.xmlToMap(xmlResult);
+                returnMap.put("result_code",xmlMap.get("result_code"));
+                returnMap.put("trade_state",xmlMap.get("trade_state"));
+                returnMap.put("transaction_id",xmlMap.get("transaction_id"));
 
+            } else {
+                System.out.println("接口获取订单出错");
+                returnMap.put("msg", "支付失败");
+                return returnMap;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("接口获取订单出错");
+            returnMap.put("msg", "系统支付错误");
+            return returnMap;
+        }
+        return returnMap;
     }
 
+    @Override
+    public Map<String,Object> orderListByUserId(String userId, Integer orderStatus, Integer start, Integer limit){
+        Map<String,Object> returnMap = new HashMap<>();
+        StringBuffer sb = new StringBuffer("SELECT om.id AS mid,om.order_no,om.create_time,om.order_status,om.order_money," +
+                "(SELECT os.goods_name FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1), " +
+                "(SELECT os.goods_img FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1)," +
+                "(SELECT COUNT(*) FROM order_slave os WHERE os.order_master_id=mid) " +
+                "FROM order_master om WHERE om.del_yn = 1 AND om.user_id =:userId");
+        StringBuffer sbCount = new StringBuffer("SELECT COUNT(*) from ( " +
+                "SELECT om.id AS mid,om.order_no,om.create_time,om.order_status,om.order_money," +
+                "(SELECT os.goods_name FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1), " +
+                "(SELECT os.goods_img FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1)," +
+                "(SELECT COUNT(*) FROM order_slave os WHERE os.order_master_id=mid) " +
+                " FROM order_master om WHERE om.del_yn = 1 AND om.user_id =:userId");
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        if(orderStatus!=null){
+            sb.append(" and om.order_status=:orderStatus ");
+            sbCount.append(" and om.order_status=:orderStatus ");
+            map.put("orderStatus", orderStatus);
+        }
 
+        sb.append(" ORDER BY om.create_time DESC");
+        sbCount.append(" ) AS a");
+        DaoUtils.Page page = daoUtils.getPage(start, limit);
+        List<Map<String, Object>> orderList = new ArrayList<Map<String, Object>>();
+        System.out.println(sb.toString());
+        List<Object[]> order_list = daoUtils.findBySQL(sb.toString(),map,page,null);
+        for (int i=0;i<order_list.size();i++){
+            Map<String,Object> objectMap = new HashMap<>();
+            objectMap.put("orderId",order_list.get(i)[0]);
+            objectMap.put("orderNo",order_list.get(i)[1]);
+            objectMap.put("createTime",order_list.get(i)[2]);
+            objectMap.put("orderStatus",order_list.get(i)[3]);
+            objectMap.put("orderMoney",order_list.get(i)[4]);
+            objectMap.put("goodsName",order_list.get(i)[5]);
+            objectMap.put("goodsImg",order_list.get(i)[6]);
+            objectMap.put("orderCount",order_list.get(i)[7]);
+            orderList.add(objectMap);
+        }
+        Integer count = daoUtils.getTotalBySQL(sbCount.toString(),map);
 
+        returnMap.put("orderList",orderList);
+        returnMap.put("count",count);
+        return returnMap;
+    }
 
+    /**
+     * 完成订单-确认收货
+     * @param orderId
+     * @return
+     */
+    @Override
+    public int updOrderStatus(String orderId){
+        Integer status = -1;
+        OrderMaster orderMaster = (OrderMaster) daoUtils.getById("OrderMaster",orderId);
+        if (orderMaster.getOrderStatus()>=2){
+            orderMaster.setOrderStatus(3);
+            orderMasterRepository.save(orderMaster);
+            status = 0;
+        }
+        return  status;
+    }
 
 }

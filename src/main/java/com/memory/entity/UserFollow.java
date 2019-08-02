@@ -1,14 +1,15 @@
 package com.memory.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
- * @author INS6+
- * @date 2019/7/23 19:35
+ * @ClassName UserFollow
+ * @Descriotion TODO
+ * @Author Ganxiqing
+ * @Date 2019/7/8 19:31
  */
-
 @Entity
 @Table(name = "user_follow", schema = "xhm_db", catalog = "")
 public class UserFollow {
@@ -16,7 +17,7 @@ public class UserFollow {
     private String followUserId;
     private String attentionUserId;
     private int isFollow;
-    private Timestamp createTime;
+    private Date createTime;
 
     @Id
     @Column(name = "id")
@@ -60,11 +61,11 @@ public class UserFollow {
 
     @Basic
     @Column(name = "create_time")
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
