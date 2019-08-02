@@ -10,6 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @Date 2019/7/8 19:33
  */
 public interface UserFollowService {
-    @Transactional
-    UserFollow follow(String fuId, String auId);
+
+    UserFollow add(UserFollow userFollow);
+
+    UserFollow update(UserFollow userFollow);
+
+    int getUserFollowByArticleId(String articleId);
+
+    UserFollow getUserFollowById(String id);
+
+    UserFollow getUserFollowByArticleIdAndFollowUserId(String articleId, String followUserId);
 }

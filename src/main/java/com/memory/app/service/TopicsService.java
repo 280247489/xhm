@@ -22,8 +22,5 @@ public interface TopicsService {
     List<Topics> queryTopicsByTopicName(String topicName);
 
 
-
-
-
-
+    List<Topics> queryHotTopics(int pageIndex, int pageLimit);
 }

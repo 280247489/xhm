@@ -33,6 +33,7 @@ public class Article {
     private String articleCreateUserName;
     private int articleTotalComment;
     private String articleCreateUserLogo;
+    private int articleTotaolDz;
 
     public Article() {
     }
@@ -69,6 +70,34 @@ public class Article {
         this.articleCreateUserName = articleCreateUserName;
         this.articleTotalComment = articleTotalComment;
         this.articleCreateUserLogo = articleCreateUserLogo;
+    }
+
+    public Article(String id, String typeId, String articleTitle, String articleLogo, String articlePicture, String articleContent, String articleTopicsId, String articleTopics, String articleLabel, String articleKeyWords, int articleOnline, int articleTotalView, int articleTotalShare, int articleTotalLike, Date articleCreateTime, String articleCreateUserId, int articleCheckYn, Date articleCheckTime, String articleCheckAdminId, int articleDelYn, int articleTopYn, String articleCreateUserName, int articleTotalComment, String articleCreateUserLogo, int articleTotaolDz) {
+        this.id = id;
+        this.typeId = typeId;
+        this.articleTitle = articleTitle;
+        this.articleLogo = articleLogo;
+        this.articlePicture = articlePicture;
+        this.articleContent = articleContent;
+        this.articleTopicsId = articleTopicsId;
+        this.articleTopics = articleTopics;
+        this.articleLabel = articleLabel;
+        this.articleKeyWords = articleKeyWords;
+        this.articleOnline = articleOnline;
+        this.articleTotalView = articleTotalView;
+        this.articleTotalShare = articleTotalShare;
+        this.articleTotalLike = articleTotalLike;
+        this.articleCreateTime = articleCreateTime;
+        this.articleCreateUserId = articleCreateUserId;
+        this.articleCheckYn = articleCheckYn;
+        this.articleCheckTime = articleCheckTime;
+        this.articleCheckAdminId = articleCheckAdminId;
+        this.articleDelYn = articleDelYn;
+        this.articleTopYn = articleTopYn;
+        this.articleCreateUserName = articleCreateUserName;
+        this.articleTotalComment = articleTotalComment;
+        this.articleCreateUserLogo = articleCreateUserLogo;
+        this.articleTotaolDz = articleTotaolDz;
     }
 
     public String getId() {

@@ -235,4 +235,50 @@ public class ArticleServiceImpl implements ArticleService {
 
 
 
+    @Override
+    public List<com.memory.entity.model.Article> queryHotTopoicsArticleByQue(String articleTopicsId, Integer pageIndex, Integer limit){
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+
+        Map<String,Object> param =new HashMap<String, Object>();
+        stringBuffer.append("select new com.memory.entity.model.Article(a.id,a.typeId,a.articleTitle,a.articleLogo,a.articlePicture,a.articleContent,a.articleTopicsId," +
+                "a.articleTopics,a.articleLabel,a.articleKeyWords,a.articleOnline,a.articleTotalView,a.articleTotalShare,a.articleTotalLike," +
+                "a.articleCreateTime,a.articleCreateUserId,a.articleCheckYn,a.articleCheckTime,a.articleCheckAdminId,a.articleDelYn,a.articleTopYn,u.userName,a.articleTotalComment,u.userLogo,a.articleTotaolDz)  ");
+        stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
+
+            stringBuffer.append(" AND a.articleCheckYn = 1");
+            stringBuffer.append(" AND a.articleOnline = 1");
+            stringBuffer.append(" AND a.articleTopicsId = :articleTopicsId");
+            stringBuffer.append(" ORDER BY a.articleTotaolDz DESC,a.articleCheckTime DESC");
+            param.put("articleTopicsId",articleTopicsId);
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), param, page);
+
+    }
+
+
+    @Override
+    public List<com.memory.entity.model.Article> queryNewsTopoicsArticleByQue(String articleTopicsId, Integer pageIndex, Integer limit){
+        StringBuffer stringBuffer = new StringBuffer();
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
+
+        Map<String,Object> param =new HashMap<String, Object>();
+        stringBuffer.append("select new com.memory.entity.model.Article(a.id,a.typeId,a.articleTitle,a.articleLogo,a.articlePicture,a.articleContent,a.articleTopicsId," +
+                "a.articleTopics,a.articleLabel,a.articleKeyWords,a.articleOnline,a.articleTotalView,a.articleTotalShare,a.articleTotalLike," +
+                "a.articleCreateTime,a.articleCreateUserId,a.articleCheckYn,a.articleCheckTime,a.articleCheckAdminId,a.articleDelYn,a.articleTopYn,u.userName,a.articleTotalComment,u.userLogo,a.articleTotaolDz)  ");
+        stringBuffer.append(" FROM Article a ,User u where a.articleCreateUserId =u.id");
+
+        stringBuffer.append(" AND a.articleCheckYn = 1");
+        stringBuffer.append(" AND a.articleOnline = 1");
+        stringBuffer.append(" AND a.articleTopicsId = :articleTopicsId");
+        stringBuffer.append(" ORDER BY a.articleCheckTime DESC");
+        param.put("articleTopicsId",articleTopicsId);
+
+        return  daoUtils.findByHQL(stringBuffer.toString(), param, page);
+
+    }
+
+
+
+
 }

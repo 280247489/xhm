@@ -13,49 +13,52 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * @ClassName UserFollowServiceImpl
- * @Descriotion TODO
- * @Author Ganxiqing
- * @Date 2019/7/8 19:33
+ * @author INS6+
+ * @date 2019/7/23 19:40
  */
-@Service("userFollowService")
+@Service
 public class UserFollowServiceImpl implements UserFollowService {
     @Autowired
     private DaoUtils daoUtils;
 
     @Autowired
-    private UserFollowRepository userFollowRepository;
+    private UserFollowRepository repository;
 
-    @Transactional
     @Override
-    public UserFollow follow (String fuId,String auId){
-        //查询被关注人是否存在
-        User user = (User) daoUtils.getById("User",auId);
-        UserFollow userFollow = null;
-        if (user != null){
-            userFollow = this.getByFidAid(fuId, auId);
-            if (userFollow!=null){
-                if (userFollow.getIsFollow()==1){
-                    userFollow.setIsFollow(0);
+    public UserFollow add(UserFollow userFollow){
+        return repository.save(userFollow);
+    }
 
-                }else {
-                    userFollow.setIsFollow(1);
-                }
-            }else {
-                userFollow = new UserFollow();
-                userFollow.setId(Utils.generateUUID());
-                userFollow.setFollowUserId(fuId);
-                userFollow.setAttentionUserId(auId);
-                userFollow.setIsFollow(1);
-                userFollow.setCreateTime(new Date());
+    @Override
+    public UserFollow update(UserFollow userFollow){
+        return repository.save(userFollow);
+    }
 
-            }
-            daoUtils.save(userFollow);
+    @Override
+    public int getUserFollowByArticleId(String articleId){
+        return repository.countUserFollowByArticleIdAndIsFollow(articleId,0);
+    }
+
+    @Override
+    public UserFollow getUserFollowById(String id){
+        if(repository.findById(id).hashCode() != 0){
+            return repository.findById(id).get();
+        }else{
+            return null;
         }
-        return userFollow;
     }
 
-    public UserFollow getByFidAid(String fid,String aid){
-        return userFollowRepository.findByFollowUserIdAndAttentionUserId(fid, aid);
+    @Override
+    public UserFollow getUserFollowByArticleIdAndFollowUserId(String articleId,String followUserId){
+
+        return repository.findByFollowUserIdAndArticleId(followUserId,articleId);
     }
+
+
+
+
+
+
 }
+
+

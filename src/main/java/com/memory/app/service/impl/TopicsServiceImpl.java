@@ -56,4 +56,24 @@ public class TopicsServiceImpl implements TopicsService {
     }
 
 
+
+    @Override
+    public List<Topics> queryHotTopics(int pageIndex,int pageLimit) {
+        StringBuffer stringBuffer = new StringBuffer();
+        Map<String,Object> mapper = new HashMap<String, Object>();
+        stringBuffer.append(" FROM Topics t where 1=1 ");
+        stringBuffer.append(" AND t.topicStatus = 1 ");
+        stringBuffer.append(" ORDER BY t.topicSort,t.topicSum,t.topicCreateTime");
+
+        DaoUtils.Page page = daoUtils.getPage(pageIndex, pageLimit);
+
+        return daoUtils.findByHQL(stringBuffer.toString(),mapper,page);
+    }
+
+
+
+
+
+
+
 }

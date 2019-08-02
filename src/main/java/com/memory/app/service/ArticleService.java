@@ -36,4 +36,8 @@ public interface ArticleService {
     List<com.memory.entity.model.Article> queryArticleByQue(String type, Integer pageIndex, Integer limit);
 
     List<Article> search(String searchWords);
+
+    List<com.memory.entity.model.Article> queryHotTopoicsArticleByQue(String articleTopicsId, Integer pageIndex, Integer limit);
+
+    List<com.memory.entity.model.Article> queryNewsTopoicsArticleByQue(String articleTopicsId, Integer pageIndex, Integer limit);
 }

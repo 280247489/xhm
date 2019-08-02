@@ -38,6 +38,7 @@ public class Article {
     private String articleCreateUserName;
     private int articleTotalComment;
     private String articleCreateUserLogo;
+    private int articleTotaolDz;
 
     @Id
     @Column(name = "id")
@@ -263,6 +264,16 @@ public class Article {
 
     public void setArticleCreateUserLogo(String articleCreateUserLogo) {
         this.articleCreateUserLogo = articleCreateUserLogo;
+    }
+
+    @Basic
+    @Column(name = "article_totaol_dz")
+    public int getArticleTotaolDz() {
+        return articleTotaolDz;
+    }
+
+    public void setArticleTotaolDz(int articleTotaolDz) {
+        this.articleTotaolDz = articleTotaolDz;
     }
 
     @Basic

@@ -456,6 +456,73 @@ public class ArticleController extends BaseController {
         return result;
     }
 
+    /**
+     * 查询某一话题的热门文章
+     * @return
+     */
+    @RequestMapping("queryHotTopicsList")
+    public Result queryHotTopicsList(@RequestParam String topicsId,@RequestParam Integer page,@RequestParam Integer size ){
+        Result result = new Result();
+        try {
+            int pageIndex = page +1;
+            int pageLimit = size;
+            List<com.memory.entity.model.Article> list = articleService.queryHotTopoicsArticleByQue(topicsId,pageIndex,pageLimit);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",list);
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 查询某一话题的最新文章
+     * @return
+     */
+    @RequestMapping("queryNowsTopicsList")
+    public Result queryNowsTopicsList(@RequestParam String topicsId,@RequestParam Integer page,@RequestParam Integer size ){
+        Result result = new Result();
+        try {
+            int pageIndex = page +1;
+            int pageLimit = size;
+            List<com.memory.entity.model.Article> list = articleService.queryNewsTopoicsArticleByQue(topicsId,pageIndex,pageLimit);
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put("fileUrl", this.getFileUrl());
+            map.put("data",list);
+            result = ResultUtil.success(map);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 设置文章分享次数
+     * @param articleId
+     * @return
+     */
+    @RequestMapping("share")
+    public Result share(@RequestParam String articleId){
+        Result result = new Result();
+        try {
+            Article article = articleService.getArticleById(articleId);
+            if(Utils.isNotNull(article)){
+                article.setArticleTotalShare(article.getArticleTotalLike() +1);
+            }
+            articleService.update(article);
+            result = ResultUtil.success();
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+        return result;
+    }
+
+
+
+
 
 
 

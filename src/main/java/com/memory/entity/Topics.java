@@ -9,13 +9,15 @@ import java.util.Objects;
 
 /**
  * @author INS6+
- * @date 2019/7/2 17:12
+ * @date 2019/8/2 17:33
  */
 
 @Entity
 public class Topics {
     private String id;
     private String topicName;
+    private String topicsImg;
+    private String topicsMsg;
     private String articleTypeId;
     private int topicSum;
     private String topicCreateUserId;
@@ -23,6 +25,7 @@ public class Topics {
     private int topicSort;
     private int topicStatus;
     private Date topicCreateTime;
+    private int topicJoinSum;
 
     @Id
     @Column(name = "id")
@@ -42,6 +45,26 @@ public class Topics {
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;
+    }
+
+    @Basic
+    @Column(name = "topics_img")
+    public String getTopicsImg() {
+        return topicsImg;
+    }
+
+    public void setTopicsImg(String topicsImg) {
+        this.topicsImg = topicsImg;
+    }
+
+    @Basic
+    @Column(name = "topics_msg")
+    public String getTopicsMsg() {
+        return topicsMsg;
+    }
+
+    public void setTopicsMsg(String topicsMsg) {
+        this.topicsMsg = topicsMsg;
     }
 
     @Basic
@@ -114,6 +137,16 @@ public class Topics {
         this.topicCreateTime = topicCreateTime;
     }
 
+    @Basic
+    @Column(name = "topic_join_sum")
+    public int getTopicJoinSum() {
+        return topicJoinSum;
+    }
+
+    public void setTopicJoinSum(int topicJoinSum) {
+        this.topicJoinSum = topicJoinSum;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,8 +155,11 @@ public class Topics {
         return topicSum == topics.topicSum &&
                 topicSort == topics.topicSort &&
                 topicStatus == topics.topicStatus &&
+                topicJoinSum == topics.topicJoinSum &&
                 Objects.equals(id, topics.id) &&
                 Objects.equals(topicName, topics.topicName) &&
+                Objects.equals(topicsImg, topics.topicsImg) &&
+                Objects.equals(topicsMsg, topics.topicsMsg) &&
                 Objects.equals(articleTypeId, topics.articleTypeId) &&
                 Objects.equals(topicCreateUserId, topics.topicCreateUserId) &&
                 Objects.equals(topicCreateUser, topics.topicCreateUser) &&
@@ -132,6 +168,6 @@ public class Topics {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, topicName, articleTypeId, topicSum, topicCreateUserId, topicCreateUser, topicSort, topicStatus, topicCreateTime);
+        return Objects.hash(id, topicName, topicsImg, topicsMsg, articleTypeId, topicSum, topicCreateUserId, topicCreateUser, topicSort, topicStatus, topicCreateTime, topicJoinSum);
     }
 }

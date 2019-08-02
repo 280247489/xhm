@@ -5,19 +5,18 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * @ClassName UserFollow
- * @Descriotion TODO
- * @Author Ganxiqing
- * @Date 2019/7/8 19:31
+ * @author INS6+
+ * @date 2019/8/2 15:39
  */
+
 @Entity
 @Table(name = "user_follow", schema = "xhm_db", catalog = "")
 public class UserFollow {
     private String id;
-    private String followUserId;
-    private String attentionUserId;
-    private int isFollow;
+    private String articleId;
     private Date createTime;
+    private String followUserId;
+    private Integer isFollow;
 
     @Id
     @Column(name = "id")
@@ -27,6 +26,26 @@ public class UserFollow {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "article_id")
+    public String getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
+
+    @Basic
+    @Column(name = "create_time")
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Basic
@@ -40,33 +59,13 @@ public class UserFollow {
     }
 
     @Basic
-    @Column(name = "attention_user_id")
-    public String getAttentionUserId() {
-        return attentionUserId;
-    }
-
-    public void setAttentionUserId(String attentionUserId) {
-        this.attentionUserId = attentionUserId;
-    }
-
-    @Basic
     @Column(name = "is_follow")
-    public int getIsFollow() {
+    public Integer getIsFollow() {
         return isFollow;
     }
 
-    public void setIsFollow(int isFollow) {
+    public void setIsFollow(Integer isFollow) {
         this.isFollow = isFollow;
-    }
-
-    @Basic
-    @Column(name = "create_time")
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     @Override
@@ -74,15 +73,15 @@ public class UserFollow {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserFollow that = (UserFollow) o;
-        return isFollow == that.isFollow &&
-                Objects.equals(id, that.id) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(articleId, that.articleId) &&
+                Objects.equals(createTime, that.createTime) &&
                 Objects.equals(followUserId, that.followUserId) &&
-                Objects.equals(attentionUserId, that.attentionUserId) &&
-                Objects.equals(createTime, that.createTime);
+                Objects.equals(isFollow, that.isFollow);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, followUserId, attentionUserId, isFollow, createTime);
+        return Objects.hash(id, articleId, createTime, followUserId, isFollow);
     }
 }

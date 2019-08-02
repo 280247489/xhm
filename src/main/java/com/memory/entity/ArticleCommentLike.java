@@ -1,24 +1,25 @@
 package com.memory.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 /**
- * @Auther: cui.Memory
- * @Date: 2019/5/8 0008 10:20
- * @Description:
+ * @author INS6+
+ * @date 2019/8/2 16:18
  */
+
 @Entity
 @Table(name = "article_comment_like", schema = "xhm_db", catalog = "")
 public class ArticleCommentLike {
     private String id;
     private String userId;
     private String commentId;
-    private Timestamp createTime;
+    private Date createTime;
+    private int isLike;
 
     @Id
-    @Column(name = "id", nullable = false, length = 255)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -28,7 +29,7 @@ public class ArticleCommentLike {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = false, length = 255)
+    @Column(name = "user_id")
     public String getUserId() {
         return userId;
     }
@@ -38,7 +39,7 @@ public class ArticleCommentLike {
     }
 
     @Basic
-    @Column(name = "comment_id", nullable = false, length = 255)
+    @Column(name = "comment_id")
     public String getCommentId() {
         return commentId;
     }
@@ -48,13 +49,23 @@ public class ArticleCommentLike {
     }
 
     @Basic
-    @Column(name = "create_time", nullable = false)
-    public Timestamp getCreateTime() {
+    @Column(name = "create_time")
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    @Basic
+    @Column(name = "is_like")
+    public int getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
     }
 
     @Override
@@ -62,7 +73,8 @@ public class ArticleCommentLike {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArticleCommentLike that = (ArticleCommentLike) o;
-        return Objects.equals(id, that.id) &&
+        return isLike == that.isLike &&
+                Objects.equals(id, that.id) &&
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(commentId, that.commentId) &&
                 Objects.equals(createTime, that.createTime);
@@ -70,6 +82,6 @@ public class ArticleCommentLike {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, commentId, createTime);
+        return Objects.hash(id, userId, commentId, createTime, isLike);
     }
 }

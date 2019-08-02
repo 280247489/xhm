@@ -10,5 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Date 2019/7/8 19:38
  */
 public interface UserFollowRepository extends JpaRepository<UserFollow,String> {
-    UserFollow findByFollowUserIdAndAttentionUserId(String fid, String aid);
+    UserFollow findByFollowUserIdAndArticleId(String fid, String articleId);
+
+    //查询文章的点赞数量
+    int countUserFollowByArticleIdAndIsFollow(String articleId,Integer isFollow);
+
+
 }
