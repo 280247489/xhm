@@ -48,9 +48,9 @@ public class BaseController {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-            File destFile = new File(dir.getPath() + File.separator + fileName + ".png");
+            File destFile = new File(dir.getPath() +  "/" + fileName + ".png");
             file.transferTo(destFile);
-            db_path = dirPath + File.separator + fileName + ".png";
+            db_path = dirPath + "/" + fileName + ".png";
         } catch (Exception e) {
             e.printStackTrace();
         }

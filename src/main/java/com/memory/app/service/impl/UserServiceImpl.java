@@ -30,12 +30,14 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             user = new User(Utils.generateUUID(), "", userUnionId, userOpenId, "", userName, userLogo,
                     "", "", "", "", "", "",
-                    new Date(), 0, 0, 0, "");
-
-        }else{
-            user.setUserLogo(userLogo);
+                    new Date(), 0, 0, 0, "",0,0,0,0,0,0);
+            userRepository.save(user);
         }
-        userRepository.save(user);
+
+//        else{
+//            user.setUserLogo(userLogo);
+//        }
+
         return user;
     }
 
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             user = new User(Utils.generateUUID(), password, "", "", userTel, "", "",
                     "", "", "", "", "", "",
-                    new Date(), 0, 0, 0, "");
+                    new Date(), 0, 0, 0, "",0,0,0,0,0,0);
             userRepository.save(user);
         }else{
             user = null;
@@ -66,6 +68,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String userTel, String password){
         User user = userRepository.findByUserTelAndPassword(userTel, password);
+        return user;
+    }
+
+    @Override
+    public User getUserByOpenId(String userOpenId) {
+        User user = userRepository.findByUserOpenId(userOpenId);
         return user;
     }
 

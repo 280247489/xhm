@@ -125,30 +125,31 @@ function fileUpload() {
             cache: false,
             contentType: false,
             processData: false,
-            success: function (data.recode == 0){
-            setTimeout('window.location.href="sel_goods.html"', 1000);
-            },
-            error:function () {
+            success: function (data){
+                if (data.recode == 0){
+                    setTimeout('window.location.href="sel_goods.html"', 1000);
+                } else {
+                    $.jBox.tip(data.msg);
+                }
+            },error:function () {
             $("body").mLoading("hide");
             $.jBox.tip(res.description || res.message || "上传失败");
         }
     });
     }
 }
-    function check(){
-        var flag = true;
-        if($('#goodsName').val()==""){
-            flag = false; $.jBox.tip("产品名称不能为空");
-        }else if($('#goodsPrice').val()==""){
-            flag = false; $.jBox.tip("产品价格不能为空");
-        }else if($('#goodsDescribe').val()==""){
-            flag = false; $.jBox.tip("产品描述不能为空");
-        }else if($('#goodsCurrentPrice').val()==""){
-            flag = false; $.jBox.tip("产品价格不能为空");
-        }else if ($('#editor').html()=="") {
-            flag = false; $.jBox.tip("产品详情不能为空");
-        }
-        return flag;
+function check(){
+    var flag = true;
+    if($('#goodsName').val()==""){
+        flag = false; $.jBox.tip("产品名称不能为空");
+    }else if($('#goodsPrice').val()==""){
+        flag = false; $.jBox.tip("产品价格不能为空");
+    }else if($('#goodsDescribe').val()==""){
+        flag = false; $.jBox.tip("产品描述不能为空");
+    }else if($('#goodsCurrentPrice').val()==""){
+        flag = false; $.jBox.tip("产品价格不能为空");
+    }else if ($('#editor').html()=="") {
+        flag = false; $.jBox.tip("产品详情不能为空");
     }
-
+    return flag;
 }

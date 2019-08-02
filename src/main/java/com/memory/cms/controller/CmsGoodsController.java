@@ -130,7 +130,7 @@ public class CmsGoodsController extends BaseController {
                 if(!files.isEmpty()){
                     StringBuffer stringBuffer = new StringBuffer("");
                     for (int i = 0; i < files.size(); i++) {
-                        String path = this.upload2Filse(i+"_"+Utils.idTimer.format(date), "xhm_file/goods/"+goods.getId(),files.get(i) );
+                        String path = this.upload2PNG(i+"_"+Utils.idTimer.format(date), "xhm_file/goods/"+goods.getId(),files.get(i) );
                         stringBuffer.append(path+",");
                     }
                     goods.setGoodsImg(stringBuffer.substring(0, stringBuffer.length()-1));

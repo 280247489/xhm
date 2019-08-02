@@ -19,4 +19,5 @@ public interface UserService {
     //验证手机是否存在
     User checkTel(String userTel);
 
+    User getUserByOpenId(String userOpenId);
 }
