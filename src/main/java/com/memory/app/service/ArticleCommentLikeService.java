@@ -12,7 +12,8 @@ public interface ArticleCommentLikeService {
 
     ArticleCommentLike update(ArticleCommentLike articleCommentLike);
 
-    int getArticleCommentLikeCount(String userId, String commentId);
+
+    int getArticleCommentLikeCount(String commentId);
 
     ArticleCommentLike getArticleCommentLikeByUserIdAndCommentId(String userId, String commentId);
 }

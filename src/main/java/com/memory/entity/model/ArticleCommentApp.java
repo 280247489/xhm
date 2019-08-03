@@ -24,6 +24,7 @@ public class ArticleCommentApp {
     private Date commentCreateTime;
     private int commentTotalLike;
     private long commentSum;
+    private boolean liked;
 
     public String getId() {
         return id;
@@ -143,6 +144,14 @@ public class ArticleCommentApp {
 
     public void setCommentSum(long commentSum) {
         this.commentSum = commentSum;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public ArticleCommentApp(String id, String articleId, String userId, String userLogo, String userName, int commentType, String commentRootId, String commentParentId, String commentParentUserName, String commentContent, String commentParentContent, String commentContentReplace, Date commentCreateTime, int commentTotalLike, long commentSum) {

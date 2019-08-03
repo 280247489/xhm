@@ -26,6 +26,7 @@ public class ArticleComment {
     private String commentContentReplace;
     private Date commentCreateTime;
     private int commentTotalLike;
+    private boolean liked;
 
     @Id
     @Column(name = "id")
@@ -165,6 +166,14 @@ public class ArticleComment {
 
     public void setCommentTotalLike(int commentTotalLike) {
         this.commentTotalLike = commentTotalLike;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     @Override

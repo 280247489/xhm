@@ -8,14 +8,13 @@ package com.memory.app.controller;
 import com.memory.app.service.ArticleCommentLikeService;
 import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
-import com.memory.common.utils.Utils;
-import com.memory.entity.ArticleCommentLike;
+import com.memory.redis.config.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
+import static com.memory.app.redis.dic.RedisDic.articleCommentLike;
+import static com.memory.app.redis.dic.RedisDic.articleCommentLikeDetail;
 
 /**
  * 评论点赞
@@ -29,6 +28,8 @@ public class ArticleCommentLikeController {
     private ArticleCommentLikeService articleCommentLikeService;
 
 
+    @Autowired
+    private RedisUtil redisUtil;
     /**
      * 文章的点赞和取消点赞
      * @param userId
@@ -37,27 +38,36 @@ public class ArticleCommentLikeController {
      */
     @RequestMapping("isLike")
     public Result isLike(@RequestParam String userId,@RequestParam String commentId){
+        /**
+         *     //文章评论的点赞数量
+         *     //key article:comment:like:commentId
+         *     //val count 评论点赞数
+         *     public static final String articleCommentLike ="article:comment:like:";
+         *
+         *     //用户文章评论的点赞 是否
+         *     //key article:comment:like:detail: userId
+         *     //val:hashMap => key:commentId value:是否点赞 0/1
+         *     public static final String articleCommentLikeDetail ="user:comment:like:detail:";
+         */
+
+        String articleLike = articleCommentLike + commentId;
+        String articleLikeDetail = articleCommentLikeDetail + userId;
         Result result = new Result();
         try {
-            ArticleCommentLike like =articleCommentLikeService.getArticleCommentLikeByUserIdAndCommentId(userId, commentId);
-            if(Utils.isNotNull(like)){
-                int oldType = like.getIsLike();
-                //0点赞 1 取消点赞
-                if(oldType == 0){
-                    like.setIsLike(1);
-                }else {
-                    like.setIsLike(0);
+            //判断用户是否存在点赞数据
+            Object isLike =  redisUtil.hget(articleLikeDetail,commentId);
+            if (isLike != null){
+                Integer like = Integer.valueOf(isLike.toString());
+                if (like==0){
+                    redisUtil.incr(articleLike,1);
+                    redisUtil.hset(articleLikeDetail,commentId,"1");
+                }else{
+                    redisUtil.decr(articleLike,1);
+                    redisUtil.hset(articleLikeDetail,commentId,"0");
                 }
-                articleCommentLikeService.update(like);
-            }else {
-                 like = new ArticleCommentLike();
-                like.setId(Utils.getShortUUID());
-                like.setIsLike(0);
-                like.setUserId(userId);
-                like.setCommentId(commentId);
-                like.setCreateTime(new Date());
-                articleCommentLikeService.add(like);
-
+            }else{
+                redisUtil.incr(articleLike,1);
+                redisUtil.hset(articleLikeDetail,commentId,"1");
             }
             result = ResultUtil.success();
         }catch (Exception e){

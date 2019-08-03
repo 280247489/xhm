@@ -1,5 +1,6 @@
 package com.memory.app.controller;
 import com.alibaba.fastjson.JSON;
+import com.memory.app.service.ArticleCommentLikeService;
 import com.memory.app.service.ArticleCommentService;
 import com.memory.app.service.ArticleService;
 import com.memory.app.service.UserService;
@@ -9,8 +10,11 @@ import com.memory.common.utils.Result;
 import com.memory.common.utils.ResultUtil;
 import com.memory.common.utils.Utils;
 import com.memory.entity.Article;
+import com.memory.entity.ArticleCommentLike;
 import com.memory.entity.User;
 import com.memory.entity.model.ArticleComment;
+import com.memory.entity.model.ArticleCommentApp;
+import com.memory.redis.config.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
+
+import static com.memory.app.redis.dic.RedisDic.articleCommentLike;
+import static com.memory.app.redis.dic.RedisDic.articleCommentLikeDetail;
 
 /**
  * @author INS6+
@@ -39,6 +46,12 @@ public class ArticleCommentController extends BaseController {
     @Autowired
     private ArticleService articleService;
 
+
+    @Autowired
+    private ArticleCommentLikeService articleCommentLikeService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
 
 
@@ -173,12 +186,40 @@ public class ArticleCommentController extends BaseController {
 
     @RequestMapping("listFirst")
     public Result listFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
-                            @RequestParam String articleId){
+                            @RequestParam String articleId,@RequestParam String userId){
         Result result = new Result();
         try {
             int pageIndex = page+1;
             int limit = size;
-            List<com.memory.entity.ArticleComment> list = articleCommentService.queryArticleCommentFirstByArticleId(pageIndex,limit,articleId);
+            List<com.memory.entity.model.ArticleCommentApp> list = articleCommentService.queryArticleCommentFirstByArticleId(pageIndex,limit,articleId);
+
+            /**
+             *     //文章评论的点赞数量
+             *     //key article:comment:like:commentId
+             *     //val count 评论点赞数
+             *     public static final String articleCommentLike ="article:comment:like:";
+             *
+             *     //用户文章评论的点赞 是否
+             *     //key article:comment:like:detail: userId
+             *     //val:hashMap => key:commentId value:是否点赞 0/1
+             *     public static final String articleCommentLikeDetail ="user:comment:like:detail:";
+             */
+
+            for (ArticleCommentApp articleCommentApp : list) {
+
+                String hashKey = articleCommentLike + articleCommentApp.getId();
+                Integer dz = (Utils.isNotNull(redisUtil.get(hashKey)))?(Integer.valueOf(redisUtil.get(hashKey).toString())):0;
+                articleCommentApp.setCommentTotalLike(dz);
+
+                String hashKey2 = articleCommentLikeDetail + userId;
+                Object object = redisUtil.hget(hashKey2,articleCommentApp.getId());
+                if(Utils.isNotNull(object)&&object.toString().equals("1")){
+                    articleCommentApp.setLiked(true);
+                }
+            }
+
+
+
             int totalElements = articleCommentService.queryArticleCommentFirstCountByArticleId(articleId);
             PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
             return ResultUtil.success(pageResult);
@@ -192,12 +233,26 @@ public class ArticleCommentController extends BaseController {
 
     @RequestMapping("listSecond")
     public Result secondFirst(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
-                           @RequestParam String commentRootId){
+                           @RequestParam String commentRootId,@RequestParam String userId){
         Result result = new Result();
         try {
             int pageIndex = page+1;
             int limit = size;
             List<com.memory.entity.ArticleComment> list = articleCommentService.getArticleCommentSecondByArticleId(commentRootId,pageIndex,limit);
+
+            for (com.memory.entity.ArticleComment articleComment : list) {
+                String hashKey = articleCommentLike + articleComment.getId();
+                Integer dz = (Utils.isNotNull(redisUtil.get(hashKey)))?(Integer.valueOf(redisUtil.get(hashKey).toString())):0;
+                articleComment.setCommentTotalLike(dz);
+
+                String hashKey2 = articleCommentLikeDetail + userId;
+                Object object = redisUtil.hget(hashKey2,articleComment.getId());
+                if(Utils.isNotNull(object)&&object.toString().equals("1")){
+                    articleComment.setLiked(true);
+                }
+            }
+
+
             int totalElements = articleCommentService.getArticleCommentSecondCountByArticleId(commentRootId);
             PageResult pageResult = PageResult.getPageResult(page, size, list, totalElements);
             return ResultUtil.success(pageResult);
@@ -212,10 +267,20 @@ public class ArticleCommentController extends BaseController {
 
     //查询文章详情
     @RequestMapping("getArticleCommentById")
-    public Result getArticleCommentById(@RequestParam String articleCommentId){
+    public Result getArticleCommentById(@RequestParam String articleCommentId,@RequestParam String userId){
         Result result = new Result();
         try {
             com.memory.entity.ArticleComment articleComment =articleCommentService.getArticleCommentById(articleCommentId);
+            String hashKey = articleCommentLike + articleComment.getId();
+            Integer dz = (Utils.isNotNull(redisUtil.get(hashKey)))?(Integer.valueOf(redisUtil.get(hashKey).toString())):0;
+            articleComment.setCommentTotalLike(dz);
+
+            String hashKey2 = articleCommentLikeDetail + userId;
+            Object object = redisUtil.hget(hashKey2,articleComment.getId());
+            if(Utils.isNotNull(object)&&object.toString().equals("1")){
+                articleComment.setLiked(true);
+            }
+
             Map<String,Object> map = new HashMap<String, Object>();
             map.put("data",articleComment);
             map.put("fileUrl", this.getFileUrl());

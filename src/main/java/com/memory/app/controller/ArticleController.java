@@ -13,6 +13,7 @@ import com.memory.common.video.VideoUtils;
 import com.memory.entity.*;
 import com.memory.entity.model.ArticleModel;
 import com.memory.app.service.ArticleService;
+import com.memory.redis.config.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.memory.app.redis.dic.RedisDic.*;
 
 /**
  * @Auther: cui.Memory
@@ -47,6 +50,10 @@ public class ArticleController extends BaseController {
 
     @Autowired
     private ArticleLikeService articleLikeService;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
 
     /**
      * 查询文章
@@ -97,6 +104,41 @@ public class ArticleController extends BaseController {
         Boolean isCollection =false;
         Boolean isLike =false;
         Article article = articleService.selById(aid);
+
+        //点赞数
+        String managerViewTotalKey = articleLikes  + aid;
+        Integer dz = (Utils.isNotNull(redisUtil.get(managerViewTotalKey)))?(Integer.valueOf(redisUtil.get(managerViewTotalKey).toString())):0;
+        article.setArticleTotaolDz(dz);
+
+        //用户是否点赞
+        String key1 = userLike +userId;
+        Object object = redisUtil.hget(key1,aid);
+        if(Utils.isNotNull(object)&& object.toString().equals("1") ){
+            isCollection =true;
+        }
+
+/*
+        //收藏数
+        String managerViewTotalKey2 = ARTICLEFOLLOW + aid;
+        Integer gz = (Utils.isNotNull(redisUtil.get(managerViewTotalKey2)))?(Integer.valueOf(redisUtil.get(managerViewTotalKey2).toString())):0;
+        article.setArticleTotalLike(gz);
+
+        //用户是否收藏
+        String key2 = articleLikes +userId;
+        Object object2 = redisUtil.hget(key2,aid);
+        if(Utils.isNotNull(object2)&& object2.toString().equals("1") ){
+            isLike =true;
+        }
+*/
+
+
+        //转发数
+        String managerViewTotalKey3 = articleForward + aid;
+        Integer zf = (Utils.isNotNull(redisUtil.get(managerViewTotalKey3)))?(Integer.valueOf(redisUtil.get(managerViewTotalKey3).toString())):0;
+        article.setArticleTotalShare(zf);
+
+
+
         String articleUserId ="";
 
 
@@ -110,13 +152,7 @@ public class ArticleController extends BaseController {
         System.out.println("articleUserId ===="+articleUserId);
         User user = userService.getUserById(articleUserId);
 
-        UserCollection userCollection = userCollectionService.getUserCollectionByCollectionUserIdAndAttentionUserId(userId,articleUserId);
-        if(Utils.isNotNull(userCollection)){
-            if(userCollection.getIsFollow() == 1){
-                isCollection =true;
-            }
 
-        }
 
         ArticleLike articleLike = articleLikeService.getArticleLike(userId,aid);
         if(Utils.isNotNull(articleLike)){
@@ -443,6 +479,19 @@ public class ArticleController extends BaseController {
             int pageIndex = page +1;
             int pageLimit = size;
             List<com.memory.entity.model.Article> list = articleService.queryArticleByQue(type,pageIndex,pageLimit);
+            for (com.memory.entity.model.Article article : list) {
+                String aid = article.getId();
+                String managerViewTotalKey = articleLikes  + aid;
+                Integer dz = (Utils.isNotNull(redisUtil.get(managerViewTotalKey)))?(Integer.valueOf(redisUtil.get(managerViewTotalKey).toString())):0;
+                article.setArticleTotaolDz(dz);
+            }
+
+
+   /*         //点赞数
+            String managerViewTotalKey = articleLikes  + aid;
+            Integer dz = (Utils.isNotNull(redisUtil.get(managerViewTotalKey)))?(Integer.valueOf(redisUtil.get(managerViewTotalKey).toString())):0;
+            article.setArticleTotaolDz(dz);*/
+
 
 
             Map<String,Object> map = new HashMap<String, Object>();
@@ -509,9 +558,9 @@ public class ArticleController extends BaseController {
         try {
             Article article = articleService.getArticleById(articleId);
             if(Utils.isNotNull(article)){
-                article.setArticleTotalShare(article.getArticleTotalLike() +1);
+                redisUtil.incr(articleForward+articleId,1);
             }
-            articleService.update(article);
+          //  articleService.update(article);
             result = ResultUtil.success();
         }catch (Exception e){
             e.printStackTrace();

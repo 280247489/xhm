@@ -11,10 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ArticleCommentLikeRepository extends JpaRepository<ArticleCommentLike,String> {
 
 
-    ArticleCommentLike getArticleCommentLikeByUserIdAndCommentId(String userId, String commentId);
+    ArticleCommentLike getArticleCommentLikeByUserIdAndCommentId(String userId,String commentId);
 
     int countByCommentIdAndUserId(String commentId,String  userId);
-
 
 
 

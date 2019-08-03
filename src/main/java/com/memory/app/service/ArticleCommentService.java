@@ -39,7 +39,7 @@ public interface ArticleCommentService {
     void delete(String id);
 
     //根据文章id查询一级评论
-    List<com.memory.entity.ArticleComment> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId);
+    List<com.memory.entity.model.ArticleCommentApp> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId);
 
     int queryArticleCommentFirstCountByArticleId(String articleId);
 

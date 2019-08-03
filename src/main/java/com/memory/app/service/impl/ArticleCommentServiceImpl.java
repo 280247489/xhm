@@ -221,7 +221,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     }
 
     @Override
-    public List<com.memory.entity.ArticleComment> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId) {
+    public List<com.memory.entity.model.ArticleCommentApp> queryArticleCommentFirstByArticleId(Integer pageIndex,Integer limit,String articleId) {
         StringBuffer stringBuffer = new StringBuffer();
         DaoUtils.Page page = daoUtils.getPage(pageIndex, limit);
 

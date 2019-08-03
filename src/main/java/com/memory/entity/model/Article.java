@@ -291,4 +291,12 @@ public class Article {
     public void setArticleCreateUserLogo(String articleCreateUserLogo) {
         this.articleCreateUserLogo = articleCreateUserLogo;
     }
+
+    public int getArticleTotaolDz() {
+        return articleTotaolDz;
+    }
+
+    public void setArticleTotaolDz(int articleTotaolDz) {
+        this.articleTotaolDz = articleTotaolDz;
+    }
 }
