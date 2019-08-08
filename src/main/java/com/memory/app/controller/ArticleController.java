@@ -338,7 +338,22 @@ public class ArticleController extends BaseController {
             }
 
             Date date = new Date();
-            if("img".equals(type)){
+            // 获取到源文件名
+            String filename = file.getOriginalFilename();
+            // 获取文件的后缀名
+          //  String suffix = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+            System.out.printf("filename ============== " ,filename);
+            //图片
+            if (filename.indexOf("mp4")< 0) {
+                path = this.upload2PNG(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
+            //视频
+            }else {
+                path = this.upload2MP4(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
+            }
+
+
+
+      /*      if("img".equals(type)){
                 path = this.upload2PNG(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
             }else {
                 path = this.upload2MP4(num+"_"+Utils.idTimer.format(date), "xhm_file/article/"+uuid, file);
@@ -352,7 +367,7 @@ public class ArticleController extends BaseController {
 
                 //path = finalPath;
 
-            }
+            }*/
 
             System.out.printf("file upload path ==="+path);
 
@@ -403,13 +418,13 @@ public class ArticleController extends BaseController {
             article.setArticleTotalComment(0);
             article.setArticleLabel(articleLabel);
 
-            if(Utils.isNotNull(articleLabel) && articleLabel.equals("video")){
+        /*    if(Utils.isNotNull(articleLabel) && articleLabel.equals("video")){
                 String finalPath = articlePicture.replace(".mp4",".png");
                 System.out.println("视频保存路径。。。" +finalPath );
                 article.setArticleLogo(finalPath);
-            }else{
+            }else{*/
                 article.setArticleLogo(articleLogo);
-            }
+          //  }
 
             Article article1 =articleService.add(article);
 
