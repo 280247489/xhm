@@ -10,14 +10,26 @@ function init(){
     fileUrl = sessionStorage.getItem("fileUrl");
     console.log(obj);
     $('#typeId').html(obj.typeId);
-    $('#logo').html('<img style="width: 80px; height: 80px;" src="' + fileUrl + obj.articleLogo + '">');
+    $('#logo').html('<img style="width: 180px; height: 180px;" src="' + fileUrl + obj.articleLogo + '">');
     $('#title').html(obj.articleTitle);
     pictures = obj.articlePicture.split(";");
-    var picture_img="";
-    for (var i = 0; i< pictures.length; i++) {
-        picture_img+='<img style="width: 80px; height: 80px;" src="' + fileUrl + pictures[i] + '">-'
+    console.log("pictures == ",pictures);
+    console.log("pictures.indexOf(\"mp4\") == ",pictures.indexOf("mp4"))
+    if(pictures[0].indexOf("mp4")>=0){
+
+        var videoHtml = '<video controls style="width: 280px; height: 280px;">\n' +
+            '  <source src="'+ fileUrl + pictures[0] +'" type="video/mp4">\n' +
+            '  Your browser does not support the <code>video</code> element.\n' +
+            '</video>'
+        $('#picture').html(videoHtml);
+    }else{
+        var picture_img="";
+        for (var i = 0; i< pictures.length; i++) {
+            picture_img+='<img style="width: 180px; height: 180px;" src="' + fileUrl + pictures[i] + '">-'
+        }
+        $('#picture').html(picture_img.substring(0, picture_img.length-1));
     }
-    $('#picture').html(picture_img.substring(0, picture_img.length-1));
+
     $('#article_content').html(obj.articleContent);
     $('#userId').html(obj.articleCreateUserId);
     $('#createTime').html(obj.articleCheckTime);
