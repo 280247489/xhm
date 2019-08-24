@@ -108,6 +108,25 @@ public class OrderController extends BaseController {
         return msg;
     }
 
+    /**
+     * 取消订单-删除订单
+     * @param orderId
+     * @return 0 已完成 1 未完成
+     */
+    @RequestMapping(value = "delOrder",method = RequestMethod.POST)
+    public Message delOrder(@RequestParam String orderId){
+        try {
+            msg = Message.success();
+            Integer code = orderService.delOrder(orderId);
+            msg.setRecode(0);
+            msg.setResult(code);
+        }catch (Exception e){
+            msg = Message.error();
+            e.printStackTrace();
+        }
+        return msg;
+    }
+
 
 
 

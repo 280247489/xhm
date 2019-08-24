@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
                 int total_fee = (int) (orderMoney * 100);
 
 
-                payMap = this.pay(String.valueOf(total_fee),out_trade_no,"测试-测试商品",openId);
+                payMap = this.pay(String.valueOf(total_fee),out_trade_no,"家乐说-勤消宝物理抗菌喷雾",openId);
                 String msg = payMap.get("msg");
                 if ("success".equals(msg)){
                     String nonce_str = payMap.get("returnNonceStr");
@@ -205,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
                         UserGroup userGroup1 = userGroupRepository.findByUserId(groupIdOne);
                         User user1 = (User) daoUtils.getById("User",groupIdOne);
                         if (userGroup1!=null){
-                            double sumOne = orderSum*userGroup1.getRoyalty();
+                            double sumOne = orderSum*userGroup1.getRoyaltyOne();
                             Details detailsOne = new Details(Utils.generateUUID(),"下单",orderMasterId,sumOne,groupIdOne,user1.getUserIntegral()+sumOne,0,date,"");
                             detailsList.add(detailsOne);
                         }
@@ -215,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
                         UserGroup userGroup2 = userGroupRepository.findByUserId(gruopIdTwo);
                         User user2 = (User) daoUtils.getById("User",gruopIdTwo);
                         if (userGroup2!=null){
-                            double sumTwo = orderSum*userGroup2.getRoyalty();
+                            double sumTwo = orderSum*userGroup2.getRoyaltyTwo();
                             Details detailsTwo = new Details(Utils.generateUUID(),"下单",orderMasterId,sumTwo,gruopIdTwo,user2.getUserIntegral()+sumTwo,0,date,"");
                             detailsList.add(detailsTwo);
                         }
@@ -373,7 +373,7 @@ public class OrderServiceImpl implements OrderService {
         StringBuffer sb = new StringBuffer("SELECT om.id AS mid,om.order_no,om.create_time,om.order_status,om.order_money," +
                 "(SELECT os.goods_name FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1), " +
                 "(SELECT os.goods_img FROM order_slave os WHERE os.order_master_id=mid ORDER BY os.create_time DESC LIMIT 1)," +
-                "(SELECT COUNT(*) FROM order_slave os WHERE os.order_master_id=mid) " +
+                "(SELECT COUNT(*) FROM order_slave os WHERE os.order_master_id=mid ) " +
                 "FROM order_master om WHERE om.del_yn = 1 AND om.user_id =:userId");
         StringBuffer sbCount = new StringBuffer("SELECT COUNT(*) from ( " +
                 "SELECT om.id AS mid,om.order_no,om.create_time,om.order_status,om.order_money," +
@@ -425,6 +425,23 @@ public class OrderServiceImpl implements OrderService {
         OrderMaster orderMaster = (OrderMaster) daoUtils.getById("OrderMaster",orderId);
         if (orderMaster.getOrderStatus()>=2){
             orderMaster.setOrderStatus(3);
+            orderMasterRepository.save(orderMaster);
+            status = 0;
+        }
+        return  status;
+    }
+
+    /**
+     * 取消订单-删除订单
+     * @param orderId
+     * @return
+     */
+    @Override
+    public int delOrder(String orderId){
+        Integer status = -1;
+        OrderMaster orderMaster = (OrderMaster) daoUtils.getById("OrderMaster",orderId);
+        if (orderMaster.getOrderStatus()==1){
+           orderMaster.setDelYn(0);
             orderMasterRepository.save(orderMaster);
             status = 0;
         }

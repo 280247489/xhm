@@ -1,7 +1,7 @@
 filePath: /opt/tomcat8/webapps/
 fileUrl: https://server.momjia.com/
 server:
-  port: 8081
+  port: 8082
   servlet:
     context-path: /xhm
 spring:

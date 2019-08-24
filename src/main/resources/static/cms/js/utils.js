@@ -10,7 +10,7 @@ var serPath="http://server.momjia.com/xhm/";
 var imgPath="http://server.momjia.com/xhm/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
-
+var url_editer = serPath + '/jodit/uploadImg';
 var deBug=false;
 $(function(){
 	//非登录页加载
