@@ -239,7 +239,7 @@ function createPage(count){
 function create_topics() {
 
 	var topicName = $(".articleName_add").val();
-	var articleType=$("#articleTypeId_add").val();
+	var articleType="推荐"/*$("#articleTypeId_add").val();*/
 	var sort=$(".sort_add").val();
 	var userId = window.sessionStorage.getItem("login_id");
 	var userName = window.sessionStorage.getItem("login_name");
@@ -282,7 +282,8 @@ function create_callback(data) {
 		init()
 
 	}else{
-		$.jBox.tip(data.msg);
+		alert(data.msg)
+		//$.jBox.tip(data.msg);
 	}
 
 }

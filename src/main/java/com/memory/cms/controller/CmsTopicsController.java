@@ -44,6 +44,8 @@ public class CmsTopicsController {
                 topicsSave.setTopicName(topics.getTopicName());
                 topicsSave.setArticleTypeId(topics.getArticleTypeId());
                 topicsSave.setTopicSum(0);
+                topicsSave.setTopicsImg("");
+                topicsSave.setTopicsMsg("");
                 topicsSave.setTopicCreateUserId(topics.getTopicCreateUserId());
                 topicsSave.setTopicCreateUser(topics.getTopicCreateUser());
                 topicsSave.setTopicSort(topics.getTopicSort());
