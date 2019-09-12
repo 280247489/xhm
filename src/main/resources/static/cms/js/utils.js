@@ -6,8 +6,8 @@ if(window.sessionStorage.getItem("login_id")==null&&window.location.pathname.ind
 }else{
 
 }
-var serPath="http://server.momjia.com/xhm/";
-var imgPath="http://server.momjia.com/xhm/";
+var serPath="http://192.168.1.200:8099/xhm/";
+var imgPath="http://192.168.1.200:8099/xhm/";
 //var serPath="http://hasystem.houaihome.com/houai_order/";
 //var imgPath="http://hasystem.houaihome.com/";
 var url_editer = serPath + '/jodit/uploadImg';
@@ -42,6 +42,12 @@ $(function(){
 			sys_html+='<li><dl id="topics">';
 			sys_html+='<dt><a href="javascript:;">话题管理</a></dt>';
 			sys_html+='<dd><a id="sel_topics" href="sel_topics.html">话题查询</a></dd>';
+			sys_html+='</dl></li>';
+
+			//专栏管理
+			sys_html+='<li><dl id="topics">';
+			sys_html+='<dt><a href="javascript:;">专栏管理</a></dt>';
+			sys_html+='<dd><a id="sel_topics" href="sel_zhuanlan.html">专栏查询</a></dd>';
 			sys_html+='</dl></li>';
 
 			//评论管理

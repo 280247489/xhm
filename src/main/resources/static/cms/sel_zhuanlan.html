@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>家乐说后台管理系统</title>
+<link rel="shortcut icon" type="text/css" href="images/icon/favicon.ico" />
+<meta name="author" content="CuiDi" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="js/jbox-v2.3/jBox/Skins/Green/jbox.css"/>
+   <link rel="stylesheet" href="css/dialog/css/css.css"  media="all"/>
+    <link rel="stylesheet" href="publicity/zyupload/skins/zyupload-1.0.0.css">
+
+<!--<link rel="stylesheet" href="css/hDialog/common.css" />-->
+<!--<link rel="stylesheet" href="css/hDialog/animate.min.css" />-->
+
+    <!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<![endif]-->
+<script src="js/jquery.js"></script>
+<script src="js/utils.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery-migrate-1.1.1.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="js/jbox-v2.3/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script src="/css/dialog/jquery.min.js"></script>
+    <script src="publicity/zyupload/zyupload-1.0.0.min.js"></script>
+
+
+</head>
+<body>
+
+<header>
+ <h1><img src="images/logo.png"/></h1>
+ <ul class="rt_nav">
+  <li><a href="javascript:;" class="admin_icon" id="loginUserName"></a></li>
+  <li><a href="change_password.html" class="set_icon">修改密码</a></li>
+  <li><a href="javascript:;" id="esc" class="quit_icon">安全退出</a></li>
+ </ul>
+</header>
+<aside class="lt_aside_nav content mCustomScrollbar">
+ <h2><a href="index.html">主菜单</a></h2>
+ <ul class="dh_close" id="sys">
+  <!--  -->
+ </ul>
+</aside>
+<section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+     <section class="loading_area">
+      <div class="loading_cont">
+       <div class="loading_icon"><i></i><i></i><i></i><i></i><i></i></div>
+       <div class="loading_txt"><mark>数据正在加载，请稍后！</mark></div>
+      </div>
+     </section>
+     <div class="page_title">
+		 <h2 class="fl"><strong style="font-size:10px;color:grey;">&nbsp;&nbsp;&nbsp;专栏管理 / 专栏查询</strong></h2>
+
+
+     </div>
+
+ </div>
+
+   <form class="theme-signin" name="loginform" action="" method="post">
+        <ol>
+            <li><strong>话题名称：</strong><input class="ipt articleName_add 	required" type="text" value="" /></li>
+<!--            <li><strong>专栏内容：</strong><textarea class="ipt articleContent_add 	required" type="text" value="" /></li>-->
+            <li><strong>专栏内容：</strong><textarea rows="5" cols="30" class="ipt articleContent_add 	required" type="text" value="" ></textarea></li>
+
+            <li><strong> 专栏类型：</strong>
+                <select class="ipt select" id="zhuanlanTypeId_add" style="width:100px">
+                    <option value="图片">图片</option>
+                    <option value="视频">视频</option>
+                </select></li>
+
+            <div id="picShow" style="display: none">
+
+                <!--图片-->
+                <li><strong> 选择图片</strong>
+                    <div id="zyupload" class="zyupload"></div>
+                </li>
+
+            </div>
+
+
+            <div id="videoShow"  style="display: none">
+                <li><strong> 选择视频</strong>
+                    <input type="file">
+                </li>
+
+                <li><strong> 选择视频封面图</strong>
+                    <input type="file">
+                </li>
+            </div>
+
+
+
+            <li><input class="btn btn-primary create-zhuanlan create-zhuanlan"   value=" 发布 " /></li>
+        </ol>
+   </form>
+
+
+
+</section>
+</body>
+
+<script type="text/javascript">
+    $(function(){
+
+        var test =$("#zhuanlanTypeId_add").val()
+        if(test =="图片"){
+            document.getElementById("picShow").style.display="";
+            document.getElementById("videoShow").style.display="none";
+        }else{
+            document.getElementById("picShow").style.display="none";
+            document.getElementById("videoShow").style.display="";
+        }
+        $("#zhuanlanTypeId_add").bind("change",(function(){
+            var test =$("#zhuanlanTypeId_add").val()
+            if(test =="图片"){
+                document.getElementById("picShow").style.display="";
+                document.getElementById("videoShow").style.display="none";
+            }else{
+                document.getElementById("picShow").style.display="none";
+                document.getElementById("videoShow").style.display="";
+            }
+        }))
+
+
+        // 初始化插件
+        $("#zyupload").zyUpload({
+            width            :   "650px",                 // 宽度
+            height           :   "400px",                 // 宽度
+            itemWidth        :   "140px",                 // 文件项的宽度
+            itemHeight       :   "115px",                 // 文件项的高度
+            url              :   serPath + "/fileUpload/path",  // 上传文件的路径
+            fileType         :   ["jpg","png","txt","js","exe"],// 上传文件的类型
+            fileSize         :   51200000,                // 上传文件的大小
+            multiple         :   true,                    // 是否可以多个文件上传
+            dragDrop         :   true,                    // 是否可以拖动上传文件
+            tailor           :   true,                    // 是否可以裁剪图片
+            del              :   true,                    // 是否可以删除文件
+            finishDel        :   false,  				  // 是否在上传文件完成后删除预览
+            /* 外部获得的回调接口 */
+            onSelect: function(selectFiles, allFiles){    // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
+                console.info("当前选择了以下文件：");
+                console.info(selectFiles);
+            },
+            onDelete: function(file, files){              // 删除一个文件的回调方法 file:当前删除的文件  files:删除之后的文件
+                console.info("当前删除了此文件：");
+                console.info(file.name);
+            },
+            onSuccess: function(file, response){          // 文件上传成功的回调方法
+                console.info("此文件上传成功：");
+                console.info(file.name);
+                console.info("此文件上传到服务器地址：");
+                console.info(response);
+                $("#uploadInf").append("<p>上传成功，文件地址是：" + response + "</p>");
+            },
+            onFailure: function(file, response){          // 文件上传失败的回调方法
+                console.info("此文件上传失败：");
+                console.info(file.name);
+            },
+            onComplete: function(response){           	  // 上传完成的回调方法
+                console.info("文件上传完成");
+                console.info(response);
+            }
+        });
+
+    });
+
+    $(".create-zhuanlan").click(function () {
+
+    })
+
+
+
+</script>
+
+
+
+</html>

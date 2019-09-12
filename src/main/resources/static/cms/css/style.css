@@ -4,7 +4,7 @@
 @import url(../bnyht/css/font-awesome-4.7.0/css/font-awesome.min.css); */
 html{overflow-y: scroll;}
 body{margin:0;}
-a:active,a:hover{outline:0}
+
 button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}
 button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
 input,select,button{outline:none;}
@@ -148,11 +148,10 @@ background-size:cover;-moz-background-size:cover;-webkit-background-size:cover;}
 .errorTips{color:red;margin:0 8px;}
 .errorTips:before{content:"x";font-family:'adminthemesregular';margin-right:3px;font-size:16px;}
 .textarea{display:inline-block;margin-top:5px;outline:none;resize:none;border:1px #139667 solid;padding:8px;}
-.uploadImg{display:inline-block;padding:15px;background:#f8f8f8;position:relative;border:1px #139667 solid;}
+/*.uploadImg{display:inline-block;padding:15px;background:#f8f8f8;position:relative;border:1px #139667 solid;}
 .uploadImg input{display:none;}
 .uploadImg span{display:block;font-size:12px;text-align:center;color:#139667;}
-.uploadImg span:hover{color:#209f71;}
-.uploadImg span:before{content:"#";font-family:'adminthemesregular';display:block;font-size:40px;}
+.uploadImg span:hover{color:#209f71;}*/
 .ulColumn2{overflow:hidden;}
 .ulColumn2 li{margin:15px 0;}
 .ulColumn2 li .item_name{text-align: left; display:inline-block;}

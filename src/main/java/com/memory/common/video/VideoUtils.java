@@ -7,9 +7,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import com.memory.common.utils.Utils;
-import org.bytedeco.javacv.FFmpegFrameGrabber;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
+
 
 
 /**
@@ -100,6 +98,7 @@ public class VideoUtils {
     }
 
 
+/*
 
     public static String fetchFrame(String videoFile,String frameFile,String os)  {
         File targetFile = new File(frameFile);
@@ -149,8 +148,10 @@ public class VideoUtils {
 
         return bufferedImage;
     }
+*/
 
 
+/*
         public static void main(String[] args) {
         try {
            // VideoUtils.fetchFrame("G:/video/test6_ios.mp4", "G:/video/test6_ios.jpg");
@@ -163,6 +164,7 @@ public class VideoUtils {
 
 
     }
+*/
 
 
 
